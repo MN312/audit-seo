@@ -315,16 +315,29 @@ const StatusBadge = ({ status, lang }) => {
 
 const PositionBadge = ({ rank }) => {
   let bg, color;
+  const numRank = typeof rank === 'string' && rank.startsWith('+') ? parseInt(rank.substring(1)) + 1 : rank;
+  
   if (rank === 'N/A' || rank === 'ERR' || rank === null || rank === undefined) {
     bg = '#ef4444'; color = '#fff';
-  } else if (rank >= 1 && rank <= 3) {
+  } else if (typeof numRank === 'number' && numRank >= 1 && numRank <= 3) {
     bg = '#10b981'; color = '#000';
-  } else if (rank >= 4 && rank <= 7) {
+  } else if (typeof numRank === 'number' && numRank >= 4 && numRank <= 7) {
     bg = '#f59e0b'; color = '#000';
   } else {
     bg = '#ef4444'; color = '#fff';
   }
-  const display = rank === 'N/A' || rank === null || rank === undefined ? 'N/A' : typeof rank === 'number' ? `#${rank}` : rank;
+  
+  let display;
+  if (rank === 'N/A' || rank === null || rank === undefined) {
+    display = 'N/A';
+  } else if (typeof rank === 'string' && rank.startsWith('+')) {
+    display = rank; // Affiche "+20" par exemple
+  } else if (typeof rank === 'number') {
+    display = `#${rank}`;
+  } else {
+    display = rank;
+  }
+  
   return (
     <span style={{ padding: '5px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, fontFamily: 'monospace', background: bg, color: color, minWidth: '44px', display: 'inline-block', textAlign: 'center' }}>
       {display}
@@ -450,6 +463,10 @@ export default function AuditSEOLocalV2() {
           if (data.local_results) {
             for (let i = 0; i < data.local_results.length; i++) {
               if (data.local_results[i].place_id === location.placeId) { rank = i + 1; break; }
+            }
+            // Si non trouvé dans les résultats, marquer la position comme > nombre de résultats
+            if (rank === 'N/A' && data.local_results.length > 0) {
+              rank = '+' + data.local_results.length;
             }
           }
           if (data.competitors) {
@@ -743,22 +760,13 @@ export default function AuditSEOLocalV2() {
 
                 {loc.name && (
                   <div style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)', borderRadius: '10px', padding: '16px', marginBottom: '16px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                       <div>
                         <div style={{ fontSize: '16px', fontWeight: 600, color: '#10b981' }}>✅ {loc.name}</div>
                         <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>{loc.city}</div>
                       </div>
                       {loc.rating && <RatingBadge rating={loc.rating} />}
                     </div>
-                    
-                    {loc.audit && (
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginTop: '12px' }}>
-                        <AuditCheck ok={loc.audit.hasPhotos} label={`${t.photos} (${loc.audit.photosCount || 0})`} />
-                        <AuditCheck ok={loc.audit.hasDescription} label={t.description} />
-                        <AuditCheck ok={loc.audit.hasHours} label={t.hours} />
-                        <AuditCheck ok={loc.audit.hasWebsite} label={t.website} />
-                      </div>
-                    )}
                   </div>
                 )}
 
@@ -885,7 +893,7 @@ export default function AuditSEOLocalV2() {
               { value: results.summary.totalLocations, label: t.statsEstablishments, color: '#10b981' },
               { value: results.summary.avgRating || 'N/A', label: t.statsAvgRating, color: results.summary.avgRating >= 4.5 ? '#10b981' : results.summary.avgRating >= 4.1 ? '#f59e0b' : '#ef4444' },
               { value: results.summary.totalLocations * keywords.length, label: t.statsQueries, color: '#06b6d4' },
-              { value: `${results.summary.auditScore}%`, label: t.statsScore, color: results.summary.auditScore >= 70 ? '#10b981' : results.summary.auditScore >= 50 ? '#f59e0b' : '#ef4444' },
+              { value: results.summary.totalReviews, label: t.reviews, color: '#3b82f6' },
             ].map((stat, i) => (
               <div key={i} style={{ ...styles.statCard, borderTop: `3px solid ${stat.color}` }}>
                 <div style={{ fontSize: '38px', fontWeight: 800, color: stat.color }}>{stat.value}</div>
@@ -945,7 +953,7 @@ export default function AuditSEOLocalV2() {
             {results.locations.sort((a, b) => b.estimatedLoss - a.estimatedLoss).map((loc, i) => (
               <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', background: '#1a2942', borderRadius: '10px', marginBottom: '10px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '14px' }}>{loc.name || loc.city}</span>
+                  <span style={{ fontSize: '14px' }}>{loc.city}</span>
                   <StatusBadge status={loc.status} lang={lang} />
                 </div>
                 <span style={{ fontSize: '18px', fontWeight: 700, color: '#ef4444' }}>-{loc.estimatedLoss}K€</span>
@@ -997,8 +1005,7 @@ export default function AuditSEOLocalV2() {
               <div key={i} style={styles.card}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
                   <div>
-                    <div style={{ fontSize: '18px', fontWeight: 700 }}>{loc.name || loc.city}</div>
-                    <div style={{ fontSize: '13px', color: '#64748b' }}>{loc.city}</div>
+                    <div style={{ fontSize: '18px', fontWeight: 700 }}>{loc.city}</div>
                   </div>
                   <StatusBadge status={loc.status} lang={lang} />
                 </div>
@@ -1013,20 +1020,6 @@ export default function AuditSEOLocalV2() {
                     <div style={{ fontSize: '11px', textTransform: 'uppercase', color: '#64748b' }}>{t.reviews}</div>
                   </div>
                 </div>
-
-                {loc.audit && (
-                  <div style={{ marginBottom: '20px' }}>
-                    <div style={{ fontSize: '11px', fontWeight: 700, color: '#06b6d4', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>{t.auditTitle}</div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                      <AuditCheck ok={loc.audit.hasPhotos} label={`${t.photos} (${loc.audit.photosCount || 0})`} />
-                      <AuditCheck ok={loc.audit.hasDescription} label={t.description} />
-                      <AuditCheck ok={loc.audit.hasHours} label={t.hours} />
-                      <AuditCheck ok={loc.audit.hasWebsite} label={t.website} />
-                      <AuditCheck ok={loc.audit.hasPhone} label={t.phone} />
-                      <AuditCheck ok={loc.audit.hasServices} label={t.services} />
-                    </div>
-                  </div>
-                )}
 
                 <div style={{ fontSize: '11px', fontWeight: 700, color: '#06b6d4', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>{t.positionsPerQuery}</div>
                 {loc.rankings.map((r, j) => (
