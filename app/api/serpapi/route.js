@@ -7,7 +7,7 @@ export async function POST(request) {
       return Response.json({ error: "Clé API manquante" }, { status: 400 });
     }
 
-    // ACTION 1: Récupérer les détails d'un lieu (lat/lon + infos complètes)
+    // ACTION 1: Récupérer les détails d'un lieu (lat/lon + infos)
     if (action === "getPlaceDetails") {
       if (!placeId) {
         return Response.json({ error: "Place ID manquant" }, { status: 400 });
@@ -38,25 +38,6 @@ export async function POST(request) {
           }
         }
 
-        // Analyser les infos de la fiche pour l'audit
-        const auditInfo = {
-          hasPhotos: (place.photos && place.photos.length > 0) || false,
-          photosCount: place.photos ? place.photos.length : 0,
-          hasDescription: !!place.description,
-          description: place.description || '',
-          hasHours: !!place.hours,
-          hasWebsite: !!place.website,
-          website: place.website || '',
-          hasPhone: !!place.phone,
-          phone: place.phone || '',
-          hasServices: (place.services && place.services.length > 0) || false,
-          services: place.services || [],
-          totalReviews: place.reviews || 0,
-          reviewsLink: place.reviews_link || '',
-          type: place.type || '',
-          priceRange: place.price || '',
-        };
-
         return Response.json({
           success: true,
           name: place.title || '',
@@ -66,7 +47,6 @@ export async function POST(request) {
           reviews: place.reviews || null,
           lat: place.gps_coordinates?.latitude || null,
           lon: place.gps_coordinates?.longitude || null,
-          audit: auditInfo,
         });
       } else {
         return Response.json({ error: "Lieu non trouvé", data }, { status: 404 });
@@ -101,40 +81,12 @@ export async function POST(request) {
           rating: r.rating || null,
           reviews: r.reviews || null,
           placeId: r.place_id || '',
-          type: r.type || '',
         }));
       }
 
       return Response.json({
         ...data,
         competitors: competitors,
-      });
-    }
-
-    // ACTION 3: Rechercher le volume de recherche (estimation via Google Trends ou autre)
-    if (action === "getSearchVolume") {
-      // Pour l'instant on retourne une estimation basée sur la taille de la ville
-      // Dans une vraie implémentation, on utiliserait Google Keyword Planner ou SEMrush
-      const { city, keyword } = body;
-      
-      // Estimation simplifiée basée sur la population
-      const bigCities = ['paris', 'marseille', 'lyon', 'toulouse', 'nice', 'nantes', 'strasbourg', 'montpellier', 'bordeaux', 'lille'];
-      const mediumCities = ['rennes', 'reims', 'le havre', 'saint-étienne', 'toulon', 'grenoble', 'dijon', 'angers', 'nîmes', 'villeurbanne'];
-      
-      const cityLower = (city || '').toLowerCase();
-      let baseVolume = 100; // petite ville
-      
-      if (bigCities.some(c => cityLower.includes(c))) {
-        baseVolume = 1000;
-      } else if (mediumCities.some(c => cityLower.includes(c))) {
-        baseVolume = 400;
-      }
-      
-      return Response.json({
-        success: true,
-        estimatedVolume: baseVolume,
-        city: city,
-        note: "Estimation basée sur la taille de la ville"
       });
     }
 
