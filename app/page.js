@@ -87,7 +87,7 @@ const TRANSLATIONS = {
     addEstablishment: "+ Ajouter un établissement",
     
     keywordsTitle: "Mots-clés à analyser",
-    keywordsDesc: "Variables :",
+    keywordsDesc: "Variable :",
     keywordPlaceholder: "Ex: [métier] [ville]",
     addKeyword: "+ Ajouter un mot-clé",
     
@@ -220,7 +220,7 @@ const TRANSLATIONS = {
     addEstablishment: "+ Aggiungi uno stabilimento",
     
     keywordsTitle: "Parole chiave da analizzare",
-    keywordsDesc: "Variabili:",
+    keywordsDesc: "Variabile:",
     keywordPlaceholder: "Es: [métier] [ville]",
     addKeyword: "+ Aggiungi una parola chiave",
     
@@ -787,12 +787,12 @@ export default function AuditSEOLocalV2() {
               </div>
             ))}
 
-            <button onClick={addLocation} style={{ width: '100%', padding: '16px', background: 'transparent', border: '2px dashed rgba(255,255,255,0.2)', borderRadius: '12px', color: '#64748b', cursor: 'pointer', fontSize: '14px' }}>{t.addEstablishment}</button>
+            <button onClick={addLocation} style={{ width: '100%', padding: '16px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', color: '#fff', cursor: 'pointer', fontSize: '14px', transition: 'all 0.2s ease' }} onMouseOver={(e) => { e.target.style.background = 'rgba(255,255,255,0.1)'; e.target.style.borderColor = 'rgba(255,255,255,0.4)'; }} onMouseOut={(e) => { e.target.style.background = 'rgba(255,255,255,0.05)'; e.target.style.borderColor = 'rgba(255,255,255,0.2)'; }}>{t.addEstablishment}</button>
           </div>
 
           <div style={styles.card}>
             <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>🔍 {t.keywordsTitle}</h3>
-            <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>{t.keywordsDesc} <code style={{ background: '#1a2942', padding: '2px 6px', borderRadius: '4px' }}>[métier]</code> <code style={{ background: '#1a2942', padding: '2px 6px', borderRadius: '4px' }}>[ville]</code></p>
+            <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>{t.keywordsDesc} <code style={{ background: '#1a2942', padding: '2px 6px', borderRadius: '4px' }}>[métier]</code></p>
             
             {keywords.map((kw, i) => (
               <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
@@ -801,7 +801,7 @@ export default function AuditSEOLocalV2() {
               </div>
             ))}
             
-            <button onClick={addKeyword} style={{ marginTop: '8px', padding: '12px 20px', background: 'rgba(16,185,129,0.1)', border: '1px dashed #10b981', borderRadius: '8px', color: '#10b981', cursor: 'pointer', fontSize: '13px' }}>{t.addKeyword}</button>
+            <button onClick={addKeyword} style={{ marginTop: '8px', padding: '12px 20px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: '#fff', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s ease' }} onMouseOver={(e) => { e.target.style.background = 'rgba(255,255,255,0.1)'; e.target.style.borderColor = 'rgba(255,255,255,0.4)'; }} onMouseOut={(e) => { e.target.style.background = 'rgba(255,255,255,0.05)'; e.target.style.borderColor = 'rgba(255,255,255,0.2)'; }}>{t.addKeyword}</button>
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
