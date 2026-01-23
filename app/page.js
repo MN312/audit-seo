@@ -5,8 +5,8 @@ const PASSWORD = "Test2026_V1";
 const BLUE = '#0c4a6e';
 
 const T = {
-  fr: { login: "Audit SEO Local", sub: "Outil d'analyse", pwd: "Mot de passe", pwdPh: "Entrez le mot de passe", pwdErr: "Incorrect", access: "Accéder", header: "Audit SEO Local", badge: "Automatisé", title: "Analysez votre visibilité locale", desc: "Audit complet avec positionnement et impact financier", apiTitle: "Clé API SerpAPI", apiLabel: "Clé API", apiPh: "Collez votre clé", cont: "Continuer", config: "Configuration", bizTitle: "Informations", bizName: "Entreprise", bizPh: "Ex: Alsace Carreaux", logoL: "Logo URL", logoPh: "https://...", actL: "Activité", actPh: "Ex: carrelage", panL: "Panier moyen €", panPh: "500", marL: "Marge %", marPh: "15", etabTitle: "Établissements", etab: "Établissement", del: "Supprimer", cityL: "Ville", cityPh: "Ville", volL: "Volume/mois", addEtab: "Ajouter un établissement", kwTitle: "Mots-clés à analyser", kwPh: "Ex: carrelage Mulhouse", addKw: "Ajouter", back: "Retour", launch: "Lancer l'analyse", analyzing: "Analyse en cours", wait: "Veuillez patienter", report: "Rapport d'audit", etabs: "établissement(s)", statEtab: "Établissements", statNote: "Note moyenne", statReq: "Requêtes", statVis: "Visibilité", diag: "Diagnostic visibilité", top3: "Top 3", exc: "Excellent", pos47: "Position 4-7", imp: "À améliorer", pos8: "Position 8+", crit: "Critique", fin: "Impact financier", loss: "Perte annuelle estimée", lossD: "CA perdu par manque de visibilité", pot: "Potentiel récupérable", potD: "Récupérable en 12 mois", dist: "Répartition par établissement", inv: "Investissement", roi: "ROI estimé", be: "Break-even", leads: "Leads/an", comp: "Concurrents principaux", detail: "Analyse détaillée", note: "Note", avis: "Avis", posReq: "Positions", matrix: "Matrice de positionnement", newA: "Nouvel audit", pdf: "Exporter PDF", search: "Rechercher un établissement...", footer: "V1" },
-  it: { login: "Audit SEO Locale", sub: "Strumento di analisi", pwd: "Password", pwdPh: "Inserisci password", pwdErr: "Errata", access: "Accedi", header: "Audit SEO Locale", badge: "Automatizzato", title: "Analizza la visibilità locale", desc: "Audit completo con posizionamento e impatto", apiTitle: "Chiave API SerpAPI", apiLabel: "Chiave API", apiPh: "Incolla chiave", cont: "Continua", config: "Configurazione", bizTitle: "Informazioni", bizName: "Azienda", bizPh: "Es: Milano Piastrelle", logoL: "Logo URL", logoPh: "https://...", actL: "Attività", actPh: "Es: piastrelle", panL: "Scontrino medio €", panPh: "500", marL: "Margine %", marPh: "15", etabTitle: "Stabilimenti", etab: "Stabilimento", del: "Elimina", cityL: "Città", cityPh: "Città", volL: "Volume/mese", addEtab: "Aggiungi stabilimento", kwTitle: "Parole chiave da analizzare", kwPh: "Es: piastrelle Milano", addKw: "Aggiungi", back: "Indietro", launch: "Avvia analisi", analyzing: "Analisi in corso", wait: "Attendere", report: "Rapporto audit", etabs: "stabilimento/i", statEtab: "Stabilimenti", statNote: "Valutazione", statReq: "Query", statVis: "Visibilità", diag: "Diagnosi visibilità", top3: "Top 3", exc: "Eccellente", pos47: "Posizione 4-7", imp: "Da migliorare", pos8: "Posizione 8+", crit: "Critico", fin: "Impatto finanziario", loss: "Perdita annuale stimata", lossD: "Fatturato perso", pot: "Potenziale recuperabile", potD: "Recuperabile in 12 mesi", dist: "Distribuzione per stabilimento", inv: "Investimento", roi: "ROI stimato", be: "Break-even", leads: "Lead/anno", comp: "Concorrenti principali", detail: "Analisi dettagliata", note: "Nota", avis: "Recensioni", posReq: "Posizioni", matrix: "Matrice di posizionamento", newA: "Nuovo audit", pdf: "Esporta PDF", search: "Cerca uno stabilimento...", footer: "V1" }
+  fr: { login: "Audit SEO Local", sub: "Outil d'analyse", pwd: "Mot de passe", pwdPh: "Entrez le mot de passe", pwdErr: "Incorrect", access: "Accéder", header: "Audit SEO Local", badge: "Automatisé", title: "Analysez votre visibilité locale", desc: "Audit complet avec positionnement et impact financier", apiTitle: "Clé API SerpAPI", apiLabel: "Clé API", apiPh: "Collez votre clé", cont: "Continuer", config: "Configuration", bizTitle: "Informations", bizName: "Nom de l'entreprise *", bizPh: "Ex: MiNiTAUX", logoL: "Logo URL", logoPh: "https://...", actL: "Activité", actPh: "Ex: courtier immobilier", panL: "Panier moyen €", panPh: "500", marL: "Marge %", marPh: "15", etabTitle: "Établissements", etab: "Établissement", del: "Supprimer", cityL: "Ville", cityPh: "Ville", volL: "Volume recherches/mois", volInfo: "Retrouvez cette donnée sur Semrush.com (outil gratuit)", volUpload: "Télécharger une capture Semrush", addEtab: "Ajouter un établissement", kwTitle: "Mots-clés à analyser", kwPh: "Ex: courtier immobilier", addKw: "Ajouter", back: "Retour", launch: "Lancer l'analyse", analyzing: "Analyse en cours", wait: "Veuillez patienter", report: "Rapport d'audit", etabs: "établissement(s)", statEtab: "Établissements", statNote: "Note moyenne", statReq: "Requêtes", statVis: "Visibilité", diag: "Diagnostic visibilité", top3: "Top 3", exc: "Excellent", pos47: "Position 4-7", imp: "À améliorer", pos8: "Position 8+", crit: "Critique", fin: "Impact financier", loss: "Perte annuelle estimée", lossD: "CA perdu par manque de visibilité", pot: "Potentiel récupérable", potD: "Récupérable en 12 mois", dist: "Répartition par établissement", inv: "Investissement", roi: "ROI estimé", be: "Break-even", leads: "Leads/an", comp: "Concurrents principaux", detail: "Analyse détaillée", note: "Note", avis: "Avis", posReq: "Positions", matrix: "Matrice de positionnement", newA: "Nouvel audit", pdf: "Exporter PDF", search: "Rechercher un établissement...", footer: "V1" },
+  it: { login: "Audit SEO Locale", sub: "Strumento di analisi", pwd: "Password", pwdPh: "Inserisci password", pwdErr: "Errata", access: "Accedi", header: "Audit SEO Locale", badge: "Automatizzato", title: "Analizza la visibilità locale", desc: "Audit completo con posizionamento e impatto", apiTitle: "Chiave API SerpAPI", apiLabel: "Chiave API", apiPh: "Incolla chiave", cont: "Continua", config: "Configurazione", bizTitle: "Informazioni", bizName: "Nome azienda *", bizPh: "Es: MiNiTAUX", logoL: "Logo URL", logoPh: "https://...", actL: "Attività", actPh: "Es: agente immobiliare", panL: "Scontrino medio €", panPh: "500", marL: "Margine %", marPh: "15", etabTitle: "Stabilimenti", etab: "Stabilimento", del: "Elimina", cityL: "Città", cityPh: "Città", volL: "Volume ricerche/mese", volInfo: "Trova questo dato su Semrush.com (strumento gratuito)", volUpload: "Carica screenshot Semrush", addEtab: "Aggiungi stabilimento", kwTitle: "Parole chiave da analizzare", kwPh: "Es: agente immobiliare", addKw: "Aggiungi", back: "Indietro", launch: "Avvia analisi", analyzing: "Analisi in corso", wait: "Attendere", report: "Rapporto audit", etabs: "stabilimento/i", statEtab: "Stabilimenti", statNote: "Valutazione", statReq: "Query", statVis: "Visibilità", diag: "Diagnosi visibilità", top3: "Top 3", exc: "Eccellente", pos47: "Posizione 4-7", imp: "Da migliorare", pos8: "Posizione 8+", crit: "Critico", fin: "Impatto finanziario", loss: "Perdita annuale stimata", lossD: "Fatturato perso", pot: "Potenziale recuperabile", potD: "Recuperabile in 12 mesi", dist: "Distribuzione per stabilimento", inv: "Investimento", roi: "ROI stimato", be: "Break-even", leads: "Lead/anno", comp: "Concorrenti principali", detail: "Analisi dettagliata", note: "Nota", avis: "Recensioni", posReq: "Posizioni", matrix: "Matrice di posizionamento", newA: "Nuovo audit", pdf: "Esporta PDF", search: "Cerca uno stabilimento...", footer: "V1" }
 };
 
 const Ic = ({ n, s = 20 }) => {
@@ -26,6 +26,8 @@ const Ic = ({ n, s = 20 }) => {
     trash: <><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></>,
     globe: <><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>,
     key: <><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></>,
+    upload: <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></>,
+    info: <><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></>,
   };
   return <svg width={s} height={s} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">{paths[n]}</svg>;
 };
@@ -44,14 +46,15 @@ const PosBadge = ({ r }) => {
 };
 
 const st = {
-  page: { minHeight: '100vh', background: '#f8fafc', color: '#1e293b', fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" },
-  header: { background: '#fff', borderBottom: '1px solid #e2e8f0', padding: '14px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
+  page: { minHeight: '100vh', background: '#e2e8f0', color: '#1e293b', fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" },
+  header: { background: '#fff', borderBottom: '1px solid #cbd5e1', padding: '14px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
   container: { maxWidth: '1100px', margin: '0 auto', padding: '40px 24px' },
-  card: { background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', padding: '24px', marginBottom: '20px' },
+  card: { background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', padding: '24px', marginBottom: '20px' },
   btn: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px 24px', borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', border: 'none', transition: 'all 0.2s' },
   btnP: { background: BLUE, color: '#fff', boxShadow: '0 4px 14px rgba(12, 74, 110, 0.4)' },
-  btnS: { background: '#fff', color: '#475569', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' },
-  input: { width: '100%', padding: '12px 14px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '14px', color: '#1e293b', outline: 'none', boxSizing: 'border-box' },
+  btnS: { background: '#f1f5f9', color: '#475569', border: '1px solid #cbd5e1' },
+  btnO: { background: '#fff', color: BLUE, border: '1px solid ' + BLUE },
+  input: { width: '100%', padding: '12px 14px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '14px', color: '#1e293b', outline: 'none', boxSizing: 'border-box' },
   label: { display: 'block', fontSize: '13px', fontWeight: 500, color: '#64748b', marginBottom: '6px' },
   row: { display: 'grid', gap: '16px', marginBottom: '16px' },
 };
@@ -68,8 +71,8 @@ export default function App() {
   const [met, setMet] = useState('');
   const [pan, setPan] = useState('');
   const [mar, setMar] = useState('15');
-  const [locs, setLocs] = useState([{ id: 1, pid: '', name: '', city: '', lat: '', lon: '', ld: false, err: '', rat: null, rev: null, vol: 500, q: '', res: [], sh: false }]);
-  const [kws, setKws] = useState(['', '', '', '']);
+  const [locs, setLocs] = useState([{ id: 1, pid: '', name: '', city: '', lat: '', lon: '', ld: false, err: '', rat: null, rev: null, vol: '', q: '', res: [], sh: false, semrushImg: null }]);
+  const [kws, setKws] = useState(['']);
   const [results, setResults] = useState(null);
   const [prog, setProg] = useState(0);
   const [progT, setProgT] = useState('');
@@ -77,7 +80,7 @@ export default function App() {
   const t = lang ? T[lang] : T.fr;
 
   const login = () => pwd === PASSWORD ? setAuth(true) : setPwdErr(true);
-  const addLoc = () => setLocs([...locs, { id: Date.now(), pid: '', name: '', city: '', lat: '', lon: '', ld: false, err: '', rat: null, rev: null, vol: 500, q: '', res: [], sh: false }]);
+  const addLoc = () => setLocs([...locs, { id: Date.now(), pid: '', name: '', city: '', lat: '', lon: '', ld: false, err: '', rat: null, rev: null, vol: '', q: '', res: [], sh: false, semrushImg: null }]);
   const upLoc = (id, k, v) => setLocs(locs.map(l => l.id === id ? { ...l, [k]: v } : l));
   const rmLoc = id => locs.length > 1 && setLocs(locs.filter(l => l.id !== id));
 
@@ -107,6 +110,17 @@ export default function App() {
     const city = extractCity(p.address);
     setLocs(ls => ls.map(l => l.id === id ? { ...l, pid: p.placeId, name: p.name, city, lat: p.lat, lon: p.lon, rat: p.rating, rev: p.reviews, q: p.name, res: [], sh: false } : l));
   };
+
+  const handleSemrushUpload = (id, e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => upLoc(id, 'semrushImg', ev.target.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const canLaunch = biz.trim() && locs.some(l => l.pid) && kws.some(k => k.trim());
 
   const run = async () => {
     setStep(3); setProg(0);
@@ -139,7 +153,7 @@ export default function App() {
     }
     const wr = r.locs.filter(l => l.rat); if (wr.length) r.sum.avgR = (r.sum.avgR / wr.length).toFixed(1);
     const tt = r.sum.tot * validKws.length; r.sum.visPct = Math.round((tt - r.sum.inv) / tt * 100);
-    r.locs.forEach(l => { const ir = l.inv / validKws.length, pr = (validKws.length - l.t7) / validKws.length, v = l.vol || 500; l.loss = Math.round(v * 0.35 * (ir + pr * 0.5) * 12 * 0.04 * pn * mg / 1000); });
+    r.locs.forEach(l => { const ir = l.inv / validKws.length, pr = (validKws.length - l.t7) / validKws.length, v = parseInt(l.vol) || 500; l.loss = Math.round(v * 0.35 * (ir + pr * 0.5) * 12 * 0.04 * pn * mg / 1000); });
     const tl = r.locs.reduce((s, l) => s + l.loss, 0);
     r.fin = { tl, pg: Math.round(tl * 0.65), roi: tl > 0 ? Math.round(tl * 0.65 / 15 * 100) : 0, be: '2-3 ' + (lang === 'it' ? 'mesi' : 'mois'), lpy: Math.round(tl * 0.65 / (pn * mg) * 1000), inv: '10-20K' };
     r.kws = validKws;
@@ -176,7 +190,7 @@ export default function App() {
           </div>
           <div style={{ marginBottom: '20px' }}>
             <label style={st.label}>{t.pwd}</label>
-            <input type="password" style={{ ...st.input, borderColor: pwdErr ? '#ef4444' : '#e2e8f0' }} placeholder={t.pwdPh} value={pwd} onChange={e => { setPwd(e.target.value); setPwdErr(false); }} onKeyPress={e => e.key === 'Enter' && login()} />
+            <input type="password" style={{ ...st.input, borderColor: pwdErr ? '#ef4444' : '#cbd5e1' }} placeholder={t.pwdPh} value={pwd} onChange={e => { setPwd(e.target.value); setPwdErr(false); }} onKeyPress={e => e.key === 'Enter' && login()} />
             {pwdErr && <p style={{ color: '#ef4444', fontSize: '12px', marginTop: '6px' }}>{t.pwdErr}</p>}
           </div>
           <button style={{ ...st.btn, ...st.btnP, width: '100%' }} onClick={login}>{t.access}<Ic n="arrow" s={16}/></button>
@@ -255,7 +269,7 @@ export default function App() {
             <h2 style={{ fontSize: '15px', fontWeight: 600 }}>{t.etabTitle}</h2>
           </div>
           {locs.map((l, i) => (
-            <div key={l.id} style={{ background: '#f8fafc', borderRadius: '10px', padding: '20px', marginBottom: '16px', border: '1px solid #e2e8f0' }}>
+            <div key={l.id} style={{ background: '#f8fafc', borderRadius: '10px', padding: '20px', marginBottom: '16px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                 <span style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <span style={{ width: '26px', height: '26px', background: BLUE, borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 700, color: '#fff' }}>{i + 1}</span>
@@ -269,7 +283,7 @@ export default function App() {
                   <button style={{ ...st.btn, ...st.btnP, padding: '12px 16px' }} onClick={() => searchP(l.id, l.q)} disabled={l.ld}>{l.ld ? '...' : <Ic n="search" s={18}/>}</button>
                 </div>
                 {l.sh && l.res.length > 0 && (
-                  <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px', marginTop: '8px', maxHeight: '320px', overflowY: 'auto', zIndex: 100, boxShadow: '0 10px 40px rgba(0,0,0,0.12)' }}>
+                  <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: '#fff', border: '1px solid #cbd5e1', borderRadius: '10px', marginTop: '8px', maxHeight: '320px', overflowY: 'auto', zIndex: 100, boxShadow: '0 10px 40px rgba(0,0,0,0.15)' }}>
                     {l.res.map((p, j) => (
                       <div key={j} onClick={() => selP(l.id, p)} style={{ padding: '14px 16px', borderBottom: '1px solid #f1f5f9', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.background = '#f8fafc'} onMouseOut={e => e.currentTarget.style.background = '#fff'}>
                         <div style={{ fontWeight: 600, marginBottom: '3px', fontSize: '14px' }}>{p.name}</div>
@@ -292,11 +306,24 @@ export default function App() {
               )}
               <div style={{ ...st.row, gridTemplateColumns: '1fr 1fr' }}>
                 <div><label style={st.label}>{t.cityL}</label><input style={st.input} placeholder={t.cityPh} value={l.city} onChange={e => upLoc(l.id, 'city', e.target.value)} /></div>
-                <div><label style={st.label}>{t.volL}</label><input style={st.input} type="number" placeholder="500" value={l.vol} onChange={e => upLoc(l.id, 'vol', parseInt(e.target.value) || 500)} /></div>
+                <div>
+                  <label style={st.label}>{t.volL}</label>
+                  <input style={st.input} type="number" placeholder="500" value={l.vol} onChange={e => upLoc(l.id, 'vol', e.target.value)} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '8px', fontSize: '11px', color: '#64748b' }}>
+                    <Ic n="info" s={12}/> {t.volInfo}
+                  </div>
+                </div>
+              </div>
+              <div style={{ marginTop: '12px' }}>
+                <label style={{ ...st.btn, ...st.btnO, padding: '10px 16px', fontSize: '13px', cursor: 'pointer' }}>
+                  <Ic n="upload" s={16}/> {t.volUpload}
+                  <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => handleSemrushUpload(l.id, e)} />
+                </label>
+                {l.semrushImg && <img src={l.semrushImg} alt="Semrush" style={{ marginTop: '12px', maxWidth: '100%', borderRadius: '8px', border: '1px solid #e2e8f0' }} />}
               </div>
             </div>
           ))}
-          <button onClick={addLoc} style={{ width: '100%', padding: '14px', background: '#fff', border: '2px dashed #cbd5e1', borderRadius: '10px', color: '#64748b', cursor: 'pointer', fontSize: '14px', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}><Ic n="plus" s={18}/> {t.addEtab}</button>
+          <button onClick={addLoc} style={{ ...st.btn, ...st.btnO, width: '100%' }}><Ic n="plus" s={18}/> {t.addEtab}</button>
         </div>
 
         <div style={st.card}>
@@ -311,11 +338,11 @@ export default function App() {
               {kws.length > 1 && <button onClick={() => setKws(kws.filter((_, j) => j !== i))} style={{ ...st.btn, background: '#fee2e2', color: '#dc2626', padding: '10px 14px', boxShadow: 'none' }}><Ic n="x" s={16}/></button>}
             </div>
           ))}
-          <button onClick={() => setKws([...kws, ''])} style={{ marginTop: '8px', padding: '12px 20px', background: '#fff', border: '2px dashed #cbd5e1', borderRadius: '8px', color: '#64748b', cursor: 'pointer', fontWeight: 600, fontSize: '14px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}><Ic n="plus" s={16}/> {t.addKw}</button>
+          <button onClick={() => setKws([...kws, ''])} style={{ ...st.btn, ...st.btnO, marginTop: '8px' }}><Ic n="plus" s={16}/> {t.addKw}</button>
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '32px' }}>
-          <button style={{ ...st.btn, ...st.btnP, padding: '14px 40px', fontSize: '15px', opacity: (!biz || !met || locs.every(l => !l.pid) || kws.every(k => !k.trim())) ? 0.5 : 1 }} onClick={run} disabled={!biz || !met || locs.every(l => !l.pid) || kws.every(k => !k.trim())}>{t.launch}<Ic n="arrow" s={18}/></button>
+          <button style={{ ...st.btn, ...st.btnP, padding: '14px 40px', fontSize: '15px', opacity: canLaunch ? 1 : 0.5 }} onClick={run} disabled={!canLaunch}>{t.launch}<Ic n="arrow" s={18}/></button>
         </div>
       </div>
     </div>
@@ -404,11 +431,11 @@ export default function App() {
           {r.topComp?.length > 0 && (
             <div style={st.card}>
               <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '18px' }}>{t.comp}</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '14px' }}>
+              <div style={{ display: 'flex', gap: '12px', overflowX: 'auto' }}>
                 {r.topComp.map((c, i) => (
-                  <div key={i} style={{ padding: '18px', background: '#f8fafc', borderRadius: '10px', textAlign: 'center' }}>
-                    <div style={{ width: '36px', height: '36px', background: i === 0 ? '#fef3c7' : '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '14px', color: i === 0 ? '#d97706' : '#64748b', margin: '0 auto 10px' }}>{i + 1}</div>
-                    <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.name}</div>
+                  <div key={i} style={{ flex: '0 0 180px', padding: '16px', background: '#f8fafc', borderRadius: '10px', textAlign: 'center' }}>
+                    <div style={{ width: '32px', height: '32px', background: i === 0 ? '#fef3c7' : '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '14px', color: i === 0 ? '#d97706' : '#64748b', margin: '0 auto 10px' }}>{i + 1}</div>
+                    <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={c.name}>{c.name}</div>
                     {c.rating && <div style={{ fontSize: '13px', color: '#d97706', fontWeight: 500 }}>★ {c.rating}</div>}
                   </div>
                 ))}
@@ -434,6 +461,12 @@ export default function App() {
                     <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 500, marginTop: '4px' }}>{t.avis}</div>
                   </div>
                 </div>
+                {l.semrushImg && (
+                  <div style={{ marginBottom: '18px' }}>
+                    <div style={{ fontSize: '12px', fontWeight: 600, color: '#64748b', marginBottom: '8px', textTransform: 'uppercase' }}>Données Semrush</div>
+                    <img src={l.semrushImg} alt="Semrush" style={{ width: '100%', borderRadius: '8px', border: '1px solid #e2e8f0' }} />
+                  </div>
+                )}
                 <div style={{ fontSize: '12px', fontWeight: 600, color: '#64748b', marginBottom: '12px', textTransform: 'uppercase' }}>{t.posReq}</div>
                 {l.ranks.map((x, j) => (
                   <div key={j} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: '#f8fafc', borderRadius: '8px', marginBottom: '8px' }}>
