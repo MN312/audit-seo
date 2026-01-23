@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // CONFIGURATION
@@ -8,369 +8,229 @@ import React, { useState } from 'react';
 const PASSWORD = "Test2026_V1";
 
 const DEFAULT_KEYWORDS = {
-  fr: [
-    '[métier] [ville]',
-    'meilleur [métier] [ville]',
-    '[métier] près de [ville]',
-    'avis [métier] [ville]',
-  ],
-  it: [
-    '[métier] [ville]',
-    'miglior [métier] [ville]',
-    '[métier] vicino a [ville]',
-    'recensioni [métier] [ville]',
-  ]
+  fr: ['[métier] [ville]', 'meilleur [métier] [ville]', '[métier] près de [ville]', 'avis [métier] [ville]'],
+  it: ['[métier] [ville]', 'miglior [métier] [ville]', '[métier] vicino a [ville]', 'recensioni [métier] [ville]']
 };
 
-// Traductions
 const TRANSLATIONS = {
   fr: {
-    // Login
-    loginTitle: "Audit SEO Local",
-    loginSubtitle: "Accès restreint",
-    password: "Mot de passe",
-    passwordPlaceholder: "Entrez le mot de passe...",
-    passwordError: "Mot de passe incorrect",
-    accessButton: "Accéder à l'outil →",
-    
-    // Header
-    headerTitle: "Audit SEO Local",
-    headerSubtitle: "Analyse Google Maps",
-    configSubtitle: "Configuration",
-    analysisSubtitle: "Analyse en cours...",
-    resultsSubtitle: "Résultats",
-    
-    // Step 1
-    step1Badge: "Audit automatisé",
-    step1Title: "Analysez la visibilité",
-    step1Highlight: "Google Maps",
-    step1Desc: "Générez un audit complet avec analyse de la fiche, positionnement, concurrents et impact financier",
+    loginTitle: "Audit SEO Local", loginSubtitle: "Accès restreint", password: "Mot de passe",
+    passwordPlaceholder: "Entrez le mot de passe...", passwordError: "Mot de passe incorrect",
+    accessButton: "Accéder à l'outil", headerTitle: "Audit SEO Local", headerSubtitle: "Analyse Google Maps",
+    configSubtitle: "Configuration", analysisSubtitle: "Analyse en cours...", resultsSubtitle: "Résultats",
+    step1Badge: "Audit automatisé", step1Title: "Analysez la visibilité", step1Highlight: "Google Maps",
+    step1Desc: "Générez un audit complet avec positionnement, concurrents et impact financier",
     apiKeyTitle: "Comment obtenir une clé API SerpAPI ?",
-    apiKeySteps: [
-      "Créez un compte gratuit sur",
-      "Confirmez votre email",
-      "Allez dans Dashboard → API Key",
-      "Copiez votre clé (100 recherches/mois gratuites)"
-    ],
-    apiKeyLabel: "Votre clé API SerpAPI",
-    apiKeyPlaceholder: "Collez votre clé API ici...",
-    continueButton: "Continuer →",
-    
-    // Step 2
-    configTitle: "Configuration de l'audit",
-    businessInfoTitle: "Informations du prospect",
-    businessName: "Nom de l'entreprise",
-    businessNamePlaceholder: "Ex: Alsace Carreaux",
-    logoLabel: "Logo (URL)",
-    logoPlaceholder: "https://...",
-    metierLabel: "Métier / Activité",
-    metierPlaceholder: "Ex: carrelage, plombier...",
-    panierLabel: "Panier moyen (€)",
-    panierPlaceholder: "Ex: 500",
-    margeLabel: "Marge (%)",
-    margePlaceholder: "Ex: 15",
-    
-    establishmentsTitle: "Établissements à analyser",
-    autoMessage: "Automatique : Entrez le Place ID → on récupère tout (nom, ville, note, photos, etc.)",
-    placeIdTitle: "Comment trouver un Place ID ?",
-    placeIdDesc: "Allez sur",
-    placeIdLink: "Place ID Finder Google",
-    placeIdDesc2: "→ cherchez l'établissement → copiez l'ID",
-    establishment: "Établissement",
-    delete: "Supprimer",
-    placeIdPlaceholder: "Place ID (ex: ChIJN1t_tDeuEmsRUsoyG83frY4)",
-    fetchButton: "Récupérer",
-    cityLabel: "Ville (pour mots-clés)",
-    cityPlaceholder: "Ville",
-    volumeLabel: "Volume recherches/mois",
-    coordsLabel: "Coordonnées",
-    addEstablishment: "+ Ajouter un établissement",
-    
-    keywordsTitle: "Mots-clés à analyser",
-    keywordsDesc: "Variable :",
-    keywordPlaceholder: "Ex: [métier] [ville]",
-    addKeyword: "+ Ajouter un mot-clé",
-    
-    backButton: "← Retour",
-    launchButton: "🚀 Lancer l'analyse",
-    
-    // Step 3
-    analysisInProgress: "Analyse en cours...",
-    analysisWait: "L'analyse peut prendre quelques minutes",
-    
-    // Step 4
-    auditBadge: "Audit SEO Local",
-    establishments: "établissement(s)",
-    
-    statsEstablishments: "Établissements",
-    statsAvgRating: "Note Moyenne",
-    statsQueries: "Requêtes Testées",
-    statsScore: "Score Fiche",
-    
-    visibilityDiagnostic: "Diagnostic Visibilité",
-    top3Positions: "Positions Top 3",
-    excellent: "Excellent",
-    positions47: "Positions 4-7",
-    toImprove: "À améliorer",
-    positions8plus: "Positions 8+ / Invisible",
-    critical: "Critique",
-    
-    financialImpact: "Impact Financier et ROI",
-    annualLoss: "Perte Annuelle Estimée",
-    lossDesc: "Chiffre d'affaires perdu par manque de visibilité",
-    acquisitionPotential: "Possibilité d'Acquisition",
-    acquisitionDesc: "65% du CA perdu récupérable en 12 mois",
-    
-    lossDistribution: "Répartition des pertes par établissement",
-    investment: "Investissement",
-    roiEstimated: "ROI Estimé",
-    breakeven: "Break-Even",
-    leadsYear: "Leads/an",
-    
-    mainCompetitors: "Principaux Concurrents",
-    detailedAnalysis: "Analyse Détaillée par Établissement",
-    googleRating: "Note Google",
-    reviews: "Avis",
-    auditTitle: "Audit de la Fiche Google",
-    photos: "Photos",
-    description: "Description",
-    hours: "Horaires",
-    website: "Site web",
-    phone: "Téléphone",
-    services: "Services",
-    positionsPerQuery: "Positions par Requête",
-    
-    matrixTitle: "Matrice de Positionnement par Requête",
-    legendExcellent: "Excellent",
-    legendToImprove: "À améliorer",
-    legendCritical: "Critique",
-    
-    newAudit: "← Nouvel audit",
-    exportPdf: "📄 Exporter en PDF",
-    
-    footer: "Propulsé avec ❤️ — V1",
-    
-    // Status
-    statusExcellent: "★ Excellent",
-    statusGood: "✓ Bon",
-    statusMedium: "⚡ À améliorer",
-    statusWeak: "⚠️ Critique",
-    statusUrgent: "🚨 Urgent",
+    apiKeySteps: ["Créez un compte gratuit sur", "Confirmez votre email", "Allez dans Dashboard → API Key", "Copiez votre clé (100 recherches/mois gratuites)"],
+    apiKeyLabel: "Votre clé API SerpAPI", apiKeyPlaceholder: "Collez votre clé API ici...", continueButton: "Continuer",
+    configTitle: "Configuration de l'audit", businessInfoTitle: "Informations du prospect",
+    businessName: "Nom de l'entreprise", businessNamePlaceholder: "Ex: Alsace Carreaux",
+    logoLabel: "Logo (URL)", logoPlaceholder: "https://...", metierLabel: "Métier / Activité",
+    metierPlaceholder: "Ex: carrelage, plombier...", panierLabel: "Panier moyen (€)", panierPlaceholder: "Ex: 500",
+    margeLabel: "Marge (%)", margePlaceholder: "Ex: 15", establishmentsTitle: "Établissements à analyser",
+    establishment: "Établissement", delete: "Supprimer", cityLabel: "Ville", cityPlaceholder: "Ville",
+    volumeLabel: "Volume recherches/mois", addEstablishment: "+ Ajouter un établissement",
+    keywordsTitle: "Mots-clés à analyser", keywordsDesc: "Variable :", keywordPlaceholder: "Ex: [métier] [ville]",
+    addKeyword: "+ Ajouter un mot-clé", backButton: "Retour", launchButton: "Lancer l'analyse",
+    analysisInProgress: "Analyse en cours...", analysisWait: "L'analyse peut prendre quelques minutes",
+    auditBadge: "Audit SEO Local", establishments: "établissement(s)", statsEstablishments: "Établissements",
+    statsAvgRating: "Note Moyenne", statsQueries: "Requêtes", statsVisible: "Visibilité",
+    visibilityDiagnostic: "Diagnostic Visibilité", top3Positions: "Top 3", excellent: "Excellent",
+    positions47: "Position 4-7", toImprove: "À améliorer", positions8plus: "Position 8+", critical: "Critique",
+    financialImpact: "Impact Financier", annualLoss: "Perte Annuelle Estimée",
+    lossDesc: "CA perdu par manque de visibilité", acquisitionPotential: "Possibilité d'Acquisition",
+    acquisitionDesc: "Récupérable en 12 mois", lossDistribution: "Répartition par établissement",
+    investment: "Investissement", roiEstimated: "ROI Estimé", breakeven: "Break-Even", leadsYear: "Leads/an",
+    mainCompetitors: "Concurrents Principaux", detailedAnalysis: "Analyse Détaillée",
+    googleRating: "Note Google", reviews: "Avis", positionsPerQuery: "Positions par Requête",
+    matrixTitle: "Matrice de Positionnement", legendExcellent: "Top 3", legendToImprove: "4-7",
+    legendCritical: "8+", newAudit: "Nouvel audit", exportPdf: "Exporter PDF", footer: "Propulsé avec ❤️ — V1",
+    statusExcellent: "★ Leader", statusGood: "✓ Performant", statusMedium: "⚡ Potentiel",
+    statusWeak: "⚠ À risque", statusUrgent: "🚨 Critique", searchPlaceholder: "Rechercher un établissement...",
   },
   it: {
-    // Login
-    loginTitle: "Audit SEO Locale",
-    loginSubtitle: "Accesso riservato",
-    password: "Password",
-    passwordPlaceholder: "Inserisci la password...",
-    passwordError: "Password errata",
-    accessButton: "Accedi allo strumento →",
-    
-    // Header
-    headerTitle: "Audit SEO Locale",
-    headerSubtitle: "Analisi Google Maps",
-    configSubtitle: "Configurazione",
-    analysisSubtitle: "Analisi in corso...",
-    resultsSubtitle: "Risultati",
-    
-    // Step 1
-    step1Badge: "Audit automatizzato",
-    step1Title: "Analizza la visibilità",
-    step1Highlight: "Google Maps",
-    step1Desc: "Genera un audit completo con analisi della scheda, posizionamento, concorrenti e impatto finanziario",
+    loginTitle: "Audit SEO Locale", loginSubtitle: "Accesso riservato", password: "Password",
+    passwordPlaceholder: "Inserisci la password...", passwordError: "Password errata",
+    accessButton: "Accedi", headerTitle: "Audit SEO Locale", headerSubtitle: "Analisi Google Maps",
+    configSubtitle: "Configurazione", analysisSubtitle: "Analisi in corso...", resultsSubtitle: "Risultati",
+    step1Badge: "Audit automatizzato", step1Title: "Analizza la visibilità", step1Highlight: "Google Maps",
+    step1Desc: "Genera un audit completo con posizionamento, concorrenti e impatto finanziario",
     apiKeyTitle: "Come ottenere una chiave API SerpAPI?",
-    apiKeySteps: [
-      "Crea un account gratuito su",
-      "Conferma la tua email",
-      "Vai su Dashboard → API Key",
-      "Copia la tua chiave (100 ricerche/mese gratuite)"
-    ],
-    apiKeyLabel: "La tua chiave API SerpAPI",
-    apiKeyPlaceholder: "Incolla qui la tua chiave API...",
-    continueButton: "Continua →",
-    
-    // Step 2
-    configTitle: "Configurazione dell'audit",
-    businessInfoTitle: "Informazioni del prospect",
-    businessName: "Nome dell'azienda",
-    businessNamePlaceholder: "Es: Milano Piastrelle",
-    logoLabel: "Logo (URL)",
-    logoPlaceholder: "https://...",
-    metierLabel: "Settore / Attività",
-    metierPlaceholder: "Es: piastrelle, idraulico...",
-    panierLabel: "Scontrino medio (€)",
-    panierPlaceholder: "Es: 500",
-    margeLabel: "Margine (%)",
-    margePlaceholder: "Es: 15",
-    
-    establishmentsTitle: "Stabilimenti da analizzare",
-    autoMessage: "Automatico: Inserisci il Place ID → recuperiamo tutto (nome, città, valutazione, foto, ecc.)",
-    placeIdTitle: "Come trovare un Place ID?",
-    placeIdDesc: "Vai su",
-    placeIdLink: "Place ID Finder Google",
-    placeIdDesc2: "→ cerca lo stabilimento → copia l'ID",
-    establishment: "Stabilimento",
-    delete: "Elimina",
-    placeIdPlaceholder: "Place ID (es: ChIJN1t_tDeuEmsRUsoyG83frY4)",
-    fetchButton: "Recupera",
-    cityLabel: "Città (per parole chiave)",
-    cityPlaceholder: "Città",
-    volumeLabel: "Volume ricerche/mese",
-    coordsLabel: "Coordinate",
-    addEstablishment: "+ Aggiungi uno stabilimento",
-    
-    keywordsTitle: "Parole chiave da analizzare",
-    keywordsDesc: "Variabile:",
-    keywordPlaceholder: "Es: [métier] [ville]",
-    addKeyword: "+ Aggiungi una parola chiave",
-    
-    backButton: "← Indietro",
-    launchButton: "🚀 Avvia l'analisi",
-    
-    // Step 3
-    analysisInProgress: "Analisi in corso...",
-    analysisWait: "L'analisi può richiedere alcuni minuti",
-    
-    // Step 4
-    auditBadge: "Audit SEO Locale",
-    establishments: "stabilimento/i",
-    
-    statsEstablishments: "Stabilimenti",
-    statsAvgRating: "Valutazione Media",
-    statsQueries: "Query Testate",
-    statsScore: "Punteggio Scheda",
-    
-    visibilityDiagnostic: "Diagnosi Visibilità",
-    top3Positions: "Posizioni Top 3",
-    excellent: "Eccellente",
-    positions47: "Posizioni 4-7",
-    toImprove: "Da migliorare",
-    positions8plus: "Posizioni 8+ / Invisibile",
-    critical: "Critico",
-    
-    financialImpact: "Impatto Finanziario e ROI",
-    annualLoss: "Perdita Annuale Stimata",
-    lossDesc: "Fatturato perso per mancanza di visibilità",
-    acquisitionPotential: "Possibilità di Acquisizione",
-    acquisitionDesc: "65% del fatturato perso recuperabile in 12 mesi",
-    
-    lossDistribution: "Distribuzione delle perdite per stabilimento",
-    investment: "Investimento",
-    roiEstimated: "ROI Stimato",
-    breakeven: "Break-Even",
-    leadsYear: "Lead/anno",
-    
-    mainCompetitors: "Principali Concorrenti",
-    detailedAnalysis: "Analisi Dettagliata per Stabilimento",
-    googleRating: "Valutazione Google",
-    reviews: "Recensioni",
-    auditTitle: "Audit della Scheda Google",
-    photos: "Foto",
-    description: "Descrizione",
-    hours: "Orari",
-    website: "Sito web",
-    phone: "Telefono",
-    services: "Servizi",
-    positionsPerQuery: "Posizioni per Query",
-    
-    matrixTitle: "Matrice di Posizionamento per Query",
-    legendExcellent: "Eccellente",
-    legendToImprove: "Da migliorare",
-    legendCritical: "Critico",
-    
-    newAudit: "← Nuovo audit",
-    exportPdf: "📄 Esporta in PDF",
-    
-    footer: "Realizzato con ❤️ — V1",
-    
-    // Status
-    statusExcellent: "★ Eccellente",
-    statusGood: "✓ Buono",
-    statusMedium: "⚡ Da migliorare",
-    statusWeak: "⚠️ Critico",
-    statusUrgent: "🚨 Urgente",
+    apiKeySteps: ["Crea un account gratuito su", "Conferma la tua email", "Vai su Dashboard → API Key", "Copia la chiave (100 ricerche/mese gratuite)"],
+    apiKeyLabel: "La tua chiave API SerpAPI", apiKeyPlaceholder: "Incolla qui la chiave API...", continueButton: "Continua",
+    configTitle: "Configurazione dell'audit", businessInfoTitle: "Informazioni del prospect",
+    businessName: "Nome dell'azienda", businessNamePlaceholder: "Es: Milano Piastrelle",
+    logoLabel: "Logo (URL)", logoPlaceholder: "https://...", metierLabel: "Settore / Attività",
+    metierPlaceholder: "Es: piastrelle, idraulico...", panierLabel: "Scontrino medio (€)", panierPlaceholder: "Es: 500",
+    margeLabel: "Margine (%)", margePlaceholder: "Es: 15", establishmentsTitle: "Stabilimenti da analizzare",
+    establishment: "Stabilimento", delete: "Elimina", cityLabel: "Città", cityPlaceholder: "Città",
+    volumeLabel: "Volume ricerche/mese", addEstablishment: "+ Aggiungi stabilimento",
+    keywordsTitle: "Parole chiave", keywordsDesc: "Variabile:", keywordPlaceholder: "Es: [métier] [ville]",
+    addKeyword: "+ Aggiungi parola chiave", backButton: "Indietro", launchButton: "Avvia analisi",
+    analysisInProgress: "Analisi in corso...", analysisWait: "L'analisi può richiedere alcuni minuti",
+    auditBadge: "Audit SEO Locale", establishments: "stabilimento/i", statsEstablishments: "Stabilimenti",
+    statsAvgRating: "Valutazione Media", statsQueries: "Query", statsVisible: "Visibilità",
+    visibilityDiagnostic: "Diagnosi Visibilità", top3Positions: "Top 3", excellent: "Eccellente",
+    positions47: "Posizione 4-7", toImprove: "Da migliorare", positions8plus: "Posizione 8+", critical: "Critico",
+    financialImpact: "Impatto Finanziario", annualLoss: "Perdita Annuale Stimata",
+    lossDesc: "Fatturato perso per scarsa visibilità", acquisitionPotential: "Possibilità di Acquisizione",
+    acquisitionDesc: "Recuperabile in 12 mesi", lossDistribution: "Distribuzione per stabilimento",
+    investment: "Investimento", roiEstimated: "ROI Stimato", breakeven: "Break-Even", leadsYear: "Lead/anno",
+    mainCompetitors: "Concorrenti Principali", detailedAnalysis: "Analisi Dettagliata",
+    googleRating: "Valutazione Google", reviews: "Recensioni", positionsPerQuery: "Posizioni per Query",
+    matrixTitle: "Matrice di Posizionamento", legendExcellent: "Top 3", legendToImprove: "4-7",
+    legendCritical: "8+", newAudit: "Nuovo audit", exportPdf: "Esporta PDF", footer: "Realizzato con ❤️ — V1",
+    statusExcellent: "★ Leader", statusGood: "✓ Performante", statusMedium: "⚡ Potenziale",
+    statusWeak: "⚠ A rischio", statusUrgent: "🚨 Critico", searchPlaceholder: "Cerca uno stabilimento...",
   }
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// COMPOSANTS
+// COMPOSANTS VISUELS
 // ═══════════════════════════════════════════════════════════════════════════════
+
+const GlowCard = ({ children, color = '#0ea5e9', style = {}, className = '' }) => (
+  <div className={className} style={{
+    background: 'rgba(255,255,255,0.95)',
+    backdropFilter: 'blur(20px)',
+    borderRadius: '20px',
+    border: '1px solid rgba(255,255,255,0.8)',
+    boxShadow: `0 8px 32px rgba(0,0,0,0.08), 0 0 0 1px rgba(14,165,233,0.1), inset 0 1px 0 rgba(255,255,255,0.8)`,
+    padding: '28px',
+    position: 'relative',
+    overflow: 'hidden',
+    transition: 'all 0.3s ease',
+    ...style
+  }}>
+    <div style={{
+      position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
+      background: `linear-gradient(90deg, ${color}, #f97316)`,
+      borderRadius: '20px 20px 0 0'
+    }} />
+    {children}
+  </div>
+);
+
+const AnimatedNumber = ({ value, suffix = '', color = '#0ea5e9' }) => {
+  const [displayed, setDisplayed] = useState(0);
+  useEffect(() => {
+    const num = parseFloat(value) || 0;
+    const duration = 1000;
+    const steps = 30;
+    const increment = num / steps;
+    let current = 0;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= num) { setDisplayed(num); clearInterval(timer); }
+      else { setDisplayed(Math.floor(current)); }
+    }, duration / steps);
+    return () => clearInterval(timer);
+  }, [value]);
+  return <span style={{ color, fontWeight: 800 }}>{displayed}{suffix}</span>;
+};
+
+const ProgressRing = ({ progress, size = 120, strokeWidth = 8 }) => {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = radius * 2 * Math.PI;
+  const offset = circumference - (progress / 100) * circumference;
+  return (
+    <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+      <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke="#e2e8f0" strokeWidth={strokeWidth} />
+      <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke="url(#gradient)" strokeWidth={strokeWidth}
+        strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round"
+        style={{ transition: 'stroke-dashoffset 0.5s ease' }} />
+      <defs>
+        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#0ea5e9" />
+          <stop offset="100%" stopColor="#f97316" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+};
 
 const StatusBadge = ({ status, lang }) => {
   const t = TRANSLATIONS[lang];
-  const config = {
-    excellent: { bg: '#22c55e', color: '#000', label: t.statusExcellent },
-    bon: { bg: '#22c55e', color: '#000', label: t.statusGood },
-    moyen: { bg: '#f59e0b', color: '#000', label: t.statusMedium },
-    faible: { bg: '#ef4444', color: '#0f172a', label: t.statusWeak },
-    critique: { bg: '#7f1d1d', color: '#fca5a5', label: t.statusUrgent }
-  }[status] || { bg: '#6b7280', color: '#0f172a', label: status };
-  
+  const configs = {
+    excellent: { bg: 'linear-gradient(135deg, #22c55e, #16a34a)', label: t.statusExcellent },
+    bon: { bg: 'linear-gradient(135deg, #0ea5e9, #0284c7)', label: t.statusGood },
+    moyen: { bg: 'linear-gradient(135deg, #f97316, #ea580c)', label: t.statusMedium },
+    faible: { bg: 'linear-gradient(135deg, #ef4444, #dc2626)', label: t.statusWeak },
+    critique: { bg: 'linear-gradient(135deg, #991b1b, #7f1d1d)', label: t.statusUrgent }
+  };
+  const config = configs[status] || configs.moyen;
   return (
-    <span style={{ padding: '6px 14px', borderRadius: '20px', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', background: config.bg, color: config.color }}>
+    <span style={{
+      padding: '8px 16px', borderRadius: '50px', fontSize: '11px', fontWeight: 700,
+      textTransform: 'uppercase', letterSpacing: '0.5px', background: config.bg, color: '#fff',
+      boxShadow: '0 4px 15px rgba(0,0,0,0.2)', display: 'inline-flex', alignItems: 'center', gap: '6px'
+    }}>
       {config.label}
     </span>
   );
 };
 
 const PositionBadge = ({ rank }) => {
-  let bg, color;
-  const numRank = typeof rank === 'string' && rank.startsWith('+') ? parseInt(rank.substring(1)) + 1 : rank;
-  
-  if (rank === 'N/A' || rank === 'ERR' || rank === null || rank === undefined) {
-    bg = '#ef4444'; color = '#fff';
-  } else if (typeof numRank === 'number' && numRank >= 1 && numRank <= 3) {
-    bg = '#22c55e'; color = '#000';
-  } else if (typeof numRank === 'number' && numRank >= 4 && numRank <= 7) {
-    bg = '#f59e0b'; color = '#000';
+  let bg, shadow;
+  const numRank = typeof rank === 'string' && rank.startsWith('+') ? 99 : rank;
+  if (rank === 'N/A' || rank === 'ERR' || rank === null) {
+    bg = 'linear-gradient(135deg, #ef4444, #dc2626)'; shadow = 'rgba(239,68,68,0.4)';
+  } else if (numRank <= 3) {
+    bg = 'linear-gradient(135deg, #22c55e, #16a34a)'; shadow = 'rgba(34,197,94,0.4)';
+  } else if (numRank <= 7) {
+    bg = 'linear-gradient(135deg, #f97316, #ea580c)'; shadow = 'rgba(249,115,22,0.4)';
   } else {
-    bg = '#ef4444'; color = '#fff';
+    bg = 'linear-gradient(135deg, #ef4444, #dc2626)'; shadow = 'rgba(239,68,68,0.4)';
   }
-  
-  let display;
-  if (rank === 'N/A' || rank === null || rank === undefined) {
-    display = 'N/A';
-  } else if (typeof rank === 'string' && rank.startsWith('+')) {
-    display = rank; // Affiche "+20" par exemple
-  } else if (typeof rank === 'number') {
-    display = `#${rank}`;
-  } else {
-    display = rank;
-  }
-  
+  const display = rank === 'N/A' || rank === null ? 'N/A' : typeof rank === 'number' ? `#${rank}` : rank;
   return (
-    <span style={{ padding: '5px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, fontFamily: 'monospace', background: bg, color: color, minWidth: '44px', display: 'inline-block', textAlign: 'center' }}>
+    <span style={{
+      padding: '6px 14px', borderRadius: '10px', fontSize: '13px', fontWeight: 700,
+      fontFamily: 'monospace', background: bg, color: '#fff', boxShadow: `0 4px 15px ${shadow}`,
+      minWidth: '50px', display: 'inline-block', textAlign: 'center'
+    }}>
       {display}
     </span>
   );
 };
 
-const RatingBadge = ({ rating }) => {
-  let bg, color;
-  if (!rating || rating === 'N/A') { bg = '#6b7280'; color = '#fff'; }
-  else if (rating >= 4.5) { bg = '#22c55e'; color = '#000'; }
-  else if (rating >= 4.1) { bg = '#f59e0b'; color = '#000'; }
-  else { bg = '#ef4444'; color = '#fff'; }
+const RatingStars = ({ rating }) => {
+  const fullStars = Math.floor(rating || 0);
+  const hasHalf = (rating || 0) - fullStars >= 0.5;
   return (
-    <span style={{ padding: '4px 10px', borderRadius: '6px', fontSize: '14px', fontWeight: 700, background: bg, color: color }}>
-      ⭐ {rating || 'N/A'}
-    </span>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+      {[1,2,3,4,5].map(i => (
+        <span key={i} style={{ 
+          color: i <= fullStars ? '#f97316' : (i === fullStars + 1 && hasHalf) ? '#f97316' : '#e2e8f0',
+          fontSize: '18px'
+        }}>
+          {i <= fullStars ? '★' : (i === fullStars + 1 && hasHalf) ? '★' : '☆'}
+        </span>
+      ))}
+      <span style={{ marginLeft: '8px', fontWeight: 700, color: '#0f172a' }}>{rating || 'N/A'}</span>
+    </div>
   );
 };
 
-const AuditCheck = ({ ok, label }) => (
-  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', background: ok ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)', border: `1px solid ${ok ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`, borderRadius: '8px' }}>
-    <span style={{ fontSize: '18px' }}>{ok ? '✅' : '❌'}</span>
-    <span style={{ fontSize: '13px', color: ok ? '#22c55e' : '#ef4444' }}>{label}</span>
+const VisibilityGauge = ({ percent, label }) => (
+  <div style={{ textAlign: 'center' }}>
+    <div style={{ position: 'relative', width: '100px', height: '100px', margin: '0 auto' }}>
+      <ProgressRing progress={percent} size={100} strokeWidth={10} />
+      <div style={{
+        position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+        fontSize: '24px', fontWeight: 800, color: '#0f172a'
+      }}>{percent}%</div>
+    </div>
+    <div style={{ marginTop: '12px', fontSize: '12px', color: '#64748b', fontWeight: 600 }}>{label}</div>
   </div>
 );
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// APPLICATION PRINCIPALE
+// APPLICATION
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export default function AuditSEOLocalV2() {
-  const [lang, setLang] = useState(null); // null = pas encore choisi
+export default function AuditSEOLocal() {
+  const [lang, setLang] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState(false);
@@ -381,7 +241,7 @@ export default function AuditSEOLocalV2() {
   const [metier, setMetier] = useState('');
   const [panierMoyen, setPanierMoyen] = useState('');
   const [margePercent, setMargePercent] = useState('15');
-  const [locations, setLocations] = useState([{ id: 1, placeId: '', name: '', city: '', lat: '', lon: '', loading: false, error: '', rating: null, reviews: null, audit: null, searchVolume: 500, searchQuery: '', searchResults: [], showResults: false }]);
+  const [locations, setLocations] = useState([{ id: 1, placeId: '', name: '', city: '', lat: '', lon: '', loading: false, error: '', rating: null, reviews: null, searchVolume: 500, searchQuery: '', searchResults: [], showResults: false }]);
   const [keywords, setKeywords] = useState([]);
   const [results, setResults] = useState(null);
   const [progress, setProgress] = useState(0);
@@ -389,742 +249,608 @@ export default function AuditSEOLocalV2() {
 
   const t = lang ? TRANSLATIONS[lang] : TRANSLATIONS.fr;
 
-  const selectLanguage = (selectedLang) => {
-    setLang(selectedLang);
-    setKeywords(DEFAULT_KEYWORDS[selectedLang]);
-  };
+  const selectLanguage = (l) => { setLang(l); setKeywords(DEFAULT_KEYWORDS[l]); };
+  const handleLogin = () => { if (passwordInput === PASSWORD) { setIsAuthenticated(true); } else { setPasswordError(true); } };
 
-  const handleLogin = () => {
-    if (passwordInput === PASSWORD) { setIsAuthenticated(true); setPasswordError(false); }
-    else { setPasswordError(true); }
-  };
-
-  const addLocation = () => {
-    setLocations([...locations, { id: Date.now(), placeId: '', name: '', city: '', lat: '', lon: '', loading: false, error: '', rating: null, reviews: null, audit: null, searchVolume: 500, searchQuery: '', searchResults: [], showResults: false }]);
-  };
-
-  const updateLocation = (id, field, value) => {
-    setLocations(locations.map(l => l.id === id ? { ...l, [field]: value } : l));
-  };
-
-  const removeLocation = (id) => {
-    if (locations.length > 1) setLocations(locations.filter(l => l.id !== id));
-  };
+  const addLocation = () => setLocations([...locations, { id: Date.now(), placeId: '', name: '', city: '', lat: '', lon: '', loading: false, error: '', rating: null, reviews: null, searchVolume: 500, searchQuery: '', searchResults: [], showResults: false }]);
+  const updateLocation = (id, field, value) => setLocations(locations.map(l => l.id === id ? { ...l, [field]: value } : l));
+  const removeLocation = (id) => { if (locations.length > 1) setLocations(locations.filter(l => l.id !== id)); };
 
   const searchPlaces = async (locationId, query) => {
-    if (!apiKey) { alert(lang === 'it' ? "Inserisci prima la chiave API SerpAPI" : "Veuillez d'abord entrer votre clé API SerpAPI"); return; }
-    if (!query || query.length < 3) { return; }
-    
+    if (!apiKey || !query || query.length < 3) return;
     setLocations(locs => locs.map(l => l.id === locationId ? { ...l, loading: true, error: '', showResults: false } : l));
-    
     try {
-      const response = await fetch('/api/serpapi', { 
-        method: 'POST', 
-        headers: { 'Content-Type': 'application/json' }, 
-        body: JSON.stringify({ apiKey, action: 'searchPlaces', query }) 
-      });
+      const response = await fetch('/api/serpapi', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ apiKey, action: 'searchPlaces', query }) });
       const data = await response.json();
-      
-      if (data.success && data.places.length > 0) {
-        setLocations(locs => locs.map(l => l.id === locationId ? { 
-          ...l, 
-          loading: false, 
-          searchResults: data.places,
-          showResults: true,
-          error: '' 
-        } : l));
+      if (data.success && data.places?.length > 0) {
+        setLocations(locs => locs.map(l => l.id === locationId ? { ...l, loading: false, searchResults: data.places, showResults: true } : l));
       } else {
-        setLocations(locs => locs.map(l => l.id === locationId ? { 
-          ...l, 
-          loading: false, 
-          searchResults: [],
-          showResults: false,
-          error: lang === 'it' ? 'Nessun risultato trovato' : 'Aucun résultat trouvé' 
-        } : l));
+        setLocations(locs => locs.map(l => l.id === locationId ? { ...l, loading: false, error: 'Aucun résultat', searchResults: [] } : l));
       }
-    } catch (error) {
-      setLocations(locs => locs.map(l => l.id === locationId ? { ...l, loading: false, error: lang === 'it' ? 'Errore di connessione' : 'Erreur de connexion' } : l));
+    } catch (e) {
+      setLocations(locs => locs.map(l => l.id === locationId ? { ...l, loading: false, error: 'Erreur de connexion' } : l));
     }
   };
 
   const selectPlace = (locationId, place) => {
-    // Extraire la ville depuis l'adresse
     let city = '';
     if (place.address) {
       const parts = place.address.split(',');
-      if (parts.length >= 2) {
-        const cityPart = parts[parts.length - 2].trim();
-        city = cityPart.replace(/\d{5}/, '').trim();
-      }
+      if (parts.length >= 2) city = parts[parts.length - 2].trim().replace(/\d{5}/, '').trim();
     }
-    
-    setLocations(locs => locs.map(l => l.id === locationId ? { 
-      ...l, 
-      placeId: place.placeId,
-      name: place.name,
-      city: city,
-      lat: place.lat,
-      lon: place.lon,
-      rating: place.rating,
-      reviews: place.reviews,
-      searchQuery: place.name,
-      searchResults: [],
-      showResults: false,
-      error: ''
-    } : l));
+    setLocations(locs => locs.map(l => l.id === locationId ? { ...l, placeId: place.placeId, name: place.name, city, lat: place.lat, lon: place.lon, rating: place.rating, reviews: place.reviews, searchQuery: place.name, searchResults: [], showResults: false } : l));
   };
 
-  const updateKeyword = (index, value) => { const newKeywords = [...keywords]; newKeywords[index] = value; setKeywords(newKeywords); };
+  const updateKeyword = (i, v) => { const k = [...keywords]; k[i] = v; setKeywords(k); };
   const addKeyword = () => setKeywords([...keywords, '']);
-  const removeKeyword = (index) => { if (keywords.length > 1) setKeywords(keywords.filter((_, i) => i !== index)); };
-
-  const exportPDF = () => { window.print(); };
+  const removeKeyword = (i) => { if (keywords.length > 1) setKeywords(keywords.filter((_, idx) => idx !== i)); };
+  const exportPDF = () => window.print();
 
   const runAnalysis = async () => {
-    setStep(3);
-    setProgress(0);
-    const validLocations = locations.filter(l => l.placeId && l.lat && l.lon);
-    const totalQueries = validLocations.length * keywords.length;
-    let completedQueries = 0;
-    const panierMoyenNum = parseFloat(panierMoyen) || 500;
-    const margeNum = parseFloat(margePercent) / 100 || 0.15;
+    setStep(3); setProgress(0);
+    const validLocs = locations.filter(l => l.placeId && l.lat && l.lon);
+    const total = validLocs.length * keywords.length;
+    let done = 0;
+    const panier = parseFloat(panierMoyen) || 500;
+    const marge = parseFloat(margePercent) / 100 || 0.15;
 
-    const analysisResults = {
-      business: businessName, logo: businessLogo, metier: metier, panierMoyen: panierMoyenNum, marge: margeNum,
-      locations: [], allCompetitors: [],
-      summary: { totalLocations: validLocations.length, avgRating: 0, totalReviews: 0, top3Positions: 0, top7Positions: 0, invisiblePositions: 0, auditScore: 0 }
-    };
+    const res = { business: businessName, logo: businessLogo, metier, panier, marge, locations: [], allCompetitors: [],
+      summary: { totalLocs: validLocs.length, avgRating: 0, totalReviews: 0, top3: 0, top7: 0, invisible: 0 } };
 
-    for (const location of validLocations) {
-      const locationResult = { ...location, rankings: [], competitors: [], status: 'moyen', top3Count: 0, top7Count: 0, invisibleCount: 0 };
-
-      for (const keywordTemplate of keywords) {
-        const keyword = keywordTemplate.replace(/\[métier\]/g, metier).replace(/\[ville\]/g, location.city);
-        setProgressText(`${lang === 'it' ? 'Analisi' : 'Analyse'}: "${keyword}"`);
-
+    for (const loc of validLocs) {
+      const locRes = { ...loc, rankings: [], competitors: [], status: 'moyen', top3: 0, top7: 0, invisible: 0 };
+      for (const kwTpl of keywords) {
+        const kw = kwTpl.replace(/\[métier\]/g, metier).replace(/\[ville\]/g, loc.city);
+        setProgressText(`Analyse: "${kw}"`);
         try {
-          const response = await fetch('/api/serpapi', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ apiKey, action: 'searchRanking', keyword, lat: location.lat, lon: location.lon }) });
-          const data = await response.json();
+          const resp = await fetch('/api/serpapi', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ apiKey, action: 'searchRanking', keyword: kw, lat: loc.lat, lon: loc.lon }) });
+          const data = await resp.json();
           let rank = 'N/A';
           if (data.local_results) {
             for (let i = 0; i < data.local_results.length; i++) {
-              if (data.local_results[i].place_id === location.placeId) { rank = i + 1; break; }
+              if (data.local_results[i].place_id === loc.placeId) { rank = i + 1; break; }
             }
-            // Si non trouvé dans les résultats, marquer la position comme > nombre de résultats
-            if (rank === 'N/A' && data.local_results.length > 0) {
-              rank = '+' + data.local_results.length;
-            }
+            if (rank === 'N/A' && data.local_results.length > 0) rank = '+' + data.local_results.length;
           }
           if (data.competitors) {
-            locationResult.competitors = data.competitors;
-            data.competitors.forEach(comp => { if (!analysisResults.allCompetitors.find(c => c.placeId === comp.placeId)) { analysisResults.allCompetitors.push(comp); } });
+            locRes.competitors = data.competitors;
+            data.competitors.forEach(c => { if (!res.allCompetitors.find(x => x.placeId === c.placeId)) res.allCompetitors.push(c); });
           }
-          locationResult.rankings.push({ keyword, keywordTemplate, rank });
+          locRes.rankings.push({ keyword: kw, rank });
           if (typeof rank === 'number') {
-            if (rank <= 3) { analysisResults.summary.top3Positions++; locationResult.top3Count++; }
-            if (rank <= 7) { analysisResults.summary.top7Positions++; locationResult.top7Count++; }
-          } else { analysisResults.summary.invisiblePositions++; locationResult.invisibleCount++; }
-        } catch (error) {
-          locationResult.rankings.push({ keyword, keywordTemplate, rank: 'ERR' });
-          locationResult.invisibleCount++; analysisResults.summary.invisiblePositions++;
-        }
-        completedQueries++;
-        setProgress(Math.round((completedQueries / totalQueries) * 100));
-        await new Promise(resolve => setTimeout(resolve, 1500));
+            if (rank <= 3) { res.summary.top3++; locRes.top3++; }
+            if (rank <= 7) { res.summary.top7++; locRes.top7++; }
+          } else { res.summary.invisible++; locRes.invisible++; }
+        } catch { locRes.rankings.push({ keyword: kw, rank: 'ERR' }); locRes.invisible++; res.summary.invisible++; }
+        done++; setProgress(Math.round((done / total) * 100));
+        await new Promise(r => setTimeout(r, 1500));
       }
-
-      const keywordCount = keywords.length;
-      const top3Ratio = locationResult.top3Count / keywordCount;
-      const top7Ratio = locationResult.top7Count / keywordCount;
-      if (top3Ratio >= 0.7 && locationResult.rating >= 4.5) { locationResult.status = 'excellent'; }
-      else if (top3Ratio >= 0.5 || (top7Ratio >= 0.7 && locationResult.rating >= 4.1)) { locationResult.status = 'bon'; }
-      else if (top7Ratio >= 0.3) { locationResult.status = 'moyen'; }
-      else if (locationResult.invisibleCount >= keywordCount * 0.5) { locationResult.status = 'critique'; }
-      else { locationResult.status = 'faible'; }
-
-      if (locationResult.audit) {
-        let auditScore = 0;
-        if (locationResult.audit.hasPhotos) auditScore += 20;
-        if (locationResult.audit.photosCount >= 10) auditScore += 10;
-        if (locationResult.audit.hasDescription) auditScore += 20;
-        if (locationResult.audit.hasHours) auditScore += 15;
-        if (locationResult.audit.hasWebsite) auditScore += 15;
-        if (locationResult.audit.hasPhone) auditScore += 10;
-        if (locationResult.audit.hasServices) auditScore += 10;
-        locationResult.auditScore = auditScore;
-        analysisResults.summary.auditScore += auditScore;
-      }
-      if (locationResult.rating) analysisResults.summary.avgRating += locationResult.rating;
-      if (locationResult.reviews) analysisResults.summary.totalReviews += locationResult.reviews;
-      analysisResults.locations.push(locationResult);
+      const kwCount = keywords.length;
+      if (locRes.top3 / kwCount >= 0.7 && locRes.rating >= 4.5) locRes.status = 'excellent';
+      else if (locRes.top3 / kwCount >= 0.5) locRes.status = 'bon';
+      else if (locRes.top7 / kwCount >= 0.3) locRes.status = 'moyen';
+      else if (locRes.invisible / kwCount >= 0.5) locRes.status = 'critique';
+      else locRes.status = 'faible';
+      if (locRes.rating) res.summary.avgRating += locRes.rating;
+      if (locRes.reviews) res.summary.totalReviews += locRes.reviews;
+      res.locations.push(locRes);
     }
 
-    const locsWithRating = analysisResults.locations.filter(l => l.rating);
-    if (locsWithRating.length > 0) { analysisResults.summary.avgRating = (analysisResults.summary.avgRating / locsWithRating.length).toFixed(1); }
-    analysisResults.summary.auditScore = Math.round(analysisResults.summary.auditScore / validLocations.length);
+    const withRating = res.locations.filter(l => l.rating);
+    if (withRating.length) res.summary.avgRating = (res.summary.avgRating / withRating.length).toFixed(1);
+    const totalTests = res.summary.totalLocs * keywords.length;
+    const invisRate = res.summary.invisible / totalTests;
 
-    const totalKeywordTests = analysisResults.summary.totalLocations * keywords.length;
-    const invisibleRate = analysisResults.summary.invisiblePositions / totalKeywordTests;
-
-    analysisResults.locations.forEach(loc => {
-      const locInvisibleRate = loc.invisibleCount / keywords.length;
-      const locPoorRate = (keywords.length - loc.top7Count) / keywords.length;
-      const searchVolume = loc.searchVolume || 500;
-      const monthlyLostVisits = searchVolume * 0.35 * (locInvisibleRate + locPoorRate * 0.5);
-      loc.estimatedLoss = Math.round(monthlyLostVisits * 12 * 0.04 * panierMoyenNum * margeNum / 1000);
+    res.locations.forEach(loc => {
+      const locInvisRate = loc.invisible / keywords.length;
+      const locPoorRate = (keywords.length - loc.top7) / keywords.length;
+      const vol = loc.searchVolume || 500;
+      const lost = vol * 0.35 * (locInvisRate + locPoorRate * 0.5);
+      loc.estimatedLoss = Math.round(lost * 12 * 0.04 * panier * marge / 1000);
     });
 
-    const totalLoss = analysisResults.locations.reduce((sum, loc) => sum + loc.estimatedLoss, 0);
-    analysisResults.financial = {
-      totalLoss,
-      potentialGain: Math.round(totalLoss * 0.65),
-      roi: totalLoss > 0 ? Math.round((totalLoss * 0.65 / 15) * 100) : 0,
-      breakeven: '2-3 ' + (lang === 'it' ? 'mesi' : 'mois'),
-      leadsPerYear: Math.round(totalLoss * 0.65 / (panierMoyenNum * margeNum) * 1000),
-      investmentRange: '10-20K'
-    };
-    analysisResults.summary.invisiblePercent = Math.round(invisibleRate * 100);
+    const totalLoss = res.locations.reduce((s, l) => s + l.estimatedLoss, 0);
+    res.financial = { totalLoss, potentialGain: Math.round(totalLoss * 0.65), roi: totalLoss > 0 ? Math.round((totalLoss * 0.65 / 15) * 100) : 0, breakeven: '2-3 ' + (lang === 'it' ? 'mesi' : 'mois'), leadsPerYear: Math.round(totalLoss * 0.65 / (panier * marge) * 1000), investmentRange: '10-20K' };
+    res.summary.invisiblePercent = Math.round(invisRate * 100);
+    res.summary.visiblePercent = 100 - res.summary.invisiblePercent;
 
-    const competitorCounts = {};
-    analysisResults.allCompetitors.forEach(c => {
-      if (competitorCounts[c.placeId]) { competitorCounts[c.placeId].count++; }
-      else { competitorCounts[c.placeId] = { ...c, count: 1 }; }
-    });
-    analysisResults.topCompetitors = Object.values(competitorCounts).sort((a, b) => b.count - a.count).slice(0, 5);
+    const compCounts = {};
+    res.allCompetitors.forEach(c => { compCounts[c.placeId] = compCounts[c.placeId] ? { ...compCounts[c.placeId], count: compCounts[c.placeId].count + 1 } : { ...c, count: 1 }; });
+    res.topCompetitors = Object.values(compCounts).sort((a, b) => b.count - a.count).slice(0, 5);
 
-    setResults(analysisResults);
-    setStep(4);
-  };
-
-  const styles = {
-    app: { minHeight: '100vh', background: 'linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%)', color: '#0f172a', fontFamily: "'Segoe UI', -apple-system, sans-serif" },
-    header: { borderBottom: '1px solid rgba(0,0,0,0.08)', background: '#0f172a', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#0f172a' },
-    logo: { display: 'flex', alignItems: 'center', gap: '12px' },
-    logoIcon: { width: '44px', height: '44px', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px' },
-    container: { maxWidth: '1300px', margin: '0 auto', padding: '40px 24px 80px' },
-    card: { background: '#fff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '28px', marginBottom: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' },
-    btn: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '14px 28px', borderRadius: '10px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', border: 'none', transition: 'all 0.2s ease' },
-    btnPrimary: { background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', color: '#0f172a', boxShadow: '0 4px 15px rgba(99, 102, 241, 0.3)' },
-    btnSecondary: { background: '#f1f5f9', color: '#0f172a', border: '1px solid #e2e8f0' },
-    input: { width: '100%', padding: '14px 18px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', color: '#0f172a', fontSize: '14px', fontFamily: 'inherit', boxSizing: 'border-box' },
-    label: { display: 'block', fontSize: '12px', fontWeight: 600, color: '#6366f1', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' },
-    statsGrid: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' },
-    statCard: { background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '24px', textAlign: 'center', boxShadow: '0 2px 10px rgba(0,0,0,0.03)' },
-    footer: { textAlign: 'center', padding: '30px', borderTop: '1px solid #e2e8f0', marginTop: '40px', color: '#64748b', fontSize: '14px' }
+    setResults(res); setStep(4);
   };
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // SÉLECTION DE LANGUE
+  // STYLES
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  const baseStyles = {
+    app: { minHeight: '100vh', background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%)', color: '#0f172a', fontFamily: "'Inter', 'Segoe UI', -apple-system, sans-serif" },
+    header: { background: 'linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%)', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#fff', boxShadow: '0 4px 20px rgba(3,105,161,0.3)' },
+    container: { maxWidth: '1400px', margin: '0 auto', padding: '40px 24px 80px' },
+    btn: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '14px 28px', borderRadius: '12px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', border: 'none', transition: 'all 0.3s ease' },
+    btnPrimary: { background: 'linear-gradient(135deg, #0ea5e9, #0284c7)', color: '#fff', boxShadow: '0 4px 20px rgba(14,165,233,0.4)' },
+    btnSecondary: { background: '#fff', color: '#0369a1', border: '2px solid #0ea5e9', boxShadow: '0 4px 15px rgba(14,165,233,0.15)' },
+    input: { width: '100%', padding: '16px 20px', background: '#fff', border: '2px solid #e2e8f0', borderRadius: '12px', color: '#0f172a', fontSize: '15px', transition: 'all 0.3s ease', outline: 'none' },
+    label: { display: 'block', fontSize: '12px', fontWeight: 700, color: '#0369a1', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' },
+    footer: { textAlign: 'center', padding: '30px', color: '#64748b', fontSize: '14px' }
+  };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SÉLECTION LANGUE
   // ═══════════════════════════════════════════════════════════════════════════
 
   if (!lang) {
     return (
-      <div style={styles.app}>
+      <div style={baseStyles.app}>
         <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div style={{ ...styles.card, maxWidth: '500px', width: '100%', textAlign: 'center', padding: '50px' }}>
-            <div style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, #22c55e, #6366f1)', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px', margin: '0 auto 30px', boxShadow: '0 8px 30px rgba(16, 185, 129, 0.3)' }}>🌍</div>
-            <h1 style={{ fontSize: '28px', fontWeight: 700, marginBottom: '12px' }}>Audit SEO Local</h1>
+          <GlowCard style={{ maxWidth: '500px', width: '100%', textAlign: 'center', padding: '50px' }}>
+            <div style={{ width: '100px', height: '100px', background: 'linear-gradient(135deg, #0ea5e9, #f97316)', borderRadius: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '50px', margin: '0 auto 30px', boxShadow: '0 20px 40px rgba(14,165,233,0.3)', transform: 'rotate(-5deg)' }}>🌍</div>
+            <h1 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '12px', background: 'linear-gradient(135deg, #0369a1, #0ea5e9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Audit SEO Local</h1>
             <p style={{ color: '#64748b', marginBottom: '40px', fontSize: '16px' }}>Choisissez votre langue / Scegli la tua lingua</p>
-            
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <button onClick={() => selectLanguage('fr')} style={{ ...styles.btn, ...styles.btnPrimary, padding: '20px', flexDirection: 'column', gap: '12px' }}>
-                <span style={{ fontSize: '36px' }}>🇫🇷</span>
-                <span style={{ fontSize: '16px' }}>Français</span>
+              <button onClick={() => selectLanguage('fr')} style={{ ...baseStyles.btn, ...baseStyles.btnPrimary, padding: '24px', flexDirection: 'column', gap: '12px', borderRadius: '16px' }}>
+                <span style={{ fontSize: '48px' }}>🇫🇷</span>
+                <span style={{ fontSize: '16px', fontWeight: 700 }}>Français</span>
               </button>
-              <button onClick={() => selectLanguage('it')} style={{ ...styles.btn, ...styles.btnPrimary, padding: '20px', flexDirection: 'column', gap: '12px' }}>
-                <span style={{ fontSize: '36px' }}>🇮🇹</span>
-                <span style={{ fontSize: '16px' }}>Italiano</span>
+              <button onClick={() => selectLanguage('it')} style={{ ...baseStyles.btn, ...baseStyles.btnPrimary, padding: '24px', flexDirection: 'column', gap: '12px', borderRadius: '16px' }}>
+                <span style={{ fontSize: '48px' }}>🇮🇹</span>
+                <span style={{ fontSize: '16px', fontWeight: 700 }}>Italiano</span>
               </button>
             </div>
-
-            <div style={styles.footer}>Propulsé avec ❤️ — V1</div>
-          </div>
+          </GlowCard>
         </div>
       </div>
     );
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // PAGE DE CONNEXION
+  // LOGIN
   // ═══════════════════════════════════════════════════════════════════════════
 
   if (!isAuthenticated) {
     return (
-      <div style={styles.app}>
+      <div style={baseStyles.app}>
         <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div style={{ ...styles.card, maxWidth: '420px', width: '100%', textAlign: 'center', padding: '40px' }}>
-            <div style={{ width: '70px', height: '70px', background: 'linear-gradient(135deg, #22c55e, #6366f1)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px', margin: '0 auto 24px', boxShadow: '0 8px 30px rgba(16, 185, 129, 0.3)' }}>🔐</div>
-            <h1 style={{ fontSize: '26px', fontWeight: 700, marginBottom: '8px' }}>{t.loginTitle}</h1>
-            <p style={{ color: '#64748b', marginBottom: '32px', fontSize: '14px' }}>{t.loginSubtitle}</p>
-            
-            <div style={{ marginBottom: '20px', textAlign: 'left' }}>
-              <label style={styles.label}>{t.password}</label>
-              <input type="password" style={{ ...styles.input, borderColor: passwordError ? '#ef4444' : 'rgba(255,255,255,0.1)' }} placeholder={t.passwordPlaceholder} value={passwordInput} onChange={(e) => { setPasswordInput(e.target.value); setPasswordError(false); }} onKeyPress={(e) => e.key === 'Enter' && handleLogin()} />
-              {passwordError && <p style={{ color: '#ef4444', fontSize: '12px', marginTop: '8px' }}>❌ {t.passwordError}</p>}
+          <GlowCard style={{ maxWidth: '440px', width: '100%', textAlign: 'center', padding: '50px' }}>
+            <div style={{ width: '90px', height: '90px', background: 'linear-gradient(135deg, #0ea5e9, #0284c7)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '42px', margin: '0 auto 30px', boxShadow: '0 20px 40px rgba(14,165,233,0.3)' }}>🔐</div>
+            <h1 style={{ fontSize: '28px', fontWeight: 800, marginBottom: '8px', color: '#0f172a' }}>{t.loginTitle}</h1>
+            <p style={{ color: '#64748b', marginBottom: '32px' }}>{t.loginSubtitle}</p>
+            <div style={{ marginBottom: '24px', textAlign: 'left' }}>
+              <label style={baseStyles.label}>{t.password}</label>
+              <input type="password" style={{ ...baseStyles.input, borderColor: passwordError ? '#ef4444' : '#e2e8f0' }} placeholder={t.passwordPlaceholder} value={passwordInput} onChange={(e) => { setPasswordInput(e.target.value); setPasswordError(false); }} onKeyPress={(e) => e.key === 'Enter' && handleLogin()} onFocus={(e) => e.target.style.borderColor = '#0ea5e9'} onBlur={(e) => e.target.style.borderColor = passwordError ? '#ef4444' : '#e2e8f0'} />
+              {passwordError && <p style={{ color: '#ef4444', fontSize: '13px', marginTop: '8px' }}>❌ {t.passwordError}</p>}
             </div>
-
-            <button style={{ ...styles.btn, ...styles.btnPrimary, width: '100%' }} onClick={handleLogin}>{t.accessButton}</button>
-            <div style={styles.footer}>{t.footer}</div>
-          </div>
+            <button style={{ ...baseStyles.btn, ...baseStyles.btnPrimary, width: '100%', padding: '18px' }} onClick={handleLogin}>{t.accessButton} →</button>
+            <p style={{ marginTop: '30px', color: '#94a3b8', fontSize: '13px' }}>{t.footer}</p>
+          </GlowCard>
         </div>
       </div>
     );
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ÉTAPE 1: API Key
+  // ÉTAPE 1 - API KEY
   // ═══════════════════════════════════════════════════════════════════════════
 
   if (step === 1) {
     return (
-      <div style={styles.app}>
-        <header style={styles.header}>
-          <div style={styles.logo}>
-            <div style={styles.logoIcon}>📊</div>
+      <div style={baseStyles.app}>
+        <header style={baseStyles.header}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '44px', height: '44px', background: 'rgba(255,255,255,0.2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>📊</div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: '16px' }}>{t.headerTitle}</div>
-              <div style={{ fontSize: '12px', color: '#64748b' }}>{t.headerSubtitle}</div>
+              <div style={{ fontWeight: 700, fontSize: '18px' }}>{t.headerTitle}</div>
+              <div style={{ fontSize: '12px', opacity: 0.8 }}>{t.headerSubtitle}</div>
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '20px' }}>{lang === 'fr' ? '🇫🇷' : '🇮🇹'}</span>
-            <span style={{ fontSize: '12px', color: '#64748b' }}>V1</span>
-          </div>
+          <span style={{ fontSize: '24px' }}>{lang === 'fr' ? '🇫🇷' : '🇮🇹'}</span>
         </header>
 
-        <div style={styles.container}>
-          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 20px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '100px', fontSize: '12px', fontWeight: 600, color: '#22c55e', marginBottom: '20px' }}>⚡ {t.step1Badge}</div>
-            <h2 style={{ fontSize: '42px', fontWeight: 800, marginBottom: '16px', lineHeight: 1.1 }}>{t.step1Title}<br /><span style={{ color: '#22c55e' }}>{t.step1Highlight}</span></h2>
-            <p style={{ fontSize: '18px', color: '#64748b', maxWidth: '650px', margin: '0 auto' }}>{t.step1Desc}</p>
+        <div style={baseStyles.container}>
+          <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 24px', background: 'linear-gradient(135deg, rgba(14,165,233,0.1), rgba(249,115,22,0.1))', border: '2px solid rgba(14,165,233,0.3)', borderRadius: '100px', fontSize: '13px', fontWeight: 700, color: '#0369a1', marginBottom: '24px' }}>
+              <span style={{ fontSize: '18px' }}>⚡</span> {t.step1Badge}
+            </div>
+            <h2 style={{ fontSize: '48px', fontWeight: 800, marginBottom: '20px', lineHeight: 1.1 }}>
+              {t.step1Title}<br />
+              <span style={{ background: 'linear-gradient(135deg, #0ea5e9, #f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{t.step1Highlight}</span>
+            </h2>
+            <p style={{ fontSize: '18px', color: '#64748b', maxWidth: '600px', margin: '0 auto' }}>{t.step1Desc}</p>
           </div>
 
-          <div style={{ ...styles.card, maxWidth: '700px', margin: '0 auto' }}>
-            <div style={{ background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(6, 182, 212, 0.1))', border: '1px solid rgba(59, 130, 246, 0.2)', borderRadius: '12px', padding: '20px', marginBottom: '24px' }}>
-              <h3 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '12px' }}>🔑 {t.apiKeyTitle}</h3>
-              <ol style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.9, paddingLeft: '20px', margin: 0 }}>
-                <li>{t.apiKeySteps[0]} <a href="https://serpapi.com/users/sign_up" target="_blank" rel="noreferrer" style={{ color: '#22c55e' }}>serpapi.com</a></li>
+          <GlowCard style={{ maxWidth: '700px', margin: '0 auto' }}>
+            <div style={{ background: 'linear-gradient(135deg, rgba(14,165,233,0.08), rgba(249,115,22,0.08))', borderRadius: '16px', padding: '24px', marginBottom: '28px', border: '1px solid rgba(14,165,233,0.2)' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '16px', color: '#0369a1' }}>🔑 {t.apiKeyTitle}</h3>
+              <ol style={{ fontSize: '14px', color: '#64748b', lineHeight: 2, paddingLeft: '20px', margin: 0 }}>
+                <li>{t.apiKeySteps[0]} <a href="https://serpapi.com/users/sign_up" target="_blank" rel="noreferrer" style={{ color: '#0ea5e9', fontWeight: 600 }}>serpapi.com</a></li>
                 <li>{t.apiKeySteps[1]}</li>
                 <li>{t.apiKeySteps[2]}</li>
                 <li>{t.apiKeySteps[3]}</li>
               </ol>
             </div>
-
-            <div style={{ marginBottom: '20px' }}>
-              <label style={styles.label}>{t.apiKeyLabel}</label>
-              <input type="password" style={styles.input} placeholder={t.apiKeyPlaceholder} value={apiKey} onChange={(e) => setApiKey(e.target.value)} />
+            <div style={{ marginBottom: '24px' }}>
+              <label style={baseStyles.label}>{t.apiKeyLabel}</label>
+              <input type="password" style={baseStyles.input} placeholder={t.apiKeyPlaceholder} value={apiKey} onChange={(e) => setApiKey(e.target.value)} onFocus={(e) => e.target.style.borderColor = '#0ea5e9'} onBlur={(e) => e.target.style.borderColor = '#e2e8f0'} />
             </div>
+            <button style={{ ...baseStyles.btn, ...baseStyles.btnPrimary, width: '100%', padding: '18px', fontSize: '16px' }} onClick={() => apiKey && setStep(2)}>{t.continueButton} →</button>
+          </GlowCard>
 
-            <button style={{ ...styles.btn, ...styles.btnPrimary, width: '100%' }} onClick={() => apiKey ? setStep(2) : alert(lang === 'it' ? 'Inserisci una chiave API' : 'Veuillez entrer une clé API')}>{t.continueButton}</button>
-          </div>
-
-          <div style={styles.footer}>{t.footer}</div>
+          <p style={baseStyles.footer}>{t.footer}</p>
         </div>
       </div>
     );
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ÉTAPE 2: Configuration
+  // ÉTAPE 2 - CONFIGURATION
   // ═══════════════════════════════════════════════════════════════════════════
 
   if (step === 2) {
     return (
-      <div style={styles.app}>
-        <header style={styles.header}>
-          <div style={styles.logo}>
-            <div style={styles.logoIcon}>📊</div>
+      <div style={baseStyles.app}>
+        <header style={baseStyles.header}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '44px', height: '44px', background: 'rgba(255,255,255,0.2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>📊</div>
             <div>
-              <div style={{ fontWeight: 700 }}>{t.headerTitle}</div>
-              <div style={{ fontSize: '12px', color: '#64748b' }}>{t.configSubtitle}</div>
+              <div style={{ fontWeight: 700, fontSize: '18px' }}>{t.headerTitle}</div>
+              <div style={{ fontSize: '12px', opacity: 0.8 }}>{t.configSubtitle}</div>
             </div>
           </div>
-          <span style={{ fontSize: '20px' }}>{lang === 'fr' ? '🇫🇷' : '🇮🇹'}</span>
         </header>
 
-        <div style={styles.container}>
-          <h2 style={{ fontSize: '28px', fontWeight: 700, marginBottom: '32px', textAlign: 'center' }}>{t.configTitle}</h2>
+        <div style={baseStyles.container}>
+          <h2 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '40px', textAlign: 'center' }}>{t.configTitle}</h2>
 
-          <div style={styles.card}>
-            <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>🏢 {t.businessInfoTitle}</h3>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px', marginBottom: '16px' }}>
+          <GlowCard style={{ marginBottom: '28px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ width: '36px', height: '36px', background: 'linear-gradient(135deg, #0ea5e9, #0284c7)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>🏢</span>
+              {t.businessInfoTitle}
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px', marginBottom: '20px' }}>
               <div>
-                <label style={styles.label}>{t.businessName}</label>
-                <input style={styles.input} placeholder={t.businessNamePlaceholder} value={businessName} onChange={(e) => setBusinessName(e.target.value)} />
+                <label style={baseStyles.label}>{t.businessName}</label>
+                <input style={baseStyles.input} placeholder={t.businessNamePlaceholder} value={businessName} onChange={(e) => setBusinessName(e.target.value)} />
               </div>
               <div>
-                <label style={styles.label}>{t.logoLabel}</label>
-                <input style={styles.input} placeholder={t.logoPlaceholder} value={businessLogo} onChange={(e) => setBusinessLogo(e.target.value)} />
+                <label style={baseStyles.label}>{t.logoLabel}</label>
+                <input style={baseStyles.input} placeholder={t.logoPlaceholder} value={businessLogo} onChange={(e) => setBusinessLogo(e.target.value)} />
               </div>
             </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px' }}>
               <div>
-                <label style={styles.label}>{t.metierLabel}</label>
-                <input style={styles.input} placeholder={t.metierPlaceholder} value={metier} onChange={(e) => setMetier(e.target.value)} />
+                <label style={baseStyles.label}>{t.metierLabel}</label>
+                <input style={baseStyles.input} placeholder={t.metierPlaceholder} value={metier} onChange={(e) => setMetier(e.target.value)} />
               </div>
               <div>
-                <label style={styles.label}>{t.panierLabel}</label>
-                <input style={styles.input} type="number" placeholder={t.panierPlaceholder} value={panierMoyen} onChange={(e) => setPanierMoyen(e.target.value)} />
+                <label style={baseStyles.label}>{t.panierLabel}</label>
+                <input style={baseStyles.input} type="number" placeholder={t.panierPlaceholder} value={panierMoyen} onChange={(e) => setPanierMoyen(e.target.value)} />
               </div>
               <div>
-                <label style={styles.label}>{t.margeLabel}</label>
-                <input style={styles.input} type="number" placeholder={t.margePlaceholder} value={margePercent} onChange={(e) => setMargePercent(e.target.value)} />
+                <label style={baseStyles.label}>{t.margeLabel}</label>
+                <input style={baseStyles.input} type="number" placeholder={t.margePlaceholder} value={margePercent} onChange={(e) => setMargePercent(e.target.value)} />
               </div>
             </div>
-          </div>
+          </GlowCard>
 
-          <div style={styles.card}>
-            <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>📍 {t.establishmentsTitle}</h3>
-
-            <div style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '10px', padding: '16px', marginBottom: '20px' }}>
-              <p style={{ fontSize: '13px', color: '#22c55e', margin: 0 }}><strong>✨ {lang === 'it' ? 'Cerca un\'attività e selezionala dalla lista' : 'Recherchez un établissement et sélectionnez-le dans la liste'}</strong></p>
-            </div>
+          <GlowCard style={{ marginBottom: '28px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ width: '36px', height: '36px', background: 'linear-gradient(135deg, #f97316, #ea580c)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>📍</span>
+              {t.establishmentsTitle}
+            </h3>
 
             {locations.map((loc, i) => (
-              <div key={loc.id} style={{ background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px', marginBottom: '16px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <span style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ width: '28px', height: '28px', background: '#6366f1', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 700 }}>{i + 1}</span>
+              <div key={loc.id} style={{ background: '#f8fafc', border: '2px solid #e2e8f0', borderRadius: '16px', padding: '24px', marginBottom: '16px', transition: 'all 0.3s ease' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                  <span style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ width: '32px', height: '32px', background: 'linear-gradient(135deg, #0ea5e9, #0284c7)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 800, color: '#fff' }}>{i + 1}</span>
                     {t.establishment}
                   </span>
-                  {locations.length > 1 && <button onClick={() => removeLocation(loc.id)} style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: '6px', color: '#ef4444', padding: '6px 12px', cursor: 'pointer', fontSize: '12px' }}>{t.delete}</button>}
+                  {locations.length > 1 && <button onClick={() => removeLocation(loc.id)} style={{ background: 'rgba(239,68,68,0.1)', border: '2px solid rgba(239,68,68,0.3)', borderRadius: '10px', color: '#ef4444', padding: '8px 16px', cursor: 'pointer', fontWeight: 600, transition: 'all 0.3s ease' }}>{t.delete}</button>}
                 </div>
 
-                {/* Champ de recherche */}
-                <div style={{ position: 'relative', marginBottom: '16px' }}>
-                  <div style={{ display: 'flex', gap: '10px' }}>
-                    <input 
-                      style={{ ...styles.input, background: '#fff', flex: 1 }} 
-                      placeholder={lang === 'it' ? 'Cerca un\'attività (es: Pizzeria Roma)...' : 'Rechercher un établissement (ex: Boulangerie Paris)...'} 
-                      value={loc.searchQuery} 
-                      onChange={(e) => updateLocation(loc.id, 'searchQuery', e.target.value)} 
-                      onKeyPress={(e) => e.key === 'Enter' && searchPlaces(loc.id, loc.searchQuery)}
-                    />
-                    <button 
-                      onClick={() => searchPlaces(loc.id, loc.searchQuery)} 
-                      disabled={loc.loading || !loc.searchQuery || loc.searchQuery.length < 3} 
-                      style={{ ...styles.btn, ...styles.btnPrimary, padding: '14px 24px', opacity: (loc.loading || !loc.searchQuery || loc.searchQuery.length < 3) ? 0.6 : 1 }}
-                    >
-                      {loc.loading ? '⏳' : '🔍'}
-                    </button>
+                <div style={{ position: 'relative', marginBottom: '20px' }}>
+                  <div style={{ display: 'flex', gap: '12px' }}>
+                    <input style={{ ...baseStyles.input, flex: 1 }} placeholder={t.searchPlaceholder} value={loc.searchQuery} onChange={(e) => updateLocation(loc.id, 'searchQuery', e.target.value)} onKeyPress={(e) => e.key === 'Enter' && searchPlaces(loc.id, loc.searchQuery)} />
+                    <button onClick={() => searchPlaces(loc.id, loc.searchQuery)} disabled={loc.loading} style={{ ...baseStyles.btn, ...baseStyles.btnPrimary, padding: '16px 24px', opacity: loc.loading ? 0.7 : 1 }}>{loc.loading ? '⏳' : '🔍'}</button>
                   </div>
-                  
-                  {/* Résultats de recherche */}
+
                   {loc.showResults && loc.searchResults.length > 0 && (
-                    <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px', marginTop: '8px', maxHeight: '300px', overflowY: 'auto', zIndex: 100 }}>
+                    <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: '#fff', border: '2px solid #e2e8f0', borderRadius: '16px', marginTop: '8px', maxHeight: '300px', overflowY: 'auto', zIndex: 100, boxShadow: '0 20px 40px rgba(0,0,0,0.15)' }}>
                       {loc.searchResults.map((place, idx) => (
-                        <div 
-                          key={idx} 
-                          onClick={() => selectPlace(loc.id, place)}
-                          style={{ padding: '14px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer', transition: 'background 0.2s' }}
-                          onMouseOver={(e) => e.currentTarget.style.background = 'rgba(16, 185, 129, 0.1)'}
-                          onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
-                        >
-                          <div style={{ fontWeight: 600, marginBottom: '4px' }}>{place.name}</div>
-                          <div style={{ fontSize: '12px', color: '#64748b' }}>{place.address}</div>
-                          {place.rating && (
-                            <div style={{ fontSize: '12px', color: '#f59e0b', marginTop: '4px' }}>⭐ {place.rating} ({place.reviews} {lang === 'it' ? 'recensioni' : 'avis'})</div>
-                          )}
+                        <div key={idx} onClick={() => selectPlace(loc.id, place)} style={{ padding: '16px 20px', borderBottom: '1px solid #e2e8f0', cursor: 'pointer', transition: 'all 0.2s ease' }} onMouseOver={(e) => e.currentTarget.style.background = 'rgba(14,165,233,0.05)'} onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}>
+                          <div style={{ fontWeight: 700, marginBottom: '4px', color: '#0f172a' }}>{place.name}</div>
+                          <div style={{ fontSize: '13px', color: '#64748b' }}>{place.address}</div>
+                          {place.rating && <div style={{ marginTop: '6px' }}><RatingStars rating={place.rating} /></div>}
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
 
-                {loc.error && <div style={{ color: '#ef4444', fontSize: '13px', marginBottom: '16px', padding: '10px', background: 'rgba(239,68,68,0.1)', borderRadius: '8px' }}>❌ {loc.error}</div>}
+                {loc.error && <div style={{ color: '#ef4444', fontSize: '14px', marginBottom: '16px', padding: '12px', background: 'rgba(239,68,68,0.1)', borderRadius: '10px', border: '1px solid rgba(239,68,68,0.3)' }}>❌ {loc.error}</div>}
 
-                {/* Établissement sélectionné */}
                 {loc.name && (
-                  <div style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)', borderRadius: '10px', padding: '16px', marginBottom: '16px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.1), rgba(22,163,74,0.05))', border: '2px solid rgba(34,197,94,0.3)', borderRadius: '14px', padding: '20px', marginBottom: '20px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div>
-                        <div style={{ fontSize: '16px', fontWeight: 600, color: '#22c55e' }}>✅ {loc.name}</div>
-                        <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>{loc.city}</div>
+                        <div style={{ fontSize: '18px', fontWeight: 700, color: '#16a34a', marginBottom: '4px' }}>✅ {loc.name}</div>
+                        <div style={{ fontSize: '14px', color: '#64748b' }}>{loc.city}</div>
                       </div>
-                      {loc.rating && <RatingBadge rating={loc.rating} />}
+                      {loc.rating && <RatingStars rating={loc.rating} />}
                     </div>
                   </div>
                 )}
 
-                {/* Champs éditables */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                   <div>
-                    <label style={{ ...styles.label, fontSize: '10px' }}>{t.cityLabel}</label>
-                    <input style={{ ...styles.input, background: '#fff' }} placeholder={t.cityPlaceholder} value={loc.city} onChange={(e) => updateLocation(loc.id, 'city', e.target.value)} />
+                    <label style={{ ...baseStyles.label, fontSize: '11px' }}>{t.cityLabel}</label>
+                    <input style={baseStyles.input} placeholder={t.cityPlaceholder} value={loc.city} onChange={(e) => updateLocation(loc.id, 'city', e.target.value)} />
                   </div>
                   <div>
-                    <label style={{ ...styles.label, fontSize: '10px' }}>{t.volumeLabel}</label>
-                    <input style={{ ...styles.input, background: '#fff' }} type="number" placeholder="500" value={loc.searchVolume} onChange={(e) => updateLocation(loc.id, 'searchVolume', parseInt(e.target.value) || 500)} />
+                    <label style={{ ...baseStyles.label, fontSize: '11px' }}>{t.volumeLabel}</label>
+                    <input style={baseStyles.input} type="number" placeholder="500" value={loc.searchVolume} onChange={(e) => updateLocation(loc.id, 'searchVolume', parseInt(e.target.value) || 500)} />
                   </div>
                 </div>
               </div>
             ))}
 
-            <button onClick={addLocation} style={{ width: '100%', padding: '16px', background: 'rgba(255,255,255,0.05)', border: '1px solid #e2e8f0', borderRadius: '12px', color: '#0f172a', cursor: 'pointer', fontSize: '14px', transition: 'all 0.2s ease' }} onMouseOver={(e) => { e.target.style.background = 'rgba(255,255,255,0.1)'; e.target.style.borderColor = 'rgba(255,255,255,0.4)'; }} onMouseOut={(e) => { e.target.style.background = 'rgba(255,255,255,0.05)'; e.target.style.borderColor = 'rgba(255,255,255,0.2)'; }}>{t.addEstablishment}</button>
-          </div>
+            <button onClick={addLocation} style={{ width: '100%', padding: '18px', background: '#fff', border: '2px dashed #0ea5e9', borderRadius: '14px', color: '#0ea5e9', cursor: 'pointer', fontSize: '15px', fontWeight: 700, transition: 'all 0.3s ease' }} onMouseOver={(e) => { e.target.style.background = 'rgba(14,165,233,0.05)'; e.target.style.borderStyle = 'solid'; }} onMouseOut={(e) => { e.target.style.background = '#fff'; e.target.style.borderStyle = 'dashed'; }}>{t.addEstablishment}</button>
+          </GlowCard>
 
-          <div style={styles.card}>
-            <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>🔍 {t.keywordsTitle}</h3>
-            <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>{t.keywordsDesc} <code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>[métier]</code></p>
+          <GlowCard style={{ marginBottom: '28px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ width: '36px', height: '36px', background: 'linear-gradient(135deg, #22c55e, #16a34a)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>🔍</span>
+              {t.keywordsTitle}
+            </h3>
+            <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '20px' }}>{t.keywordsDesc} <code style={{ background: '#f1f5f9', padding: '4px 10px', borderRadius: '6px', fontWeight: 600, color: '#0369a1' }}>[métier]</code></p>
             
             {keywords.map((kw, i) => (
-              <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
-                <input style={{ ...styles.input, flex: 1 }} value={kw} onChange={(e) => updateKeyword(i, e.target.value)} placeholder={t.keywordPlaceholder} />
-                {keywords.length > 1 && <button onClick={() => removeKeyword(i)} style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: '8px', color: '#ef4444', padding: '0 14px', cursor: 'pointer', fontSize: '18px' }}>×</button>}
+              <div key={i} style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
+                <input style={{ ...baseStyles.input, flex: 1 }} value={kw} onChange={(e) => updateKeyword(i, e.target.value)} placeholder={t.keywordPlaceholder} />
+                {keywords.length > 1 && <button onClick={() => removeKeyword(i)} style={{ background: 'rgba(239,68,68,0.1)', border: '2px solid rgba(239,68,68,0.3)', borderRadius: '12px', color: '#ef4444', padding: '0 18px', cursor: 'pointer', fontSize: '20px', fontWeight: 700 }}>×</button>}
               </div>
             ))}
             
-            <button onClick={addKeyword} style={{ marginTop: '8px', padding: '12px 20px', background: 'rgba(255,255,255,0.05)', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#0f172a', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s ease' }} onMouseOver={(e) => { e.target.style.background = 'rgba(255,255,255,0.1)'; e.target.style.borderColor = 'rgba(255,255,255,0.4)'; }} onMouseOut={(e) => { e.target.style.background = 'rgba(255,255,255,0.05)'; e.target.style.borderColor = 'rgba(255,255,255,0.2)'; }}>{t.addKeyword}</button>
-          </div>
+            <button onClick={addKeyword} style={{ marginTop: '12px', padding: '14px 24px', background: '#fff', border: '2px dashed #22c55e', borderRadius: '12px', color: '#22c55e', cursor: 'pointer', fontWeight: 700, transition: 'all 0.3s ease' }} onMouseOver={(e) => { e.target.style.background = 'rgba(34,197,94,0.05)'; e.target.style.borderStyle = 'solid'; }} onMouseOut={(e) => { e.target.style.background = '#fff'; e.target.style.borderStyle = 'dashed'; }}>{t.addKeyword}</button>
+          </GlowCard>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <button style={{ ...styles.btn, ...styles.btnSecondary }} onClick={() => setStep(1)}>{t.backButton}</button>
-            <button style={{ ...styles.btn, ...styles.btnPrimary, opacity: (!businessName || !metier || locations.every(l => !l.placeId || !l.lat)) ? 0.5 : 1 }} onClick={runAnalysis} disabled={!businessName || !metier || locations.every(l => !l.placeId || !l.lat)}>{t.launchButton}</button>
+            <button style={{ ...baseStyles.btn, ...baseStyles.btnSecondary }} onClick={() => setStep(1)}>← {t.backButton}</button>
+            <button style={{ ...baseStyles.btn, ...baseStyles.btnPrimary, padding: '18px 40px', fontSize: '16px', opacity: (!businessName || !metier || locations.every(l => !l.placeId)) ? 0.5 : 1 }} onClick={runAnalysis} disabled={!businessName || !metier || locations.every(l => !l.placeId)}>🚀 {t.launchButton}</button>
           </div>
 
-          <div style={styles.footer}>{t.footer}</div>
+          <p style={baseStyles.footer}>{t.footer}</p>
         </div>
       </div>
     );
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ÉTAPE 3: Chargement
+  // ÉTAPE 3 - CHARGEMENT
   // ═══════════════════════════════════════════════════════════════════════════
 
   if (step === 3) {
     return (
-      <div style={styles.app}>
-        <header style={styles.header}>
-          <div style={styles.logo}>
-            <div style={styles.logoIcon}>📊</div>
+      <div style={baseStyles.app}>
+        <header style={baseStyles.header}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ width: '44px', height: '44px', background: 'rgba(255,255,255,0.2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>📊</div>
             <div>
-              <div style={{ fontWeight: 700 }}>{t.headerTitle}</div>
-              <div style={{ fontSize: '12px', color: '#64748b' }}>{t.analysisSubtitle}</div>
+              <div style={{ fontWeight: 700, fontSize: '18px' }}>{t.headerTitle}</div>
+              <div style={{ fontSize: '12px', opacity: 0.8 }}>{t.analysisSubtitle}</div>
             </div>
           </div>
         </header>
 
-        <div style={styles.container}>
-          <div style={{ ...styles.card, maxWidth: '500px', margin: '80px auto', textAlign: 'center', padding: '50px 40px' }}>
-            <div style={{ width: '140px', height: '140px', margin: '0 auto 32px', borderRadius: '50%', background: `conic-gradient(#22c55e ${progress * 3.6}deg, #1a2942 0deg)`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 40px rgba(16, 185, 129, 0.2)' }}>
-              <div style={{ width: '115px', height: '115px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px', fontWeight: 700 }}>{progress}%</div>
+        <div style={baseStyles.container}>
+          <GlowCard style={{ maxWidth: '500px', margin: '80px auto', textAlign: 'center', padding: '60px' }}>
+            <div style={{ position: 'relative', width: '160px', height: '160px', margin: '0 auto 40px' }}>
+              <ProgressRing progress={progress} size={160} strokeWidth={12} />
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', fontSize: '42px', fontWeight: 800, background: 'linear-gradient(135deg, #0ea5e9, #f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{progress}%</div>
             </div>
-            <h3 style={{ fontSize: '20px', marginBottom: '12px' }}>{t.analysisInProgress}</h3>
-            <p style={{ fontSize: '14px', color: '#64748b', minHeight: '40px' }}>{progressText}</p>
-            <p style={{ fontSize: '12px', color: '#4a5568', marginTop: '20px' }}>☕ {t.analysisWait}</p>
-          </div>
+            <h3 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px' }}>{t.analysisInProgress}</h3>
+            <p style={{ fontSize: '15px', color: '#64748b', minHeight: '50px' }}>{progressText}</p>
+            <p style={{ fontSize: '13px', color: '#94a3b8', marginTop: '24px' }}>☕ {t.analysisWait}</p>
+          </GlowCard>
         </div>
       </div>
     );
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ÉTAPE 4: Résultats
+  // ÉTAPE 4 - RÉSULTATS
   // ═══════════════════════════════════════════════════════════════════════════
 
   if (step === 4 && results) {
     return (
-      <div style={styles.app} id="audit-report">
-        <style>{`@media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .no-print { display: none !important; } }`}</style>
+      <div style={baseStyles.app}>
+        <style>{`@media print { .no-print { display: none !important; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }`}</style>
         
-        <header style={styles.header} className="no-print">
-          <div style={styles.logo}>
-            <div style={styles.logoIcon}>📊</div>
+        <header style={baseStyles.header} className="no-print">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {results.logo && <img src={results.logo} alt="" style={{ width: '44px', height: '44px', borderRadius: '12px', objectFit: 'cover' }} />}
             <div>
-              <div style={{ fontWeight: 700 }}>{t.headerTitle}</div>
-              <div style={{ fontSize: '12px', color: '#64748b' }}>{results.business}</div>
+              <div style={{ fontWeight: 700, fontSize: '18px' }}>{t.headerTitle}</div>
+              <div style={{ fontSize: '12px', opacity: 0.8 }}>{results.business}</div>
             </div>
           </div>
           <div style={{ display: 'flex', gap: '12px' }}>
-            <button style={{ ...styles.btn, ...styles.btnSecondary, padding: '10px 20px' }} onClick={() => { setStep(2); setResults(null); }}>{t.newAudit}</button>
-            <button style={{ ...styles.btn, ...styles.btnPrimary, padding: '10px 20px' }} onClick={exportPDF}>{t.exportPdf}</button>
+            <button style={{ ...baseStyles.btn, background: 'rgba(255,255,255,0.2)', color: '#fff', border: '2px solid rgba(255,255,255,0.3)' }} onClick={() => { setStep(2); setResults(null); }}>← {t.newAudit}</button>
+            <button style={{ ...baseStyles.btn, ...baseStyles.btnPrimary }} onClick={exportPDF}>📄 {t.exportPdf}</button>
           </div>
         </header>
 
-        <div style={styles.container}>
-          {/* En-tête avec logo agrandi */}
-          <div style={{ textAlign: 'center', marginBottom: '50px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 20px', background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.3)', borderRadius: '20px', fontSize: '12px', color: '#3b82f6', marginBottom: '24px' }}>📊 {t.auditBadge} — 2025</div>
-            
-            {/* Logo agrandi */}
-            {results.logo && (
-              <div style={{ marginBottom: '24px' }}>
-                <img src={results.logo} alt="Logo" style={{ width: '150px', height: '150px', borderRadius: '20px', objectFit: 'contain', background: '#fff', padding: '15px', boxShadow: '0 8px 30px rgba(0,0,0,0.3)' }} onError={(e) => { e.target.style.display = 'none'; }} />
-              </div>
-            )}
-            
-            <h2 style={{ fontSize: '44px', fontWeight: 800, marginBottom: '12px' }}>
-              <span style={{ color: '#22c55e' }}>{results.business}</span>
-            </h2>
-            <p style={{ color: '#64748b', fontSize: '18px' }}>{results.metier} — {results.summary.totalLocations} {t.establishments}</p>
+        <div style={baseStyles.container}>
+          {/* EN-TÊTE */}
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '12px 28px', background: 'linear-gradient(135deg, rgba(14,165,233,0.1), rgba(249,115,22,0.1))', border: '2px solid rgba(14,165,233,0.3)', borderRadius: '100px', fontSize: '14px', fontWeight: 700, color: '#0369a1', marginBottom: '28px' }}>
+              📊 {t.auditBadge} — 2025
+            </div>
+            {results.logo && <div style={{ marginBottom: '24px' }}><img src={results.logo} alt="" style={{ width: '140px', height: '140px', borderRadius: '28px', objectFit: 'contain', background: '#fff', padding: '16px', boxShadow: '0 20px 50px rgba(0,0,0,0.15)' }} /></div>}
+            <h2 style={{ fontSize: '52px', fontWeight: 800, marginBottom: '16px', background: 'linear-gradient(135deg, #0369a1, #0ea5e9, #f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{results.business}</h2>
+            <p style={{ color: '#64748b', fontSize: '20px' }}>{results.metier} — {results.summary.totalLocs} {t.establishments}</p>
           </div>
 
-          {/* Stats */}
-          <div style={styles.statsGrid}>
+          {/* STATS PRINCIPALES */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '40px' }}>
             {[
-              { value: results.summary.totalLocations, label: t.statsEstablishments, color: '#22c55e' },
-              { value: results.summary.avgRating || 'N/A', label: t.statsAvgRating, color: results.summary.avgRating >= 4.5 ? '#22c55e' : results.summary.avgRating >= 4.1 ? '#f59e0b' : '#ef4444' },
-              { value: results.summary.totalLocations * keywords.length, label: t.statsQueries, color: '#6366f1' },
-              { value: results.summary.totalReviews, label: t.reviews, color: '#3b82f6' },
+              { value: results.summary.totalLocs, label: t.statsEstablishments, color: '#0ea5e9', icon: '🏢' },
+              { value: results.summary.avgRating || 'N/A', label: t.statsAvgRating, color: '#f97316', icon: '⭐' },
+              { value: results.summary.totalLocs * keywords.length, label: t.statsQueries, color: '#22c55e', icon: '🔍' },
+              { value: `${results.summary.visiblePercent}%`, label: t.statsVisible, color: '#8b5cf6', icon: '👁️' },
             ].map((stat, i) => (
-              <div key={i} style={{ ...styles.statCard, borderTop: `3px solid ${stat.color}` }}>
-                <div style={{ fontSize: '38px', fontWeight: 800, color: stat.color }}>{stat.value}</div>
-                <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b' }}>{stat.label}</div>
-              </div>
+              <GlowCard key={i} color={stat.color} style={{ textAlign: 'center', padding: '32px 24px' }}>
+                <div style={{ fontSize: '40px', marginBottom: '12px' }}>{stat.icon}</div>
+                <div style={{ fontSize: '42px', fontWeight: 800, marginBottom: '8px' }}><AnimatedNumber value={stat.value} color={stat.color} /></div>
+                <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>{stat.label}</div>
+              </GlowCard>
             ))}
           </div>
 
-          {/* Diagnostic visibilité */}
-          <div style={{ ...styles.card, marginBottom: '24px' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ width: '4px', height: '24px', background: 'linear-gradient(180deg, #22c55e, #6366f1)', borderRadius: '2px' }}></span>
+          {/* DIAGNOSTIC VISIBILITÉ */}
+          <GlowCard style={{ marginBottom: '32px' }}>
+            <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '28px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ width: '8px', height: '32px', background: 'linear-gradient(180deg, #0ea5e9, #f97316)', borderRadius: '4px' }} />
               {t.visibilityDiagnostic}
             </h3>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-              <div style={{ padding: '24px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '12px', textAlign: 'center' }}>
-                <div style={{ fontSize: '36px', fontWeight: 800, color: '#22c55e' }}>{results.summary.top3Positions}</div>
-                <div style={{ fontSize: '12px', color: '#64748b' }}>{t.top3Positions}</div>
-                <div style={{ fontSize: '11px', color: '#22c55e', marginTop: '4px' }}>🟢 {t.excellent}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
+              <VisibilityGauge percent={results.summary.visiblePercent} label="Visibilité Globale" />
+              <div style={{ textAlign: 'center', padding: '20px', background: 'linear-gradient(135deg, rgba(34,197,94,0.1), rgba(22,163,74,0.05))', borderRadius: '16px', border: '2px solid rgba(34,197,94,0.2)' }}>
+                <div style={{ fontSize: '48px', fontWeight: 800, color: '#22c55e' }}>{results.summary.top3}</div>
+                <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>{t.top3Positions}</div>
+                <div style={{ fontSize: '12px', color: '#22c55e', marginTop: '6px', fontWeight: 700 }}>🟢 {t.excellent}</div>
               </div>
-              <div style={{ padding: '24px', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.3)', borderRadius: '12px', textAlign: 'center' }}>
-                <div style={{ fontSize: '36px', fontWeight: 800, color: '#f59e0b' }}>{results.summary.top7Positions - results.summary.top3Positions}</div>
-                <div style={{ fontSize: '12px', color: '#64748b' }}>{t.positions47}</div>
-                <div style={{ fontSize: '11px', color: '#f59e0b', marginTop: '4px' }}>🟠 {t.toImprove}</div>
+              <div style={{ textAlign: 'center', padding: '20px', background: 'linear-gradient(135deg, rgba(249,115,22,0.1), rgba(234,88,12,0.05))', borderRadius: '16px', border: '2px solid rgba(249,115,22,0.2)' }}>
+                <div style={{ fontSize: '48px', fontWeight: 800, color: '#f97316' }}>{results.summary.top7 - results.summary.top3}</div>
+                <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>{t.positions47}</div>
+                <div style={{ fontSize: '12px', color: '#f97316', marginTop: '6px', fontWeight: 700 }}>🟠 {t.toImprove}</div>
               </div>
-              <div style={{ padding: '24px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '12px', textAlign: 'center' }}>
-                <div style={{ fontSize: '36px', fontWeight: 800, color: '#ef4444' }}>{results.summary.totalLocations * keywords.length - results.summary.top7Positions}</div>
-                <div style={{ fontSize: '12px', color: '#64748b' }}>{t.positions8plus}</div>
-                <div style={{ fontSize: '11px', color: '#ef4444', marginTop: '4px' }}>🔴 {t.critical}</div>
+              <div style={{ textAlign: 'center', padding: '20px', background: 'linear-gradient(135deg, rgba(239,68,68,0.1), rgba(220,38,38,0.05))', borderRadius: '16px', border: '2px solid rgba(239,68,68,0.2)' }}>
+                <div style={{ fontSize: '48px', fontWeight: 800, color: '#ef4444' }}>{results.summary.totalLocs * keywords.length - results.summary.top7}</div>
+                <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>{t.positions8plus}</div>
+                <div style={{ fontSize: '12px', color: '#ef4444', marginTop: '6px', fontWeight: 700 }}>🔴 {t.critical}</div>
               </div>
             </div>
-          </div>
+          </GlowCard>
 
-          {/* Impact Financier */}
-          <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ width: '4px', height: '24px', background: 'linear-gradient(180deg, #22c55e, #6366f1)', borderRadius: '2px' }}></span>
+          {/* IMPACT FINANCIER */}
+          <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ width: '8px', height: '32px', background: 'linear-gradient(180deg, #0ea5e9, #f97316)', borderRadius: '4px' }} />
             {t.financialImpact}
           </h3>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '24px' }}>
-            <div style={{ ...styles.card, borderLeft: '4px solid #ef4444', marginBottom: 0 }}>
-              <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b', marginBottom: '10px' }}>{t.annualLoss}</div>
-              <div style={{ fontSize: '52px', fontWeight: 800, color: '#ef4444', marginBottom: '10px' }}>-{results.financial.totalLoss}K€</div>
-              <div style={{ fontSize: '14px', color: '#64748b' }}>{t.lossDesc}</div>
-            </div>
-            <div style={{ ...styles.card, borderLeft: '4px solid #22c55e', marginBottom: 0 }}>
-              <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b', marginBottom: '10px' }}>{t.acquisitionPotential}</div>
-              <div style={{ fontSize: '52px', fontWeight: 800, color: '#22c55e', marginBottom: '10px' }}>+{results.financial.potentialGain}K€</div>
-              <div style={{ fontSize: '14px', color: '#64748b' }}>{t.acquisitionDesc}</div>
-            </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '32px' }}>
+            <GlowCard color="#ef4444" style={{ borderLeft: '6px solid #ef4444' }}>
+              <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>{t.annualLoss}</div>
+              <div style={{ fontSize: '56px', fontWeight: 800, color: '#ef4444', marginBottom: '12px' }}>-{results.financial.totalLoss}K€</div>
+              <div style={{ fontSize: '15px', color: '#64748b' }}>{t.lossDesc}</div>
+            </GlowCard>
+            <GlowCard color="#22c55e" style={{ borderLeft: '6px solid #22c55e' }}>
+              <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>{t.acquisitionPotential}</div>
+              <div style={{ fontSize: '56px', fontWeight: 800, color: '#22c55e', marginBottom: '12px' }}>+{results.financial.potentialGain}K€</div>
+              <div style={{ fontSize: '15px', color: '#64748b' }}>{t.acquisitionDesc}</div>
+            </GlowCard>
           </div>
 
-          {/* Répartition pertes */}
-          <div style={styles.card}>
-            <div style={{ fontSize: '14px', fontWeight: 700, color: '#ef4444', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>📊 {t.lossDistribution}</div>
+          {/* RÉPARTITION */}
+          <GlowCard style={{ marginBottom: '32px' }}>
+            <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#ef4444', marginBottom: '20px', textTransform: 'uppercase', letterSpacing: '1px' }}>📊 {t.lossDistribution}</h4>
             {results.locations.sort((a, b) => b.estimatedLoss - a.estimatedLoss).map((loc, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', background: '#f1f5f9', borderRadius: '10px', marginBottom: '10px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '14px' }}>{loc.city}</span>
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', background: '#f8fafc', borderRadius: '12px', marginBottom: '12px', border: '1px solid #e2e8f0' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <span style={{ fontWeight: 700, fontSize: '16px' }}>{loc.city}</span>
                   <StatusBadge status={loc.status} lang={lang} />
                 </div>
-                <span style={{ fontSize: '18px', fontWeight: 700, color: '#ef4444' }}>-{loc.estimatedLoss}K€</span>
+                <span style={{ fontSize: '20px', fontWeight: 800, color: '#ef4444' }}>-{loc.estimatedLoss}K€</span>
               </div>
             ))}
-          </div>
+          </GlowCard>
 
-          {/* ROI Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '32px' }}>
+          {/* ROI */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '40px' }}>
             {[
-              { value: results.financial.investmentRange + '€', label: t.investment, color: '#6366f1' },
+              { value: results.financial.investmentRange + '€', label: t.investment, color: '#0ea5e9' },
               { value: results.financial.roi + '%', label: t.roiEstimated, color: '#22c55e' },
-              { value: results.financial.breakeven, label: t.breakeven, color: '#f59e0b' },
-              { value: '+' + results.financial.leadsPerYear, label: t.leadsYear, color: '#3b82f6' },
+              { value: results.financial.breakeven, label: t.breakeven, color: '#f97316' },
+              { value: '+' + results.financial.leadsPerYear, label: t.leadsYear, color: '#8b5cf6' },
             ].map((m, i) => (
-              <div key={i} style={{ ...styles.statCard, padding: '22px' }}>
-                <div style={{ fontSize: '26px', fontWeight: 800, color: m.color }}>{m.value}</div>
-                <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b' }}>{m.label}</div>
-              </div>
+              <GlowCard key={i} color={m.color} style={{ textAlign: 'center', padding: '28px' }}>
+                <div style={{ fontSize: '32px', fontWeight: 800, color: m.color, marginBottom: '8px' }}>{m.value}</div>
+                <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>{m.label}</div>
+              </GlowCard>
             ))}
           </div>
 
-          {/* Concurrents */}
-          {results.topCompetitors && results.topCompetitors.length > 0 && (
-            <div style={styles.card}>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>🏆 {t.mainCompetitors}</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+          {/* CONCURRENTS */}
+          {results.topCompetitors?.length > 0 && (
+            <GlowCard style={{ marginBottom: '32px' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '24px' }}>🏆 {t.mainCompetitors}</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
                 {results.topCompetitors.map((comp, i) => (
-                  <div key={i} style={{ padding: '16px', background: '#f1f5f9', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '36px', height: '36px', background: i === 0 ? '#ffd700' : i === 1 ? '#c0c0c0' : i === 2 ? '#cd7f32' : '#4a5568', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '14px', color: '#000' }}>{i + 1}</div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: '13px', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{comp.name}</div>
-                      <div style={{ fontSize: '11px', color: '#64748b' }}>{comp.rating ? `⭐ ${comp.rating}` : ''} {comp.reviews ? `(${comp.reviews})` : ''}</div>
-                    </div>
+                  <div key={i} style={{ padding: '20px', background: '#f8fafc', borderRadius: '14px', textAlign: 'center', border: '2px solid #e2e8f0' }}>
+                    <div style={{ width: '48px', height: '48px', background: i === 0 ? 'linear-gradient(135deg, #fbbf24, #f59e0b)' : i === 1 ? 'linear-gradient(135deg, #9ca3af, #6b7280)' : i === 2 ? 'linear-gradient(135deg, #d97706, #b45309)' : '#e2e8f0', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '18px', color: i < 3 ? '#fff' : '#64748b', margin: '0 auto 12px', boxShadow: i < 3 ? '0 8px 20px rgba(0,0,0,0.2)' : 'none' }}>{i + 1}</div>
+                    <div style={{ fontSize: '14px', fontWeight: 700, marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{comp.name}</div>
+                    {comp.rating && <div style={{ fontSize: '13px', color: '#f97316' }}>⭐ {comp.rating}</div>}
                   </div>
                 ))}
               </div>
-            </div>
+            </GlowCard>
           )}
 
-          {/* Établissements détaillés */}
-          <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ width: '4px', height: '24px', background: 'linear-gradient(180deg, #22c55e, #6366f1)', borderRadius: '2px' }}></span>
+          {/* DÉTAIL PAR ÉTABLISSEMENT */}
+          <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ width: '8px', height: '32px', background: 'linear-gradient(180deg, #0ea5e9, #f97316)', borderRadius: '4px' }} />
             {t.detailedAnalysis}
           </h3>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '24px', marginBottom: '32px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '24px', marginBottom: '40px' }}>
             {results.locations.map((loc, i) => (
-              <div key={i} style={styles.card}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
+              <GlowCard key={i}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
                   <div>
-                    <div style={{ fontSize: '18px', fontWeight: 700 }}>{loc.city}</div>
+                    <div style={{ fontSize: '22px', fontWeight: 800, marginBottom: '4px' }}>{loc.city}</div>
                   </div>
                   <StatusBadge status={loc.status} lang={lang} />
                 </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '20px' }}>
-                  <div style={{ textAlign: 'center', padding: '16px', background: loc.rating >= 4.5 ? 'rgba(16, 185, 129, 0.1)' : loc.rating >= 4.1 ? 'rgba(245, 158, 11, 0.1)' : 'rgba(239, 68, 68, 0.1)', border: `1px solid ${loc.rating >= 4.5 ? 'rgba(16, 185, 129, 0.3)' : loc.rating >= 4.1 ? 'rgba(245, 158, 11, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`, borderRadius: '10px' }}>
-                    <div style={{ fontSize: '28px', fontWeight: 800, color: loc.rating >= 4.5 ? '#22c55e' : loc.rating >= 4.1 ? '#f59e0b' : '#ef4444' }}>{loc.rating || 'N/A'}</div>
-                    <div style={{ fontSize: '11px', textTransform: 'uppercase', color: '#64748b' }}>{t.googleRating}</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+                  <div style={{ textAlign: 'center', padding: '20px', background: loc.rating >= 4.5 ? 'rgba(34,197,94,0.1)' : loc.rating >= 4.1 ? 'rgba(249,115,22,0.1)' : 'rgba(239,68,68,0.1)', borderRadius: '14px', border: `2px solid ${loc.rating >= 4.5 ? 'rgba(34,197,94,0.3)' : loc.rating >= 4.1 ? 'rgba(249,115,22,0.3)' : 'rgba(239,68,68,0.3)'}` }}>
+                    <div style={{ fontSize: '36px', fontWeight: 800, color: loc.rating >= 4.5 ? '#22c55e' : loc.rating >= 4.1 ? '#f97316' : '#ef4444' }}>{loc.rating || 'N/A'}</div>
+                    <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600, textTransform: 'uppercase' }}>{t.googleRating}</div>
                   </div>
-                  <div style={{ textAlign: 'center', padding: '16px', background: '#f1f5f9', borderRadius: '10px' }}>
-                    <div style={{ fontSize: '28px', fontWeight: 800, color: '#6366f1' }}>{loc.reviews || 'N/A'}</div>
-                    <div style={{ fontSize: '11px', textTransform: 'uppercase', color: '#64748b' }}>{t.reviews}</div>
+                  <div style={{ textAlign: 'center', padding: '20px', background: '#f8fafc', borderRadius: '14px', border: '2px solid #e2e8f0' }}>
+                    <div style={{ fontSize: '36px', fontWeight: 800, color: '#0ea5e9' }}>{loc.reviews || 'N/A'}</div>
+                    <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600, textTransform: 'uppercase' }}>{t.reviews}</div>
                   </div>
                 </div>
-
-                <div style={{ fontSize: '11px', fontWeight: 700, color: '#6366f1', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>{t.positionsPerQuery}</div>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '14px' }}>{t.positionsPerQuery}</div>
                 {loc.rankings.map((r, j) => (
-                  <div key={j} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: '#f1f5f9', borderRadius: '8px', marginBottom: '8px' }}>
-                    <span style={{ fontSize: '12px', fontFamily: 'monospace', color: '#64748b' }}>{r.keyword}</span>
+                  <div key={j} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', background: '#f8fafc', borderRadius: '10px', marginBottom: '10px', border: '1px solid #e2e8f0' }}>
+                    <span style={{ fontSize: '13px', color: '#64748b', fontFamily: 'monospace' }}>{r.keyword}</span>
                     <PositionBadge rank={r.rank} />
                   </div>
                 ))}
-              </div>
+              </GlowCard>
             ))}
           </div>
 
-          {/* Matrice */}
-          <div style={{ ...styles.card, overflowX: 'auto' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '20px' }}>{t.matrixTitle}</h3>
-            <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 8px', minWidth: '600px' }}>
+          {/* MATRICE */}
+          <GlowCard style={{ overflowX: 'auto' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '24px' }}>{t.matrixTitle}</h3>
+            <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 10px' }}>
               <thead>
                 <tr>
-                  <th style={{ padding: '14px', background: '#f1f5f9', fontSize: '11px', textTransform: 'uppercase', color: '#6366f1', textAlign: 'left', borderRadius: '8px 0 0 8px' }}>{lang === 'it' ? 'Query' : 'Requête'}</th>
+                  <th style={{ padding: '16px', background: 'linear-gradient(135deg, #0369a1, #0ea5e9)', color: '#fff', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'left', borderRadius: '12px 0 0 12px' }}>Requête</th>
                   {results.locations.map((loc, i) => (
-                    <th key={i} style={{ padding: '14px', background: '#f1f5f9', fontSize: '11px', textTransform: 'uppercase', color: '#6366f1', textAlign: 'center', borderRadius: i === results.locations.length - 1 ? '0 8px 8px 0' : 0 }}>{loc.city}</th>
+                    <th key={i} style={{ padding: '16px', background: 'linear-gradient(135deg, #0369a1, #0ea5e9)', color: '#fff', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'center', borderRadius: i === results.locations.length - 1 ? '0 12px 12px 0' : 0 }}>{loc.city}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {keywords.map((kw, ki) => (
                   <tr key={ki}>
-                    <td style={{ padding: '14px', background: '#f1f5f9', fontSize: '13px', fontFamily: 'monospace', borderRadius: '8px 0 0 8px' }}>{kw}</td>
+                    <td style={{ padding: '16px', background: '#f8fafc', fontSize: '14px', fontFamily: 'monospace', borderRadius: '12px 0 0 12px', border: '1px solid #e2e8f0', borderRight: 'none' }}>{kw}</td>
                     {results.locations.map((loc, li) => (
-                      <td key={li} style={{ padding: '14px', background: '#f1f5f9', textAlign: 'center', borderRadius: li === results.locations.length - 1 ? '0 8px 8px 0' : 0 }}>
+                      <td key={li} style={{ padding: '16px', background: '#f8fafc', textAlign: 'center', borderRadius: li === results.locations.length - 1 ? '0 12px 12px 0' : 0, border: '1px solid #e2e8f0', borderLeft: 'none', borderRight: li === results.locations.length - 1 ? '1px solid #e2e8f0' : 'none' }}>
                         <PositionBadge rank={loc.rankings[ki]?.rank} />
                       </td>
                     ))}
@@ -1132,22 +858,21 @@ export default function AuditSEOLocalV2() {
                 ))}
               </tbody>
             </table>
-
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', marginTop: '24px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '32px', marginTop: '28px' }}>
               {[
                 { color: '#22c55e', label: `#1-3 — ${t.legendExcellent}` },
-                { color: '#f59e0b', label: `#4-7 — ${t.legendToImprove}` },
+                { color: '#f97316', label: `#4-7 — ${t.legendToImprove}` },
                 { color: '#ef4444', label: `#8+ — ${t.legendCritical}` },
               ].map((l, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#64748b' }}>
-                  <div style={{ width: '16px', height: '16px', borderRadius: '4px', background: l.color }}></div>
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#64748b', fontWeight: 600 }}>
+                  <div style={{ width: '20px', height: '20px', borderRadius: '6px', background: l.color, boxShadow: `0 4px 10px ${l.color}40` }} />
                   {l.label}
                 </div>
               ))}
             </div>
-          </div>
+          </GlowCard>
 
-          <div style={styles.footer}>{t.footer}</div>
+          <p style={baseStyles.footer}>{t.footer}</p>
         </div>
       </div>
     );
