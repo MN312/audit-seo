@@ -92,6 +92,13 @@ export default function App() {
   const [results, setResults] = useState(null);
   const [prog, setProg] = useState(0);
   const [progT, setProgT] = useState('');
+  // PPTX fields
+  const [typeEtab, setTypeEtab] = useState('');
+  const [imgRechercheDirect, setImgRechercheDirect] = useState(null);
+  const [imgRechercheDecouverte, setImgRechercheDecouverte] = useState(null);
+  const [imgFicheGoogle, setImgFicheGoogle] = useState(null);
+  const [imgAvisGoogle, setImgAvisGoogle] = useState(null);
+  const [pptxLoading, setPptxLoading] = useState(false);
 
   const t = lang ? T[lang] : T.fr;
   const login = () => pwd === PASSWORD ? setAuth(true) : setPwdErr(true);
@@ -116,7 +123,43 @@ export default function App() {
   };
 
   const handleSemrushUpload = (id,e) => { const f=e.target.files[0];if(f){const r=new FileReader();r.onload=ev=>upLoc(id,'semrushImg',ev.target.result);r.readAsDataURL(f);} };
+  const handleImgUpload = (setter) => (e) => { const f=e.target.files[0];if(f){const r=new FileReader();r.onload=ev=>setter(ev.target.result);r.readAsDataURL(f);} };
   const canLaunch = biz.trim() && locs.some(l=>l.pid) && kws.some(k=>k.trim());
+
+  const generatePPTX = async () => {
+    if(!results) return;
+    setPptxLoading(true);
+    try {
+      const res = await fetch('/api/pptx', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bizName: biz,
+          logo,
+          activity: met,
+          typeEtablissement: typeEtab || 'établissements',
+          imgRechercheDirect,
+          imgRechercheDecouverte,
+          imgFicheGoogle,
+          imgAvisGoogle,
+          auditData: results,
+          lang
+        })
+      });
+      const data = await res.json();
+      if(data.success) {
+        const link = document.createElement('a');
+        link.href = 'data:application/vnd.openxmlformats-officedocument.presentationml.presentation;base64,' + data.data;
+        link.download = data.filename;
+        link.click();
+      } else {
+        alert('Erreur: ' + data.error);
+      }
+    } catch(err) {
+      alert('Erreur génération PPTX: ' + err.message);
+    }
+    setPptxLoading(false);
+  };
 
   const run = async () => {
     setStep(3);setProg(0);
@@ -285,6 +328,50 @@ export default function App() {
           <button onClick={()=>setKws([...kws,''])} style={{...st.btn,...st.btnO,marginTop:'8px'}}><Ic n="plus" s={16}/>{t.addKw}</button>
         </div>
 
+        {/* SECTION PPTX - Images pour la présentation */}
+        <div style={st.card}>
+          <div style={{display:'flex',alignItems:'center',gap:'10px',marginBottom:'24px'}}><div style={{width:'36px',height:'36px',background:'#fce7f3',borderRadius:'8px',display:'flex',alignItems:'center',justifyContent:'center',color:'#db2777'}}><Ic n="download" s={18}/></div><h2 style={{fontSize:'15px',fontWeight:600}}>Images pour PPTX</h2><span style={{fontSize:'11px',color:'#94a3b8'}}>(optionnel - pour générer la présentation)</span></div>
+          
+          <div style={{marginBottom:'16px'}}>
+            <label style={st.label}>Type d'établissement (pour les textes)</label>
+            <select style={{...st.input,cursor:'pointer'}} value={typeEtab} onChange={e=>setTypeEtab(e.target.value)}>
+              <option value="">-- Sélectionner --</option>
+              <option value="hôtels">Hôtels</option>
+              <option value="magasins">Magasins</option>
+              <option value="agences">Agences</option>
+              <option value="restaurants">Restaurants</option>
+              <option value="cliniques">Cliniques</option>
+              <option value="concessions">Concessions</option>
+              <option value="pharmacies">Pharmacies</option>
+              <option value="salons">Salons</option>
+              <option value="établissements">Établissements (générique)</option>
+            </select>
+          </div>
+
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'16px'}}>
+            <div style={{background:'#f8fafc',borderRadius:'8px',padding:'16px'}}>
+              <label style={st.label}>📱 Recherche directe (page 3)</label>
+              <label style={{...st.btn,...st.btnO,padding:'10px 16px',fontSize:'13px',cursor:'pointer',width:'100%',marginTop:'8px'}}><Ic n="upload" s={16}/>Uploader<input type="file" accept="image/*" style={{display:'none'}} onChange={handleImgUpload(setImgRechercheDirect)}/></label>
+              {imgRechercheDirect&&<img src={imgRechercheDirect} alt="Direct" style={{marginTop:'12px',maxWidth:'100%',maxHeight:'150px',borderRadius:'8px',border:'1px solid #e2e8f0'}}/>}
+            </div>
+            <div style={{background:'#f8fafc',borderRadius:'8px',padding:'16px'}}>
+              <label style={st.label}>📱 Recherche découverte (page 3)</label>
+              <label style={{...st.btn,...st.btnO,padding:'10px 16px',fontSize:'13px',cursor:'pointer',width:'100%',marginTop:'8px'}}><Ic n="upload" s={16}/>Uploader<input type="file" accept="image/*" style={{display:'none'}} onChange={handleImgUpload(setImgRechercheDecouverte)}/></label>
+              {imgRechercheDecouverte&&<img src={imgRechercheDecouverte} alt="Découverte" style={{marginTop:'12px',maxWidth:'100%',maxHeight:'150px',borderRadius:'8px',border:'1px solid #e2e8f0'}}/>}
+            </div>
+            <div style={{background:'#f8fafc',borderRadius:'8px',padding:'16px'}}>
+              <label style={st.label}>📱 Fiche Google Maps (page 11)</label>
+              <label style={{...st.btn,...st.btnO,padding:'10px 16px',fontSize:'13px',cursor:'pointer',width:'100%',marginTop:'8px'}}><Ic n="upload" s={16}/>Uploader<input type="file" accept="image/*" style={{display:'none'}} onChange={handleImgUpload(setImgFicheGoogle)}/></label>
+              {imgFicheGoogle&&<img src={imgFicheGoogle} alt="Fiche" style={{marginTop:'12px',maxWidth:'100%',maxHeight:'150px',borderRadius:'8px',border:'1px solid #e2e8f0'}}/>}
+            </div>
+            <div style={{background:'#f8fafc',borderRadius:'8px',padding:'16px'}}>
+              <label style={st.label}>📱 Avis Google (page 12)</label>
+              <label style={{...st.btn,...st.btnO,padding:'10px 16px',fontSize:'13px',cursor:'pointer',width:'100%',marginTop:'8px'}}><Ic n="upload" s={16}/>Uploader<input type="file" accept="image/*" style={{display:'none'}} onChange={handleImgUpload(setImgAvisGoogle)}/></label>
+              {imgAvisGoogle&&<img src={imgAvisGoogle} alt="Avis" style={{marginTop:'12px',maxWidth:'100%',maxHeight:'150px',borderRadius:'8px',border:'1px solid #e2e8f0'}}/>}
+            </div>
+          </div>
+        </div>
+
         <div style={{textAlign:'center',marginTop:'32px'}}><button style={{...st.btn,...st.btnP,padding:'14px 40px',fontSize:'15px',opacity:canLaunch?1:0.5}} onClick={run} disabled={!canLaunch}>{t.launch}<Ic n="arrow" s={18}/></button></div>
       </div>
     </div>
@@ -311,7 +398,7 @@ export default function App() {
     return(
       <div style={st.page}>
         <style>{`@media print{.noprint{display:none!important}}`}</style>
-        <header style={st.header} className="noprint"><div style={{display:'flex',alignItems:'center',gap:'14px'}}>{r.logo&&<img src={r.logo} alt="" style={{width:'40px',height:'40px',borderRadius:'8px',objectFit:'cover'}}/>}<div><div style={{fontWeight:600,fontSize:'15px'}}>{r.biz}</div><div style={{fontSize:'13px',color:'#64748b'}}>{r.met}</div></div></div><div style={{display:'flex',gap:'10px'}}><button style={{...st.btn,...st.btnS}} onClick={()=>{setStep(2);setResults(null);}}>{t.newA}</button><button style={{...st.btn,...st.btnP}} onClick={()=>window.print()}><Ic n="download" s={16}/>{t.pdf}</button></div></header>
+        <header style={st.header} className="noprint"><div style={{display:'flex',alignItems:'center',gap:'14px'}}>{r.logo&&<img src={r.logo} alt="" style={{width:'40px',height:'40px',borderRadius:'8px',objectFit:'cover'}}/>}<div><div style={{fontWeight:600,fontSize:'15px'}}>{r.biz}</div><div style={{fontSize:'13px',color:'#64748b'}}>{r.met}</div></div></div><div style={{display:'flex',gap:'10px'}}><button style={{...st.btn,...st.btnS}} onClick={()=>{setStep(2);setResults(null);}}>{t.newA}</button><button style={{...st.btn,...st.btnP}} onClick={()=>window.print()}><Ic n="download" s={16}/>{t.pdf}</button><button style={{...st.btn,background:'#db2777',color:'#fff',boxShadow:'0 4px 14px rgba(219,39,119,0.4)'}} onClick={generatePPTX} disabled={pptxLoading}>{pptxLoading?'Génération...':'📊 PPTX'}</button></div></header>
         <div style={st.container}>
           <div style={{textAlign:'center',marginBottom:'40px'}}><Badge v="pri">{t.report}</Badge><h1 style={{fontSize:'32px',fontWeight:700,marginTop:'14px',marginBottom:'8px',color:'#fff'}}>{r.biz}</h1><p style={{color:'#94a3b8',fontSize:'15px'}}>{r.sum.tot} {t.etabs}</p></div>
 
