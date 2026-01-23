@@ -53,7 +53,45 @@ export async function POST(request) {
       }
     }
 
-    // ACTION 2: Rechercher le ranking + concurrents
+    // ACTION 2: Rechercher des établissements par nom
+    if (action === "searchPlaces") {
+      const { query } = body;
+      if (!query) {
+        return Response.json({ error: "Requête de recherche manquante" }, { status: 400 });
+      }
+
+      const params = new URLSearchParams({
+        engine: "google_maps",
+        q: query,
+        type: "search",
+        api_key: apiKey,
+        hl: "fr",
+        gl: "fr",
+      });
+
+      const response = await fetch(`https://serpapi.com/search.json?${params}`);
+      const data = await response.json();
+
+      let places = [];
+      if (data.local_results) {
+        places = data.local_results.slice(0, 10).map((r) => ({
+          name: r.title || '',
+          address: r.address || '',
+          rating: r.rating || null,
+          reviews: r.reviews || null,
+          placeId: r.place_id || '',
+          lat: r.gps_coordinates?.latitude || null,
+          lon: r.gps_coordinates?.longitude || null,
+        }));
+      }
+
+      return Response.json({
+        success: true,
+        places: places,
+      });
+    }
+
+    // ACTION 3: Rechercher le ranking + concurrents
     if (action === "searchRanking") {
       if (!keyword || !lat || !lon) {
         return Response.json({ error: "Paramètres manquants" }, { status: 400 });
