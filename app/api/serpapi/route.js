@@ -1,139 +1,87 @@
+import { NextResponse } from 'next/server';
+
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { apiKey, action, keyword, lat, lon, zoom = 14, placeId } = body;
+    const { apiKey, action, query, keyword, lat, lon } = body;
 
     if (!apiKey) {
-      return Response.json({ error: "Clé API manquante" }, { status: 400 });
+      return NextResponse.json({ error: 'API key required' }, { status: 400 });
     }
 
-    // ACTION 1: Récupérer les détails d'un lieu (lat/lon + infos)
-    if (action === "getPlaceDetails") {
-      if (!placeId) {
-        return Response.json({ error: "Place ID manquant" }, { status: 400 });
-      }
-
-      const params = new URLSearchParams({
-        engine: "google_maps",
-        type: "place",
-        place_id: placeId,
-        api_key: apiKey,
-        hl: "fr",
-        gl: "fr",
-      });
-
-      const response = await fetch(`https://serpapi.com/search.json?${params}`);
+    // ACTION 1: Get place details
+    if (action === 'getPlaceDetails') {
+      const { placeId } = body;
+      const url = `https://serpapi.com/search.json?engine=google_maps&place_id=${placeId}&api_key=${apiKey}`;
+      const response = await fetch(url);
       const data = await response.json();
-
+      
       if (data.place_results) {
         const place = data.place_results;
-        
-        // Extraire la ville depuis l'adresse
-        let city = '';
-        if (place.address) {
-          const parts = place.address.split(',');
-          if (parts.length >= 2) {
-            const cityPart = parts[parts.length - 2].trim();
-            city = cityPart.replace(/\d{5}/, '').trim();
-          }
-        }
-
-        return Response.json({
+        return NextResponse.json({
           success: true,
-          name: place.title || '',
-          address: place.address || '',
-          city: city,
-          rating: place.rating || null,
-          reviews: place.reviews || null,
-          lat: place.gps_coordinates?.latitude || null,
-          lon: place.gps_coordinates?.longitude || null,
+          name: place.title,
+          address: place.address,
+          rating: place.rating,
+          reviews: place.reviews,
+          lat: place.gps_coordinates?.latitude,
+          lon: place.gps_coordinates?.longitude,
         });
-      } else {
-        return Response.json({ error: "Lieu non trouvé", data }, { status: 404 });
       }
+      return NextResponse.json({ success: false, error: 'Place not found' });
     }
 
-    // ACTION 2: Rechercher des établissements par nom
-    if (action === "searchPlaces") {
-      const { query } = body;
-      if (!query) {
-        return Response.json({ error: "Requête de recherche manquante" }, { status: 400 });
-      }
-
-      const params = new URLSearchParams({
-        engine: "google_maps",
-        q: query,
-        type: "search",
-        api_key: apiKey,
-        hl: "fr",
-        gl: "fr",
-      });
-
-      const response = await fetch(`https://serpapi.com/search.json?${params}`);
+    // ACTION 2: Search places by name (30 results max)
+    if (action === 'searchPlaces') {
+      const url = `https://serpapi.com/search.json?engine=google_maps&q=${encodeURIComponent(query)}&type=search&api_key=${apiKey}&num=30`;
+      const response = await fetch(url);
       const data = await response.json();
-
-      let places = [];
-      if (data.local_results) {
-        places = data.local_results.slice(0, 10).map((r) => ({
-          name: r.title || '',
-          address: r.address || '',
-          rating: r.rating || null,
-          reviews: r.reviews || null,
-          placeId: r.place_id || '',
-          lat: r.gps_coordinates?.latitude || null,
-          lon: r.gps_coordinates?.longitude || null,
+      
+      if (data.local_results && data.local_results.length > 0) {
+        const places = data.local_results.slice(0, 30).map(place => ({
+          placeId: place.place_id,
+          name: place.title,
+          address: place.address,
+          rating: place.rating,
+          reviews: place.reviews,
+          lat: place.gps_coordinates?.latitude,
+          lon: place.gps_coordinates?.longitude,
         }));
+        return NextResponse.json({ success: true, places });
+      }
+      return NextResponse.json({ success: false, places: [], error: 'No results found' });
+    }
+
+    // ACTION 3: Search ranking for keyword
+    if (action === 'searchRanking') {
+      const url = `https://serpapi.com/search.json?engine=google_maps&q=${encodeURIComponent(keyword)}&ll=@${lat},${lon},15z&type=search&api_key=${apiKey}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      const competitors = [];
+      if (data.local_results) {
+        data.local_results.slice(0, 20).forEach((place, index) => {
+          competitors.push({
+            position: index + 1,
+            placeId: place.place_id,
+            name: place.title,
+            rating: place.rating,
+            reviews: place.reviews,
+          });
+        });
       }
 
-      return Response.json({
+      return NextResponse.json({
         success: true,
-        places: places,
+        local_results: data.local_results || [],
+        competitors,
       });
     }
 
-    // ACTION 3: Rechercher le ranking + concurrents
-    if (action === "searchRanking") {
-      if (!keyword || !lat || !lon) {
-        return Response.json({ error: "Paramètres manquants" }, { status: 400 });
-      }
-
-      const params = new URLSearchParams({
-        engine: "google_maps",
-        q: keyword,
-        ll: `@${lat},${lon},${zoom}z`,
-        type: "search",
-        api_key: apiKey,
-        hl: "fr",
-        gl: "fr",
-      });
-
-      const response = await fetch(`https://serpapi.com/search.json?${params}`);
-      const data = await response.json();
-
-      // Extraire les top 5 concurrents
-      let competitors = [];
-      if (data.local_results) {
-        competitors = data.local_results.slice(0, 5).map((r, index) => ({
-          position: index + 1,
-          name: r.title || '',
-          rating: r.rating || null,
-          reviews: r.reviews || null,
-          placeId: r.place_id || '',
-        }));
-      }
-
-      return Response.json({
-        ...data,
-        competitors: competitors,
-      });
-    }
-
-    return Response.json({ error: "Action non reconnue" }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
 
   } catch (error) {
-    return Response.json(
-      { error: "Erreur serveur", details: error.message },
-      { status: 500 }
-    );
+    console.error('API Error:', error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
