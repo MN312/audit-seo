@@ -1,878 +1,245 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// CONFIGURATION
-// ═══════════════════════════════════════════════════════════════════════════════
+import React, { useState } from 'react';
 
 const PASSWORD = "Test2026_V1";
+const DEFAULT_KW = { fr: ['[métier] [ville]', 'meilleur [métier] [ville]', '[métier] près de [ville]', 'avis [métier] [ville]'], it: ['[métier] [ville]', 'miglior [métier] [ville]', '[métier] vicino a [ville]', 'recensioni [métier] [ville]'] };
 
-const DEFAULT_KEYWORDS = {
-  fr: ['[métier] [ville]', 'meilleur [métier] [ville]', '[métier] près de [ville]', 'avis [métier] [ville]'],
-  it: ['[métier] [ville]', 'miglior [métier] [ville]', '[métier] vicino a [ville]', 'recensioni [métier] [ville]']
+const T = {
+  fr: { login: "Audit SEO Local", sub: "Outil d'analyse", pwd: "Mot de passe", pwdPh: "Entrez le mot de passe", pwdErr: "Incorrect", access: "Accéder", header: "Audit SEO Local", badge: "Automatisé", title: "Analysez votre visibilité locale", desc: "Audit complet avec positionnement et impact financier", apiTitle: "Clé API SerpAPI", apiLabel: "Clé API", apiPh: "Collez votre clé", cont: "Continuer", config: "Configuration", bizTitle: "Informations", bizName: "Entreprise", bizPh: "Ex: Alsace Carreaux", logoL: "Logo URL", logoPh: "https://...", actL: "Activité", actPh: "Ex: carrelage", panL: "Panier €", panPh: "500", marL: "Marge %", marPh: "15", etabTitle: "Établissements", etab: "Établissement", del: "Supprimer", cityL: "Ville", cityPh: "Ville", volL: "Volume/mois", addEtab: "Ajouter", kwTitle: "Mots-clés", kwDesc: "Variable:", kwPh: "Ex: [métier] [ville]", addKw: "Ajouter", back: "Retour", launch: "Lancer", analyzing: "Analyse...", wait: "Veuillez patienter", report: "Rapport", etabs: "établissement(s)", statEtab: "Établissements", statNote: "Note moyenne", statReq: "Requêtes", statVis: "Visibilité", diag: "Diagnostic", top3: "Top 3", exc: "Excellent", pos47: "Pos 4-7", imp: "À améliorer", pos8: "Pos 8+", crit: "Critique", fin: "Impact financier", loss: "Perte annuelle", lossD: "CA perdu", pot: "Potentiel", potD: "Récupérable 12 mois", dist: "Répartition", inv: "Investissement", roi: "ROI", be: "Break-even", leads: "Leads/an", comp: "Concurrents", detail: "Analyse détaillée", note: "Note", avis: "Avis", posReq: "Positions", matrix: "Matrice", newA: "Nouvel audit", pdf: "Exporter", search: "Rechercher...", footer: "V1" },
+  it: { login: "Audit SEO Locale", sub: "Strumento di analisi", pwd: "Password", pwdPh: "Inserisci password", pwdErr: "Errata", access: "Accedi", header: "Audit SEO Locale", badge: "Automatizzato", title: "Analizza la visibilità locale", desc: "Audit completo con posizionamento e impatto", apiTitle: "Chiave API SerpAPI", apiLabel: "Chiave API", apiPh: "Incolla chiave", cont: "Continua", config: "Configurazione", bizTitle: "Informazioni", bizName: "Azienda", bizPh: "Es: Milano Piastrelle", logoL: "Logo URL", logoPh: "https://...", actL: "Attività", actPh: "Es: piastrelle", panL: "Scontrino €", panPh: "500", marL: "Margine %", marPh: "15", etabTitle: "Stabilimenti", etab: "Stabilimento", del: "Elimina", cityL: "Città", cityPh: "Città", volL: "Volume/mese", addEtab: "Aggiungi", kwTitle: "Parole chiave", kwDesc: "Variabile:", kwPh: "Es: [métier] [ville]", addKw: "Aggiungi", back: "Indietro", launch: "Avvia", analyzing: "Analisi...", wait: "Attendere", report: "Rapporto", etabs: "stabilimento/i", statEtab: "Stabilimenti", statNote: "Valutazione", statReq: "Query", statVis: "Visibilità", diag: "Diagnosi", top3: "Top 3", exc: "Eccellente", pos47: "Pos 4-7", imp: "Da migliorare", pos8: "Pos 8+", crit: "Critico", fin: "Impatto finanziario", loss: "Perdita annuale", lossD: "Fatturato perso", pot: "Potenziale", potD: "Recuperabile 12 mesi", dist: "Distribuzione", inv: "Investimento", roi: "ROI", be: "Break-even", leads: "Lead/anno", comp: "Concorrenti", detail: "Analisi dettagliata", note: "Valutazione", avis: "Recensioni", posReq: "Posizioni", matrix: "Matrice", newA: "Nuovo audit", pdf: "Esporta", search: "Cerca...", footer: "V1" }
 };
 
-const TRANSLATIONS = {
-  fr: {
-    loginTitle: "Audit SEO Local", loginSubtitle: "Accès restreint", password: "Mot de passe",
-    passwordPlaceholder: "Entrez le mot de passe...", passwordError: "Mot de passe incorrect",
-    accessButton: "Accéder à l'outil", headerTitle: "Audit SEO Local", headerSubtitle: "Analyse Google Maps",
-    configSubtitle: "Configuration", analysisSubtitle: "Analyse en cours...", resultsSubtitle: "Résultats",
-    step1Badge: "Audit automatisé", step1Title: "Analysez la visibilité", step1Highlight: "Google Maps",
-    step1Desc: "Générez un audit complet avec positionnement, concurrents et impact financier",
-    apiKeyTitle: "Comment obtenir une clé API SerpAPI ?",
-    apiKeySteps: ["Créez un compte gratuit sur", "Confirmez votre email", "Allez dans Dashboard → API Key", "Copiez votre clé (100 recherches/mois gratuites)"],
-    apiKeyLabel: "Votre clé API SerpAPI", apiKeyPlaceholder: "Collez votre clé API ici...", continueButton: "Continuer",
-    configTitle: "Configuration de l'audit", businessInfoTitle: "Informations du prospect",
-    businessName: "Nom de l'entreprise", businessNamePlaceholder: "Ex: Alsace Carreaux",
-    logoLabel: "Logo (URL)", logoPlaceholder: "https://...", metierLabel: "Métier / Activité",
-    metierPlaceholder: "Ex: carrelage, plombier...", panierLabel: "Panier moyen (€)", panierPlaceholder: "Ex: 500",
-    margeLabel: "Marge (%)", margePlaceholder: "Ex: 15", establishmentsTitle: "Établissements à analyser",
-    establishment: "Établissement", delete: "Supprimer", cityLabel: "Ville", cityPlaceholder: "Ville",
-    volumeLabel: "Volume recherches/mois", addEstablishment: "+ Ajouter un établissement",
-    keywordsTitle: "Mots-clés à analyser", keywordsDesc: "Variable :", keywordPlaceholder: "Ex: [métier] [ville]",
-    addKeyword: "+ Ajouter un mot-clé", backButton: "Retour", launchButton: "Lancer l'analyse",
-    analysisInProgress: "Analyse en cours...", analysisWait: "L'analyse peut prendre quelques minutes",
-    auditBadge: "Audit SEO Local", establishments: "établissement(s)", statsEstablishments: "Établissements",
-    statsAvgRating: "Note Moyenne", statsQueries: "Requêtes", statsVisible: "Visibilité",
-    visibilityDiagnostic: "Diagnostic Visibilité", top3Positions: "Top 3", excellent: "Excellent",
-    positions47: "Position 4-7", toImprove: "À améliorer", positions8plus: "Position 8+", critical: "Critique",
-    financialImpact: "Impact Financier", annualLoss: "Perte Annuelle Estimée",
-    lossDesc: "CA perdu par manque de visibilité", acquisitionPotential: "Possibilité d'Acquisition",
-    acquisitionDesc: "Récupérable en 12 mois", lossDistribution: "Répartition par établissement",
-    investment: "Investissement", roiEstimated: "ROI Estimé", breakeven: "Break-Even", leadsYear: "Leads/an",
-    mainCompetitors: "Concurrents Principaux", detailedAnalysis: "Analyse Détaillée",
-    googleRating: "Note Google", reviews: "Avis", positionsPerQuery: "Positions par Requête",
-    matrixTitle: "Matrice de Positionnement", legendExcellent: "Top 3", legendToImprove: "4-7",
-    legendCritical: "8+", newAudit: "Nouvel audit", exportPdf: "Exporter PDF", footer: "Propulsé avec ❤️ — V1",
-    statusExcellent: "★ Leader", statusGood: "✓ Performant", statusMedium: "⚡ Potentiel",
-    statusWeak: "⚠ À risque", statusUrgent: "🚨 Critique", searchPlaceholder: "Rechercher un établissement...",
-  },
-  it: {
-    loginTitle: "Audit SEO Locale", loginSubtitle: "Accesso riservato", password: "Password",
-    passwordPlaceholder: "Inserisci la password...", passwordError: "Password errata",
-    accessButton: "Accedi", headerTitle: "Audit SEO Locale", headerSubtitle: "Analisi Google Maps",
-    configSubtitle: "Configurazione", analysisSubtitle: "Analisi in corso...", resultsSubtitle: "Risultati",
-    step1Badge: "Audit automatizzato", step1Title: "Analizza la visibilità", step1Highlight: "Google Maps",
-    step1Desc: "Genera un audit completo con posizionamento, concorrenti e impatto finanziario",
-    apiKeyTitle: "Come ottenere una chiave API SerpAPI?",
-    apiKeySteps: ["Crea un account gratuito su", "Conferma la tua email", "Vai su Dashboard → API Key", "Copia la chiave (100 ricerche/mese gratuite)"],
-    apiKeyLabel: "La tua chiave API SerpAPI", apiKeyPlaceholder: "Incolla qui la chiave API...", continueButton: "Continua",
-    configTitle: "Configurazione dell'audit", businessInfoTitle: "Informazioni del prospect",
-    businessName: "Nome dell'azienda", businessNamePlaceholder: "Es: Milano Piastrelle",
-    logoLabel: "Logo (URL)", logoPlaceholder: "https://...", metierLabel: "Settore / Attività",
-    metierPlaceholder: "Es: piastrelle, idraulico...", panierLabel: "Scontrino medio (€)", panierPlaceholder: "Es: 500",
-    margeLabel: "Margine (%)", margePlaceholder: "Es: 15", establishmentsTitle: "Stabilimenti da analizzare",
-    establishment: "Stabilimento", delete: "Elimina", cityLabel: "Città", cityPlaceholder: "Città",
-    volumeLabel: "Volume ricerche/mese", addEstablishment: "+ Aggiungi stabilimento",
-    keywordsTitle: "Parole chiave", keywordsDesc: "Variabile:", keywordPlaceholder: "Es: [métier] [ville]",
-    addKeyword: "+ Aggiungi parola chiave", backButton: "Indietro", launchButton: "Avvia analisi",
-    analysisInProgress: "Analisi in corso...", analysisWait: "L'analisi può richiedere alcuni minuti",
-    auditBadge: "Audit SEO Locale", establishments: "stabilimento/i", statsEstablishments: "Stabilimenti",
-    statsAvgRating: "Valutazione Media", statsQueries: "Query", statsVisible: "Visibilità",
-    visibilityDiagnostic: "Diagnosi Visibilità", top3Positions: "Top 3", excellent: "Eccellente",
-    positions47: "Posizione 4-7", toImprove: "Da migliorare", positions8plus: "Posizione 8+", critical: "Critico",
-    financialImpact: "Impatto Finanziario", annualLoss: "Perdita Annuale Stimata",
-    lossDesc: "Fatturato perso per scarsa visibilità", acquisitionPotential: "Possibilità di Acquisizione",
-    acquisitionDesc: "Recuperabile in 12 mesi", lossDistribution: "Distribuzione per stabilimento",
-    investment: "Investimento", roiEstimated: "ROI Stimato", breakeven: "Break-Even", leadsYear: "Lead/anno",
-    mainCompetitors: "Concorrenti Principali", detailedAnalysis: "Analisi Dettagliata",
-    googleRating: "Valutazione Google", reviews: "Recensioni", positionsPerQuery: "Posizioni per Query",
-    matrixTitle: "Matrice di Posizionamento", legendExcellent: "Top 3", legendToImprove: "4-7",
-    legendCritical: "8+", newAudit: "Nuovo audit", exportPdf: "Esporta PDF", footer: "Realizzato con ❤️ — V1",
-    statusExcellent: "★ Leader", statusGood: "✓ Performante", statusMedium: "⚡ Potenziale",
-    statusWeak: "⚠ A rischio", statusUrgent: "🚨 Critico", searchPlaceholder: "Cerca uno stabilimento...",
-  }
+const Ic = ({ n, s = 20 }) => {
+  const d = { lock: "M7 11V7a5 5 0 0110 0v4M5 11h14a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2v-7a2 2 0 012-2z", chart: "M18 20V10M12 20V4M6 20v-6", search: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z", pin: "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z", building: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4", target: "M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a6 6 0 100 12 6 6 0 000-12zm0 4a2 2 0 100 4 2 2 0 000-4z", trending: "M23 6l-9.5 9.5-5-5L1 18M17 6h6v6", users: "M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zm14 14v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75", check: "M20 6L9 17l-5-5", x: "M18 6L6 18M6 6l12 12", arrow: "M5 12h14m-7-7l7 7-7 7", download: "M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5 5 5-5m-5 5V3", plus: "M12 5v14m-7-7h14", trash: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16", globe: "M12 2a10 10 0 100 20 10 10 0 000-20zm0 0c2.5 0 4.5 4.5 4.5 10s-2 10-4.5 10-4.5-4.5-4.5-10 2-10 4.5-10zM2 12h20", key: "M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" };
+  return <svg width={s} height={s} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d={d[n]}/></svg>;
 };
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// COMPOSANTS VISUELS
-// ═══════════════════════════════════════════════════════════════════════════════
-
-const GlowCard = ({ children, color = '#0ea5e9', style = {}, className = '' }) => (
-  <div className={className} style={{
-    background: 'rgba(255,255,255,0.95)',
-    backdropFilter: 'blur(20px)',
-    borderRadius: '20px',
-    border: '1px solid rgba(255,255,255,0.8)',
-    boxShadow: `0 8px 32px rgba(0,0,0,0.08), 0 0 0 1px rgba(14,165,233,0.1), inset 0 1px 0 rgba(255,255,255,0.8)`,
-    padding: '28px',
-    position: 'relative',
-    overflow: 'hidden',
-    transition: 'all 0.3s ease',
-    ...style
-  }}>
-    <div style={{
-      position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
-      background: `linear-gradient(90deg, ${color}, #f97316)`,
-      borderRadius: '20px 20px 0 0'
-    }} />
-    {children}
-  </div>
-);
-
-const AnimatedNumber = ({ value, suffix = '', color = '#0ea5e9' }) => {
-  const [displayed, setDisplayed] = useState(0);
-  useEffect(() => {
-    const num = parseFloat(value) || 0;
-    const duration = 1000;
-    const steps = 30;
-    const increment = num / steps;
-    let current = 0;
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= num) { setDisplayed(num); clearInterval(timer); }
-      else { setDisplayed(Math.floor(current)); }
-    }, duration / steps);
-    return () => clearInterval(timer);
-  }, [value]);
-  return <span style={{ color, fontWeight: 800 }}>{displayed}{suffix}</span>;
+const Badge = ({ children, v = 'def' }) => {
+  const c = { def: ['#f1f5f9', '#475569'], ok: ['#dcfce7', '#16a34a'], warn: ['#fef3c7', '#d97706'], err: ['#fee2e2', '#dc2626'], pri: ['#dbeafe', '#2563eb'] }[v];
+  return <span style={{ display: 'inline-flex', padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: 600, background: c[0], color: c[1] }}>{children}</span>;
 };
 
-const ProgressRing = ({ progress, size = 120, strokeWidth = 8 }) => {
-  const radius = (size - strokeWidth) / 2;
-  const circumference = radius * 2 * Math.PI;
-  const offset = circumference - (progress / 100) * circumference;
-  return (
-    <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
-      <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke="#e2e8f0" strokeWidth={strokeWidth} />
-      <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke="url(#gradient)" strokeWidth={strokeWidth}
-        strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round"
-        style={{ transition: 'stroke-dashoffset 0.5s ease' }} />
-      <defs>
-        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#0ea5e9" />
-          <stop offset="100%" stopColor="#f97316" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
+const PosBadge = ({ r }) => {
+  const n = typeof r === 'string' && r.startsWith('+') ? 99 : r;
+  let v = 'err';
+  if (n !== 'N/A' && n !== null && typeof n === 'number') { if (n <= 3) v = 'ok'; else if (n <= 7) v = 'warn'; }
+  return <Badge v={v}>{r === 'N/A' || r === null ? 'N/A' : typeof r === 'number' ? '#' + r : r}</Badge>;
 };
 
-const StatusBadge = ({ status, lang }) => {
-  const t = TRANSLATIONS[lang];
-  const configs = {
-    excellent: { bg: 'linear-gradient(135deg, #22c55e, #16a34a)', label: t.statusExcellent },
-    bon: { bg: 'linear-gradient(135deg, #0ea5e9, #0284c7)', label: t.statusGood },
-    moyen: { bg: 'linear-gradient(135deg, #f97316, #ea580c)', label: t.statusMedium },
-    faible: { bg: 'linear-gradient(135deg, #ef4444, #dc2626)', label: t.statusWeak },
-    critique: { bg: 'linear-gradient(135deg, #991b1b, #7f1d1d)', label: t.statusUrgent }
-  };
-  const config = configs[status] || configs.moyen;
-  return (
-    <span style={{
-      padding: '8px 16px', borderRadius: '50px', fontSize: '11px', fontWeight: 700,
-      textTransform: 'uppercase', letterSpacing: '0.5px', background: config.bg, color: '#fff',
-      boxShadow: '0 4px 15px rgba(0,0,0,0.2)', display: 'inline-flex', alignItems: 'center', gap: '6px'
-    }}>
-      {config.label}
-    </span>
-  );
-};
+const Card = ({ children, style }) => <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e2e8f0', padding: '28px', marginBottom: '24px', ...style }}>{children}</div>;
+const Btn = ({ children, primary, style, ...p }) => <button style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px 24px', borderRadius: '10px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', border: 'none', transition: 'all 0.2s', background: primary ? '#0f172a' : '#f1f5f9', color: primary ? '#fff' : '#475569', ...style }} {...p}>{children}</button>;
+const Input = ({ style, ...p }) => <input style={{ width: '100%', padding: '14px 16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', color: '#0f172a', fontSize: '15px', outline: 'none', ...style }} {...p} />;
+const Label = ({ children }) => <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#475569', marginBottom: '8px' }}>{children}</label>;
 
-const PositionBadge = ({ rank }) => {
-  let bg, shadow;
-  const numRank = typeof rank === 'string' && rank.startsWith('+') ? 99 : rank;
-  if (rank === 'N/A' || rank === 'ERR' || rank === null) {
-    bg = 'linear-gradient(135deg, #ef4444, #dc2626)'; shadow = 'rgba(239,68,68,0.4)';
-  } else if (numRank <= 3) {
-    bg = 'linear-gradient(135deg, #22c55e, #16a34a)'; shadow = 'rgba(34,197,94,0.4)';
-  } else if (numRank <= 7) {
-    bg = 'linear-gradient(135deg, #f97316, #ea580c)'; shadow = 'rgba(249,115,22,0.4)';
-  } else {
-    bg = 'linear-gradient(135deg, #ef4444, #dc2626)'; shadow = 'rgba(239,68,68,0.4)';
-  }
-  const display = rank === 'N/A' || rank === null ? 'N/A' : typeof rank === 'number' ? `#${rank}` : rank;
-  return (
-    <span style={{
-      padding: '6px 14px', borderRadius: '10px', fontSize: '13px', fontWeight: 700,
-      fontFamily: 'monospace', background: bg, color: '#fff', boxShadow: `0 4px 15px ${shadow}`,
-      minWidth: '50px', display: 'inline-block', textAlign: 'center'
-    }}>
-      {display}
-    </span>
-  );
-};
-
-const RatingStars = ({ rating }) => {
-  const fullStars = Math.floor(rating || 0);
-  const hasHalf = (rating || 0) - fullStars >= 0.5;
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
-      {[1,2,3,4,5].map(i => (
-        <span key={i} style={{ 
-          color: i <= fullStars ? '#f97316' : (i === fullStars + 1 && hasHalf) ? '#f97316' : '#e2e8f0',
-          fontSize: '18px'
-        }}>
-          {i <= fullStars ? '★' : (i === fullStars + 1 && hasHalf) ? '★' : '☆'}
-        </span>
-      ))}
-      <span style={{ marginLeft: '8px', fontWeight: 700, color: '#0f172a' }}>{rating || 'N/A'}</span>
-    </div>
-  );
-};
-
-const VisibilityGauge = ({ percent, label }) => (
-  <div style={{ textAlign: 'center' }}>
-    <div style={{ position: 'relative', width: '100px', height: '100px', margin: '0 auto' }}>
-      <ProgressRing progress={percent} size={100} strokeWidth={10} />
-      <div style={{
-        position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-        fontSize: '24px', fontWeight: 800, color: '#0f172a'
-      }}>{percent}%</div>
-    </div>
-    <div style={{ marginTop: '12px', fontSize: '12px', color: '#64748b', fontWeight: 600 }}>{label}</div>
-  </div>
-);
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// APPLICATION
-// ═══════════════════════════════════════════════════════════════════════════════
-
-export default function AuditSEOLocal() {
+export default function App() {
   const [lang, setLang] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [passwordInput, setPasswordInput] = useState('');
-  const [passwordError, setPasswordError] = useState(false);
+  const [auth, setAuth] = useState(false);
+  const [pwd, setPwd] = useState('');
+  const [pwdErr, setPwdErr] = useState(false);
   const [step, setStep] = useState(1);
   const [apiKey, setApiKey] = useState('');
-  const [businessName, setBusinessName] = useState('');
-  const [businessLogo, setBusinessLogo] = useState('');
-  const [metier, setMetier] = useState('');
-  const [panierMoyen, setPanierMoyen] = useState('');
-  const [margePercent, setMargePercent] = useState('15');
-  const [locations, setLocations] = useState([{ id: 1, placeId: '', name: '', city: '', lat: '', lon: '', loading: false, error: '', rating: null, reviews: null, searchVolume: 500, searchQuery: '', searchResults: [], showResults: false }]);
-  const [keywords, setKeywords] = useState([]);
+  const [biz, setBiz] = useState('');
+  const [logo, setLogo] = useState('');
+  const [met, setMet] = useState('');
+  const [pan, setPan] = useState('');
+  const [mar, setMar] = useState('15');
+  const [locs, setLocs] = useState([{ id: 1, pid: '', name: '', city: '', lat: '', lon: '', ld: false, err: '', rat: null, rev: null, vol: 500, q: '', res: [], sh: false }]);
+  const [kws, setKws] = useState([]);
   const [results, setResults] = useState(null);
-  const [progress, setProgress] = useState(0);
-  const [progressText, setProgressText] = useState('');
+  const [prog, setProg] = useState(0);
+  const [progT, setProgT] = useState('');
 
-  const t = lang ? TRANSLATIONS[lang] : TRANSLATIONS.fr;
+  const t = lang ? T[lang] : T.fr;
+  const page = { minHeight: '100vh', background: '#f8fafc', color: '#0f172a', fontFamily: "'Inter',-apple-system,sans-serif" };
+  const header = { background: '#fff', borderBottom: '1px solid #e2e8f0', padding: '16px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' };
+  const container = { maxWidth: '1200px', margin: '0 auto', padding: '48px 24px' };
 
-  const selectLanguage = (l) => { setLang(l); setKeywords(DEFAULT_KEYWORDS[l]); };
-  const handleLogin = () => { if (passwordInput === PASSWORD) { setIsAuthenticated(true); } else { setPasswordError(true); } };
+  const login = () => pwd === PASSWORD ? setAuth(true) : setPwdErr(true);
+  const addLoc = () => setLocs([...locs, { id: Date.now(), pid: '', name: '', city: '', lat: '', lon: '', ld: false, err: '', rat: null, rev: null, vol: 500, q: '', res: [], sh: false }]);
+  const upLoc = (id, k, v) => setLocs(locs.map(l => l.id === id ? { ...l, [k]: v } : l));
+  const rmLoc = id => locs.length > 1 && setLocs(locs.filter(l => l.id !== id));
 
-  const addLocation = () => setLocations([...locations, { id: Date.now(), placeId: '', name: '', city: '', lat: '', lon: '', loading: false, error: '', rating: null, reviews: null, searchVolume: 500, searchQuery: '', searchResults: [], showResults: false }]);
-  const updateLocation = (id, field, value) => setLocations(locations.map(l => l.id === id ? { ...l, [field]: value } : l));
-  const removeLocation = (id) => { if (locations.length > 1) setLocations(locations.filter(l => l.id !== id)); };
-
-  const searchPlaces = async (locationId, query) => {
-    if (!apiKey || !query || query.length < 3) return;
-    setLocations(locs => locs.map(l => l.id === locationId ? { ...l, loading: true, error: '', showResults: false } : l));
+  const searchP = async (id, q) => {
+    if (!apiKey || q.length < 3) return;
+    setLocs(ls => ls.map(l => l.id === id ? { ...l, ld: true, err: '', sh: false } : l));
     try {
-      const response = await fetch('/api/serpapi', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ apiKey, action: 'searchPlaces', query }) });
-      const data = await response.json();
-      if (data.success && data.places?.length > 0) {
-        setLocations(locs => locs.map(l => l.id === locationId ? { ...l, loading: false, searchResults: data.places, showResults: true } : l));
-      } else {
-        setLocations(locs => locs.map(l => l.id === locationId ? { ...l, loading: false, error: 'Aucun résultat', searchResults: [] } : l));
-      }
-    } catch (e) {
-      setLocations(locs => locs.map(l => l.id === locationId ? { ...l, loading: false, error: 'Erreur de connexion' } : l));
-    }
+      const r = await fetch('/api/serpapi', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ apiKey, action: 'searchPlaces', query: q }) });
+      const d = await r.json();
+      setLocs(ls => ls.map(l => l.id === id ? { ...l, ld: false, res: d.places || [], sh: d.places?.length > 0, err: d.places?.length ? '' : 'Aucun résultat' } : l));
+    } catch { setLocs(ls => ls.map(l => l.id === id ? { ...l, ld: false, err: 'Erreur' } : l)); }
   };
 
-  const selectPlace = (locationId, place) => {
-    let city = '';
-    if (place.address) {
-      const parts = place.address.split(',');
-      if (parts.length >= 2) city = parts[parts.length - 2].trim().replace(/\d{5}/, '').trim();
-    }
-    setLocations(locs => locs.map(l => l.id === locationId ? { ...l, placeId: place.placeId, name: place.name, city, lat: place.lat, lon: place.lon, rating: place.rating, reviews: place.reviews, searchQuery: place.name, searchResults: [], showResults: false } : l));
+  const selP = (id, p) => {
+    let city = p.address?.split(',').slice(-2, -1)[0]?.trim().replace(/\d{5}/, '').trim() || '';
+    setLocs(ls => ls.map(l => l.id === id ? { ...l, pid: p.placeId, name: p.name, city, lat: p.lat, lon: p.lon, rat: p.rating, rev: p.reviews, q: p.name, res: [], sh: false } : l));
   };
 
-  const updateKeyword = (i, v) => { const k = [...keywords]; k[i] = v; setKeywords(k); };
-  const addKeyword = () => setKeywords([...keywords, '']);
-  const removeKeyword = (i) => { if (keywords.length > 1) setKeywords(keywords.filter((_, idx) => idx !== i)); };
-  const exportPDF = () => window.print();
+  const run = async () => {
+    setStep(3); setProg(0);
+    const valid = locs.filter(l => l.pid && l.lat);
+    const tot = valid.length * kws.length;
+    let done = 0, pn = parseFloat(pan) || 500, mg = parseFloat(mar) / 100 || 0.15;
+    const r = { biz, logo, met, pan: pn, mar: mg, locs: [], comp: [], sum: { tot: valid.length, avgR: 0, totRev: 0, t3: 0, t7: 0, inv: 0 } };
 
-  const runAnalysis = async () => {
-    setStep(3); setProgress(0);
-    const validLocs = locations.filter(l => l.placeId && l.lat && l.lon);
-    const total = validLocs.length * keywords.length;
-    let done = 0;
-    const panier = parseFloat(panierMoyen) || 500;
-    const marge = parseFloat(margePercent) / 100 || 0.15;
-
-    const res = { business: businessName, logo: businessLogo, metier, panier, marge, locations: [], allCompetitors: [],
-      summary: { totalLocs: validLocs.length, avgRating: 0, totalReviews: 0, top3: 0, top7: 0, invisible: 0 } };
-
-    for (const loc of validLocs) {
-      const locRes = { ...loc, rankings: [], competitors: [], status: 'moyen', top3: 0, top7: 0, invisible: 0 };
-      for (const kwTpl of keywords) {
-        const kw = kwTpl.replace(/\[métier\]/g, metier).replace(/\[ville\]/g, loc.city);
-        setProgressText(`Analyse: "${kw}"`);
+    for (const loc of valid) {
+      const lr = { ...loc, ranks: [], stat: 'moyen', t3: 0, t7: 0, inv: 0 };
+      for (const kwT of kws) {
+        const kw = kwT.replace(/\[métier\]/g, met).replace(/\[ville\]/g, loc.city);
+        setProgT(kw);
         try {
-          const resp = await fetch('/api/serpapi', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ apiKey, action: 'searchRanking', keyword: kw, lat: loc.lat, lon: loc.lon }) });
-          const data = await resp.json();
-          let rank = 'N/A';
-          if (data.local_results) {
-            for (let i = 0; i < data.local_results.length; i++) {
-              if (data.local_results[i].place_id === loc.placeId) { rank = i + 1; break; }
-            }
-            if (rank === 'N/A' && data.local_results.length > 0) rank = '+' + data.local_results.length;
-          }
-          if (data.competitors) {
-            locRes.competitors = data.competitors;
-            data.competitors.forEach(c => { if (!res.allCompetitors.find(x => x.placeId === c.placeId)) res.allCompetitors.push(c); });
-          }
-          locRes.rankings.push({ keyword: kw, rank });
-          if (typeof rank === 'number') {
-            if (rank <= 3) { res.summary.top3++; locRes.top3++; }
-            if (rank <= 7) { res.summary.top7++; locRes.top7++; }
-          } else { res.summary.invisible++; locRes.invisible++; }
-        } catch { locRes.rankings.push({ keyword: kw, rank: 'ERR' }); locRes.invisible++; res.summary.invisible++; }
-        done++; setProgress(Math.round((done / total) * 100));
-        await new Promise(r => setTimeout(r, 1500));
+          const rs = await fetch('/api/serpapi', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ apiKey, action: 'searchRanking', keyword: kw, lat: loc.lat, lon: loc.lon }) });
+          const d = await rs.json();
+          let rk = 'N/A';
+          if (d.local_results) { for (let i = 0; i < d.local_results.length; i++) if (d.local_results[i].place_id === loc.pid) { rk = i + 1; break; } if (rk === 'N/A' && d.local_results.length) rk = '+' + d.local_results.length; }
+          if (d.competitors) d.competitors.forEach(c => { if (!r.comp.find(x => x.placeId === c.placeId)) r.comp.push(c); });
+          lr.ranks.push({ kw, rk });
+          if (typeof rk === 'number') { if (rk <= 3) { r.sum.t3++; lr.t3++; } if (rk <= 7) { r.sum.t7++; lr.t7++; } } else { r.sum.inv++; lr.inv++; }
+        } catch { lr.ranks.push({ kw, rk: 'ERR' }); lr.inv++; r.sum.inv++; }
+        done++; setProg(Math.round(done / tot * 100));
+        await new Promise(x => setTimeout(x, 1500));
       }
-      const kwCount = keywords.length;
-      if (locRes.top3 / kwCount >= 0.7 && locRes.rating >= 4.5) locRes.status = 'excellent';
-      else if (locRes.top3 / kwCount >= 0.5) locRes.status = 'bon';
-      else if (locRes.top7 / kwCount >= 0.3) locRes.status = 'moyen';
-      else if (locRes.invisible / kwCount >= 0.5) locRes.status = 'critique';
-      else locRes.status = 'faible';
-      if (locRes.rating) res.summary.avgRating += locRes.rating;
-      if (locRes.reviews) res.summary.totalReviews += locRes.reviews;
-      res.locations.push(locRes);
+      const kc = kws.length;
+      if (lr.t3 / kc >= 0.7 && lr.rat >= 4.5) lr.stat = 'excellent'; else if (lr.t3 / kc >= 0.5) lr.stat = 'bon'; else if (lr.t7 / kc >= 0.3) lr.stat = 'moyen'; else if (lr.inv / kc >= 0.5) lr.stat = 'critique'; else lr.stat = 'faible';
+      if (lr.rat) r.sum.avgR += lr.rat; if (lr.rev) r.sum.totRev += lr.rev;
+      r.locs.push(lr);
     }
-
-    const withRating = res.locations.filter(l => l.rating);
-    if (withRating.length) res.summary.avgRating = (res.summary.avgRating / withRating.length).toFixed(1);
-    const totalTests = res.summary.totalLocs * keywords.length;
-    const invisRate = res.summary.invisible / totalTests;
-
-    res.locations.forEach(loc => {
-      const locInvisRate = loc.invisible / keywords.length;
-      const locPoorRate = (keywords.length - loc.top7) / keywords.length;
-      const vol = loc.searchVolume || 500;
-      const lost = vol * 0.35 * (locInvisRate + locPoorRate * 0.5);
-      loc.estimatedLoss = Math.round(lost * 12 * 0.04 * panier * marge / 1000);
-    });
-
-    const totalLoss = res.locations.reduce((s, l) => s + l.estimatedLoss, 0);
-    res.financial = { totalLoss, potentialGain: Math.round(totalLoss * 0.65), roi: totalLoss > 0 ? Math.round((totalLoss * 0.65 / 15) * 100) : 0, breakeven: '2-3 ' + (lang === 'it' ? 'mesi' : 'mois'), leadsPerYear: Math.round(totalLoss * 0.65 / (panier * marge) * 1000), investmentRange: '10-20K' };
-    res.summary.invisiblePercent = Math.round(invisRate * 100);
-    res.summary.visiblePercent = 100 - res.summary.invisiblePercent;
-
-    const compCounts = {};
-    res.allCompetitors.forEach(c => { compCounts[c.placeId] = compCounts[c.placeId] ? { ...compCounts[c.placeId], count: compCounts[c.placeId].count + 1 } : { ...c, count: 1 }; });
-    res.topCompetitors = Object.values(compCounts).sort((a, b) => b.count - a.count).slice(0, 5);
-
-    setResults(res); setStep(4);
+    const wr = r.locs.filter(l => l.rat); if (wr.length) r.sum.avgR = (r.sum.avgR / wr.length).toFixed(1);
+    const tt = r.sum.tot * kws.length; r.sum.visPct = Math.round((tt - r.sum.inv) / tt * 100);
+    r.locs.forEach(l => { const ir = l.inv / kws.length, pr = (kws.length - l.t7) / kws.length, v = l.vol || 500; l.loss = Math.round(v * 0.35 * (ir + pr * 0.5) * 12 * 0.04 * pn * mg / 1000); });
+    const tl = r.locs.reduce((s, l) => s + l.loss, 0);
+    r.fin = { tl, pg: Math.round(tl * 0.65), roi: tl > 0 ? Math.round(tl * 0.65 / 15 * 100) : 0, be: '2-3 ' + (lang === 'it' ? 'mesi' : 'mois'), lpy: Math.round(tl * 0.65 / (pn * mg) * 1000), inv: '10-20K' };
+    const cc = {}; r.comp.forEach(c => cc[c.placeId] = cc[c.placeId] ? { ...cc[c.placeId], cnt: cc[c.placeId].cnt + 1 } : { ...c, cnt: 1 }); r.topComp = Object.values(cc).sort((a, b) => b.cnt - a.cnt).slice(0, 5);
+    setResults(r); setStep(4);
   };
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // STYLES
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  const baseStyles = {
-    app: { minHeight: '100vh', background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%)', color: '#0f172a', fontFamily: "'Inter', 'Segoe UI', -apple-system, sans-serif" },
-    header: { background: 'linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%)', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#fff', boxShadow: '0 4px 20px rgba(3,105,161,0.3)' },
-    container: { maxWidth: '1400px', margin: '0 auto', padding: '40px 24px 80px' },
-    btn: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '14px 28px', borderRadius: '12px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', border: 'none', transition: 'all 0.3s ease' },
-    btnPrimary: { background: 'linear-gradient(135deg, #0ea5e9, #0284c7)', color: '#fff', boxShadow: '0 4px 20px rgba(14,165,233,0.4)' },
-    btnSecondary: { background: '#fff', color: '#0369a1', border: '2px solid #0ea5e9', boxShadow: '0 4px 15px rgba(14,165,233,0.15)' },
-    input: { width: '100%', padding: '16px 20px', background: '#fff', border: '2px solid #e2e8f0', borderRadius: '12px', color: '#0f172a', fontSize: '15px', transition: 'all 0.3s ease', outline: 'none' },
-    label: { display: 'block', fontSize: '12px', fontWeight: 700, color: '#0369a1', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' },
-    footer: { textAlign: 'center', padding: '30px', color: '#64748b', fontSize: '14px' }
-  };
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SÉLECTION LANGUE
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  if (!lang) {
-    return (
-      <div style={baseStyles.app}>
-        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <GlowCard style={{ maxWidth: '500px', width: '100%', textAlign: 'center', padding: '50px' }}>
-            <div style={{ width: '100px', height: '100px', background: 'linear-gradient(135deg, #0ea5e9, #f97316)', borderRadius: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '50px', margin: '0 auto 30px', boxShadow: '0 20px 40px rgba(14,165,233,0.3)', transform: 'rotate(-5deg)' }}>🌍</div>
-            <h1 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '12px', background: 'linear-gradient(135deg, #0369a1, #0ea5e9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Audit SEO Local</h1>
-            <p style={{ color: '#64748b', marginBottom: '40px', fontSize: '16px' }}>Choisissez votre langue / Scegli la tua lingua</p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <button onClick={() => selectLanguage('fr')} style={{ ...baseStyles.btn, ...baseStyles.btnPrimary, padding: '24px', flexDirection: 'column', gap: '12px', borderRadius: '16px' }}>
-                <span style={{ fontSize: '48px' }}>🇫🇷</span>
-                <span style={{ fontSize: '16px', fontWeight: 700 }}>Français</span>
-              </button>
-              <button onClick={() => selectLanguage('it')} style={{ ...baseStyles.btn, ...baseStyles.btnPrimary, padding: '24px', flexDirection: 'column', gap: '12px', borderRadius: '16px' }}>
-                <span style={{ fontSize: '48px' }}>🇮🇹</span>
-                <span style={{ fontSize: '16px', fontWeight: 700 }}>Italiano</span>
-              </button>
-            </div>
-          </GlowCard>
+  // LANG SELECT
+  if (!lang) return (
+    <div style={page}><div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Card style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
+        <div style={{ width: '64px', height: '64px', background: '#f1f5f9', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', color: '#0ea5e9' }}><Ic n="globe" s={28}/></div>
+        <h1 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '8px' }}>Audit SEO Local</h1>
+        <p style={{ color: '#64748b', marginBottom: '32px' }}>Sélectionnez votre langue</p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          <Btn onClick={() => { setLang('fr'); setKws(DEFAULT_KW.fr); }} style={{ padding: '20px', flexDirection: 'column', gap: '8px', border: '1px solid #e2e8f0', background: '#fff' }}><span style={{ fontSize: '24px', fontWeight: 700 }}>FR</span><span style={{ fontSize: '13px', color: '#64748b' }}>Français</span></Btn>
+          <Btn onClick={() => { setLang('it'); setKws(DEFAULT_KW.it); }} style={{ padding: '20px', flexDirection: 'column', gap: '8px', border: '1px solid #e2e8f0', background: '#fff' }}><span style={{ fontSize: '24px', fontWeight: 700 }}>IT</span><span style={{ fontSize: '13px', color: '#64748b' }}>Italiano</span></Btn>
         </div>
-      </div>
-    );
-  }
+      </Card>
+    </div></div>
+  );
 
-  // ═══════════════════════════════════════════════════════════════════════════
   // LOGIN
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  if (!isAuthenticated) {
-    return (
-      <div style={baseStyles.app}>
-        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <GlowCard style={{ maxWidth: '440px', width: '100%', textAlign: 'center', padding: '50px' }}>
-            <div style={{ width: '90px', height: '90px', background: 'linear-gradient(135deg, #0ea5e9, #0284c7)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '42px', margin: '0 auto 30px', boxShadow: '0 20px 40px rgba(14,165,233,0.3)' }}>🔐</div>
-            <h1 style={{ fontSize: '28px', fontWeight: 800, marginBottom: '8px', color: '#0f172a' }}>{t.loginTitle}</h1>
-            <p style={{ color: '#64748b', marginBottom: '32px' }}>{t.loginSubtitle}</p>
-            <div style={{ marginBottom: '24px', textAlign: 'left' }}>
-              <label style={baseStyles.label}>{t.password}</label>
-              <input type="password" style={{ ...baseStyles.input, borderColor: passwordError ? '#ef4444' : '#e2e8f0' }} placeholder={t.passwordPlaceholder} value={passwordInput} onChange={(e) => { setPasswordInput(e.target.value); setPasswordError(false); }} onKeyPress={(e) => e.key === 'Enter' && handleLogin()} onFocus={(e) => e.target.style.borderColor = '#0ea5e9'} onBlur={(e) => e.target.style.borderColor = passwordError ? '#ef4444' : '#e2e8f0'} />
-              {passwordError && <p style={{ color: '#ef4444', fontSize: '13px', marginTop: '8px' }}>❌ {t.passwordError}</p>}
-            </div>
-            <button style={{ ...baseStyles.btn, ...baseStyles.btnPrimary, width: '100%', padding: '18px' }} onClick={handleLogin}>{t.accessButton} →</button>
-            <p style={{ marginTop: '30px', color: '#94a3b8', fontSize: '13px' }}>{t.footer}</p>
-          </GlowCard>
+  if (!auth) return (
+    <div style={page}><div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Card style={{ maxWidth: '400px', width: '100%' }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{ width: '56px', height: '56px', background: '#f1f5f9', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#64748b' }}><Ic n="lock" s={24}/></div>
+          <h1 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '6px' }}>{t.login}</h1>
+          <p style={{ color: '#64748b', fontSize: '14px' }}>{t.sub}</p>
         </div>
+        <div style={{ marginBottom: '20px' }}><Label>{t.pwd}</Label><Input type="password" placeholder={t.pwdPh} value={pwd} onChange={e => { setPwd(e.target.value); setPwdErr(false); }} onKeyPress={e => e.key === 'Enter' && login()} style={{ borderColor: pwdErr ? '#ef4444' : '#e2e8f0' }} />{pwdErr && <p style={{ color: '#ef4444', fontSize: '13px', marginTop: '8px' }}>{t.pwdErr}</p>}</div>
+        <Btn primary onClick={login} style={{ width: '100%' }}>{t.access} <Ic n="arrow" s={16}/></Btn>
+      </Card>
+    </div></div>
+  );
+
+  // STEP 1 - API KEY
+  if (step === 1) return (
+    <div style={page}>
+      <header style={header}><div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#0ea5e9' }}><Ic n="chart"/><span style={{ fontWeight: 700, color: '#0f172a' }}>{t.header}</span></div></header>
+      <div style={container}><div style={{ maxWidth: '560px', margin: '0 auto', textAlign: 'center' }}>
+        <Badge v="pri">{t.badge}</Badge>
+        <h1 style={{ fontSize: '32px', fontWeight: 700, margin: '16px 0 12px', letterSpacing: '-0.5px' }}>{t.title}</h1>
+        <p style={{ color: '#64748b', fontSize: '16px', marginBottom: '40px' }}>{t.desc}</p>
+        <Card>
+          <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '20px', marginBottom: '24px', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <div style={{ color: '#0ea5e9' }}><Ic n="key"/></div>
+            <div style={{ textAlign: 'left' }}><div style={{ fontWeight: 600, marginBottom: '8px' }}>{t.apiTitle}</div>
+              <ol style={{ fontSize: '14px', color: '#64748b', lineHeight: 2, paddingLeft: '18px', margin: 0 }}><li>Créez un compte sur <a href="https://serpapi.com" target="_blank" rel="noreferrer" style={{ color: '#0ea5e9' }}>serpapi.com</a></li><li>Confirmez votre email</li><li>Dashboard → API Key</li><li>100 recherches/mois gratuites</li></ol>
+            </div>
+          </div>
+          <div style={{ marginBottom: '20px' }}><Label>{t.apiLabel}</Label><Input type="password" placeholder={t.apiPh} value={apiKey} onChange={e => setApiKey(e.target.value)} /></div>
+          <Btn primary onClick={() => apiKey && setStep(2)} style={{ width: '100%' }}>{t.cont} <Ic n="arrow" s={16}/></Btn>
+        </Card>
+      </div></div>
+    </div>
+  );
+
+  // STEP 2 - CONFIG
+  if (step === 2) return (
+    <div style={page}>
+      <header style={header}><div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#0ea5e9' }}><Ic n="chart"/><span style={{ fontWeight: 700, color: '#0f172a' }}>{t.header}</span></div><Btn onClick={() => setStep(1)}>{t.back}</Btn></header>
+      <div style={container}>
+        <h1 style={{ fontSize: '28px', fontWeight: 700, marginBottom: '32px', textAlign: 'center' }}>{t.config}</h1>
+        <Card>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}><div style={{ width: '40px', height: '40px', background: '#dbeafe', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}><Ic n="building"/></div><h2 style={{ fontSize: '16px', fontWeight: 600 }}>{t.bizTitle}</h2></div>
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px', marginBottom: '16px' }}><div><Label>{t.bizName}</Label><Input placeholder={t.bizPh} value={biz} onChange={e => setBiz(e.target.value)} /></div><div><Label>{t.logoL}</Label><Input placeholder={t.logoPh} value={logo} onChange={e => setLogo(e.target.value)} /></div></div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}><div><Label>{t.actL}</Label><Input placeholder={t.actPh} value={met} onChange={e => setMet(e.target.value)} /></div><div><Label>{t.panL}</Label><Input type="number" placeholder={t.panPh} value={pan} onChange={e => setPan(e.target.value)} /></div><div><Label>{t.marL}</Label><Input type="number" placeholder={t.marPh} value={mar} onChange={e => setMar(e.target.value)} /></div></div>
+        </Card>
+        <Card>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}><div style={{ width: '40px', height: '40px', background: '#fef3c7', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d97706' }}><Ic n="pin"/></div><h2 style={{ fontSize: '16px', fontWeight: 600 }}>{t.etabTitle}</h2></div>
+          {locs.map((l, i) => (
+            <div key={l.id} style={{ background: '#f8fafc', borderRadius: '12px', padding: '20px', marginBottom: '16px', border: '1px solid #e2e8f0' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}><span style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '10px' }}><span style={{ width: '28px', height: '28px', background: '#0f172a', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 700, color: '#fff' }}>{i + 1}</span>{t.etab}</span>{locs.length > 1 && <Btn onClick={() => rmLoc(l.id)} style={{ background: '#fee2e2', color: '#dc2626', padding: '6px 12px' }}><Ic n="trash" s={16}/></Btn>}</div>
+              <div style={{ position: 'relative', marginBottom: '16px' }}><div style={{ display: 'flex', gap: '10px' }}><Input placeholder={t.search} value={l.q} onChange={e => upLoc(l.id, 'q', e.target.value)} onKeyPress={e => e.key === 'Enter' && searchP(l.id, l.q)} style={{ flex: 1, background: '#fff' }} /><Btn primary onClick={() => searchP(l.id, l.q)} disabled={l.ld} style={{ padding: '14px 18px', opacity: l.ld ? 0.6 : 1 }}>{l.ld ? '...' : <Ic n="search" s={18}/>}</Btn></div>
+                {l.sh && l.res.length > 0 && <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', marginTop: '8px', maxHeight: '280px', overflowY: 'auto', zIndex: 100, boxShadow: '0 10px 40px rgba(0,0,0,0.1)' }}>{l.res.map((p, j) => <div key={j} onClick={() => selP(l.id, p)} style={{ padding: '14px 18px', borderBottom: '1px solid #f1f5f9', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.background = '#f8fafc'} onMouseOut={e => e.currentTarget.style.background = '#fff'}><div style={{ fontWeight: 600, marginBottom: '2px' }}>{p.name}</div><div style={{ fontSize: '13px', color: '#64748b' }}>{p.address}</div>{p.rating && <div style={{ marginTop: '4px', fontSize: '13px', color: '#f59e0b' }}>★ {p.rating}</div>}</div>)}</div>}
+              </div>
+              {l.err && <div style={{ color: '#dc2626', fontSize: '13px', marginBottom: '12px', padding: '10px 14px', background: '#fee2e2', borderRadius: '8px' }}>{l.err}</div>}
+              {l.name && <div style={{ background: '#dcfce7', borderRadius: '10px', padding: '16px', marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><div><div style={{ fontWeight: 600, color: '#16a34a', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}><Ic n="check" s={16}/> {l.name}</div><div style={{ fontSize: '13px', color: '#64748b' }}>{l.city}</div></div>{l.rat && <span style={{ color: '#f59e0b', fontWeight: 600 }}>★ {l.rat}</span>}</div>}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}><div><Label style={{ fontSize: '12px' }}>{t.cityL}</Label><Input placeholder={t.cityPh} value={l.city} onChange={e => upLoc(l.id, 'city', e.target.value)} style={{ background: '#fff' }} /></div><div><Label style={{ fontSize: '12px' }}>{t.volL}</Label><Input type="number" placeholder="500" value={l.vol} onChange={e => upLoc(l.id, 'vol', parseInt(e.target.value) || 500)} style={{ background: '#fff' }} /></div></div>
+            </div>
+          ))}
+          <button onClick={addLoc} style={{ width: '100%', padding: '16px', background: '#fff', border: '2px dashed #e2e8f0', borderRadius: '12px', color: '#64748b', cursor: 'pointer', fontSize: '14px', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}><Ic n="plus" s={18}/> {t.addEtab}</button>
+        </Card>
+        <Card>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}><div style={{ width: '40px', height: '40px', background: '#dcfce7', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a' }}><Ic n="target"/></div><h2 style={{ fontSize: '16px', fontWeight: 600 }}>{t.kwTitle}</h2></div>
+          <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '16px' }}>{t.kwDesc} <code style={{ background: '#f1f5f9', padding: '3px 8px', borderRadius: '6px' }}>[métier]</code></p>
+          {kws.map((k, i) => <div key={i} style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}><Input value={k} onChange={e => { const n = [...kws]; n[i] = e.target.value; setKws(n); }} placeholder={t.kwPh} />{kws.length > 1 && <Btn onClick={() => setKws(kws.filter((_, j) => j !== i))} style={{ background: '#fee2e2', color: '#dc2626', padding: '0 14px' }}><Ic n="x" s={16}/></Btn>}</div>)}
+          <button onClick={() => setKws([...kws, ''])} style={{ marginTop: '8px', padding: '12px 20px', background: '#fff', border: '2px dashed #e2e8f0', borderRadius: '10px', color: '#64748b', cursor: 'pointer', fontWeight: 600, fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}><Ic n="plus" s={18}/> {t.addKw}</button>
+        </Card>
+        <div style={{ textAlign: 'center' }}><Btn primary onClick={run} disabled={!biz || !met || locs.every(l => !l.pid)} style={{ padding: '16px 48px', fontSize: '16px', opacity: (!biz || !met || locs.every(l => !l.pid)) ? 0.5 : 1 }}>{t.launch} <Ic n="arrow" s={16}/></Btn></div>
       </div>
-    );
-  }
+    </div>
+  );
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // ÉTAPE 1 - API KEY
-  // ═══════════════════════════════════════════════════════════════════════════
+  // STEP 3 - LOADING
+  if (step === 3) return (
+    <div style={page}>
+      <header style={header}><div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#0ea5e9' }}><Ic n="chart"/><span style={{ fontWeight: 700, color: '#0f172a' }}>{t.header}</span></div></header>
+      <div style={container}><Card style={{ maxWidth: '480px', margin: '60px auto', textAlign: 'center', padding: '48px' }}>
+        <div style={{ fontSize: '64px', fontWeight: 700, color: '#0f172a', marginBottom: '16px' }}>{prog}%</div>
+        <div style={{ height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden', marginBottom: '24px' }}><div style={{ width: prog + '%', height: '100%', background: '#0ea5e9', borderRadius: '4px', transition: 'width 0.3s' }}/></div>
+        <h2 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '12px' }}>{t.analyzing}</h2>
+        <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '8px' }}>{progT}</p>
+        <p style={{ fontSize: '13px', color: '#94a3b8' }}>{t.wait}</p>
+      </Card></div>
+    </div>
+  );
 
-  if (step === 1) {
-    return (
-      <div style={baseStyles.app}>
-        <header style={baseStyles.header}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '44px', height: '44px', background: 'rgba(255,255,255,0.2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>📊</div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '18px' }}>{t.headerTitle}</div>
-              <div style={{ fontSize: '12px', opacity: 0.8 }}>{t.headerSubtitle}</div>
-            </div>
-          </div>
-          <span style={{ fontSize: '24px' }}>{lang === 'fr' ? '🇫🇷' : '🇮🇹'}</span>
-        </header>
-
-        <div style={baseStyles.container}>
-          <div style={{ textAlign: 'center', marginBottom: '50px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 24px', background: 'linear-gradient(135deg, rgba(14,165,233,0.1), rgba(249,115,22,0.1))', border: '2px solid rgba(14,165,233,0.3)', borderRadius: '100px', fontSize: '13px', fontWeight: 700, color: '#0369a1', marginBottom: '24px' }}>
-              <span style={{ fontSize: '18px' }}>⚡</span> {t.step1Badge}
-            </div>
-            <h2 style={{ fontSize: '48px', fontWeight: 800, marginBottom: '20px', lineHeight: 1.1 }}>
-              {t.step1Title}<br />
-              <span style={{ background: 'linear-gradient(135deg, #0ea5e9, #f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{t.step1Highlight}</span>
-            </h2>
-            <p style={{ fontSize: '18px', color: '#64748b', maxWidth: '600px', margin: '0 auto' }}>{t.step1Desc}</p>
-          </div>
-
-          <GlowCard style={{ maxWidth: '700px', margin: '0 auto' }}>
-            <div style={{ background: 'linear-gradient(135deg, rgba(14,165,233,0.08), rgba(249,115,22,0.08))', borderRadius: '16px', padding: '24px', marginBottom: '28px', border: '1px solid rgba(14,165,233,0.2)' }}>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '16px', color: '#0369a1' }}>🔑 {t.apiKeyTitle}</h3>
-              <ol style={{ fontSize: '14px', color: '#64748b', lineHeight: 2, paddingLeft: '20px', margin: 0 }}>
-                <li>{t.apiKeySteps[0]} <a href="https://serpapi.com/users/sign_up" target="_blank" rel="noreferrer" style={{ color: '#0ea5e9', fontWeight: 600 }}>serpapi.com</a></li>
-                <li>{t.apiKeySteps[1]}</li>
-                <li>{t.apiKeySteps[2]}</li>
-                <li>{t.apiKeySteps[3]}</li>
-              </ol>
-            </div>
-            <div style={{ marginBottom: '24px' }}>
-              <label style={baseStyles.label}>{t.apiKeyLabel}</label>
-              <input type="password" style={baseStyles.input} placeholder={t.apiKeyPlaceholder} value={apiKey} onChange={(e) => setApiKey(e.target.value)} onFocus={(e) => e.target.style.borderColor = '#0ea5e9'} onBlur={(e) => e.target.style.borderColor = '#e2e8f0'} />
-            </div>
-            <button style={{ ...baseStyles.btn, ...baseStyles.btnPrimary, width: '100%', padding: '18px', fontSize: '16px' }} onClick={() => apiKey && setStep(2)}>{t.continueButton} →</button>
-          </GlowCard>
-
-          <p style={baseStyles.footer}>{t.footer}</p>
-        </div>
-      </div>
-    );
-  }
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // ÉTAPE 2 - CONFIGURATION
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  if (step === 2) {
-    return (
-      <div style={baseStyles.app}>
-        <header style={baseStyles.header}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '44px', height: '44px', background: 'rgba(255,255,255,0.2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>📊</div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '18px' }}>{t.headerTitle}</div>
-              <div style={{ fontSize: '12px', opacity: 0.8 }}>{t.configSubtitle}</div>
-            </div>
-          </div>
-        </header>
-
-        <div style={baseStyles.container}>
-          <h2 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '40px', textAlign: 'center' }}>{t.configTitle}</h2>
-
-          <GlowCard style={{ marginBottom: '28px' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ width: '36px', height: '36px', background: 'linear-gradient(135deg, #0ea5e9, #0284c7)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>🏢</span>
-              {t.businessInfoTitle}
-            </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px', marginBottom: '20px' }}>
-              <div>
-                <label style={baseStyles.label}>{t.businessName}</label>
-                <input style={baseStyles.input} placeholder={t.businessNamePlaceholder} value={businessName} onChange={(e) => setBusinessName(e.target.value)} />
-              </div>
-              <div>
-                <label style={baseStyles.label}>{t.logoLabel}</label>
-                <input style={baseStyles.input} placeholder={t.logoPlaceholder} value={businessLogo} onChange={(e) => setBusinessLogo(e.target.value)} />
-              </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px' }}>
-              <div>
-                <label style={baseStyles.label}>{t.metierLabel}</label>
-                <input style={baseStyles.input} placeholder={t.metierPlaceholder} value={metier} onChange={(e) => setMetier(e.target.value)} />
-              </div>
-              <div>
-                <label style={baseStyles.label}>{t.panierLabel}</label>
-                <input style={baseStyles.input} type="number" placeholder={t.panierPlaceholder} value={panierMoyen} onChange={(e) => setPanierMoyen(e.target.value)} />
-              </div>
-              <div>
-                <label style={baseStyles.label}>{t.margeLabel}</label>
-                <input style={baseStyles.input} type="number" placeholder={t.margePlaceholder} value={margePercent} onChange={(e) => setMargePercent(e.target.value)} />
-              </div>
-            </div>
-          </GlowCard>
-
-          <GlowCard style={{ marginBottom: '28px' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ width: '36px', height: '36px', background: 'linear-gradient(135deg, #f97316, #ea580c)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>📍</span>
-              {t.establishmentsTitle}
-            </h3>
-
-            {locations.map((loc, i) => (
-              <div key={loc.id} style={{ background: '#f8fafc', border: '2px solid #e2e8f0', borderRadius: '16px', padding: '24px', marginBottom: '16px', transition: 'all 0.3s ease' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                  <span style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span style={{ width: '32px', height: '32px', background: 'linear-gradient(135deg, #0ea5e9, #0284c7)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 800, color: '#fff' }}>{i + 1}</span>
-                    {t.establishment}
-                  </span>
-                  {locations.length > 1 && <button onClick={() => removeLocation(loc.id)} style={{ background: 'rgba(239,68,68,0.1)', border: '2px solid rgba(239,68,68,0.3)', borderRadius: '10px', color: '#ef4444', padding: '8px 16px', cursor: 'pointer', fontWeight: 600, transition: 'all 0.3s ease' }}>{t.delete}</button>}
-                </div>
-
-                <div style={{ position: 'relative', marginBottom: '20px' }}>
-                  <div style={{ display: 'flex', gap: '12px' }}>
-                    <input style={{ ...baseStyles.input, flex: 1 }} placeholder={t.searchPlaceholder} value={loc.searchQuery} onChange={(e) => updateLocation(loc.id, 'searchQuery', e.target.value)} onKeyPress={(e) => e.key === 'Enter' && searchPlaces(loc.id, loc.searchQuery)} />
-                    <button onClick={() => searchPlaces(loc.id, loc.searchQuery)} disabled={loc.loading} style={{ ...baseStyles.btn, ...baseStyles.btnPrimary, padding: '16px 24px', opacity: loc.loading ? 0.7 : 1 }}>{loc.loading ? '⏳' : '🔍'}</button>
-                  </div>
-
-                  {loc.showResults && loc.searchResults.length > 0 && (
-                    <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: '#fff', border: '2px solid #e2e8f0', borderRadius: '16px', marginTop: '8px', maxHeight: '300px', overflowY: 'auto', zIndex: 100, boxShadow: '0 20px 40px rgba(0,0,0,0.15)' }}>
-                      {loc.searchResults.map((place, idx) => (
-                        <div key={idx} onClick={() => selectPlace(loc.id, place)} style={{ padding: '16px 20px', borderBottom: '1px solid #e2e8f0', cursor: 'pointer', transition: 'all 0.2s ease' }} onMouseOver={(e) => e.currentTarget.style.background = 'rgba(14,165,233,0.05)'} onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}>
-                          <div style={{ fontWeight: 700, marginBottom: '4px', color: '#0f172a' }}>{place.name}</div>
-                          <div style={{ fontSize: '13px', color: '#64748b' }}>{place.address}</div>
-                          {place.rating && <div style={{ marginTop: '6px' }}><RatingStars rating={place.rating} /></div>}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {loc.error && <div style={{ color: '#ef4444', fontSize: '14px', marginBottom: '16px', padding: '12px', background: 'rgba(239,68,68,0.1)', borderRadius: '10px', border: '1px solid rgba(239,68,68,0.3)' }}>❌ {loc.error}</div>}
-
-                {loc.name && (
-                  <div style={{ background: 'linear-gradient(135deg, rgba(34,197,94,0.1), rgba(22,163,74,0.05))', border: '2px solid rgba(34,197,94,0.3)', borderRadius: '14px', padding: '20px', marginBottom: '20px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div>
-                        <div style={{ fontSize: '18px', fontWeight: 700, color: '#16a34a', marginBottom: '4px' }}>✅ {loc.name}</div>
-                        <div style={{ fontSize: '14px', color: '#64748b' }}>{loc.city}</div>
-                      </div>
-                      {loc.rating && <RatingStars rating={loc.rating} />}
-                    </div>
-                  </div>
-                )}
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                  <div>
-                    <label style={{ ...baseStyles.label, fontSize: '11px' }}>{t.cityLabel}</label>
-                    <input style={baseStyles.input} placeholder={t.cityPlaceholder} value={loc.city} onChange={(e) => updateLocation(loc.id, 'city', e.target.value)} />
-                  </div>
-                  <div>
-                    <label style={{ ...baseStyles.label, fontSize: '11px' }}>{t.volumeLabel}</label>
-                    <input style={baseStyles.input} type="number" placeholder="500" value={loc.searchVolume} onChange={(e) => updateLocation(loc.id, 'searchVolume', parseInt(e.target.value) || 500)} />
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            <button onClick={addLocation} style={{ width: '100%', padding: '18px', background: '#fff', border: '2px dashed #0ea5e9', borderRadius: '14px', color: '#0ea5e9', cursor: 'pointer', fontSize: '15px', fontWeight: 700, transition: 'all 0.3s ease' }} onMouseOver={(e) => { e.target.style.background = 'rgba(14,165,233,0.05)'; e.target.style.borderStyle = 'solid'; }} onMouseOut={(e) => { e.target.style.background = '#fff'; e.target.style.borderStyle = 'dashed'; }}>{t.addEstablishment}</button>
-          </GlowCard>
-
-          <GlowCard style={{ marginBottom: '28px' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ width: '36px', height: '36px', background: 'linear-gradient(135deg, #22c55e, #16a34a)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>🔍</span>
-              {t.keywordsTitle}
-            </h3>
-            <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '20px' }}>{t.keywordsDesc} <code style={{ background: '#f1f5f9', padding: '4px 10px', borderRadius: '6px', fontWeight: 600, color: '#0369a1' }}>[métier]</code></p>
-            
-            {keywords.map((kw, i) => (
-              <div key={i} style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-                <input style={{ ...baseStyles.input, flex: 1 }} value={kw} onChange={(e) => updateKeyword(i, e.target.value)} placeholder={t.keywordPlaceholder} />
-                {keywords.length > 1 && <button onClick={() => removeKeyword(i)} style={{ background: 'rgba(239,68,68,0.1)', border: '2px solid rgba(239,68,68,0.3)', borderRadius: '12px', color: '#ef4444', padding: '0 18px', cursor: 'pointer', fontSize: '20px', fontWeight: 700 }}>×</button>}
-              </div>
-            ))}
-            
-            <button onClick={addKeyword} style={{ marginTop: '12px', padding: '14px 24px', background: '#fff', border: '2px dashed #22c55e', borderRadius: '12px', color: '#22c55e', cursor: 'pointer', fontWeight: 700, transition: 'all 0.3s ease' }} onMouseOver={(e) => { e.target.style.background = 'rgba(34,197,94,0.05)'; e.target.style.borderStyle = 'solid'; }} onMouseOut={(e) => { e.target.style.background = '#fff'; e.target.style.borderStyle = 'dashed'; }}>{t.addKeyword}</button>
-          </GlowCard>
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <button style={{ ...baseStyles.btn, ...baseStyles.btnSecondary }} onClick={() => setStep(1)}>← {t.backButton}</button>
-            <button style={{ ...baseStyles.btn, ...baseStyles.btnPrimary, padding: '18px 40px', fontSize: '16px', opacity: (!businessName || !metier || locations.every(l => !l.placeId)) ? 0.5 : 1 }} onClick={runAnalysis} disabled={!businessName || !metier || locations.every(l => !l.placeId)}>🚀 {t.launchButton}</button>
-          </div>
-
-          <p style={baseStyles.footer}>{t.footer}</p>
-        </div>
-      </div>
-    );
-  }
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // ÉTAPE 3 - CHARGEMENT
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  if (step === 3) {
-    return (
-      <div style={baseStyles.app}>
-        <header style={baseStyles.header}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '44px', height: '44px', background: 'rgba(255,255,255,0.2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>📊</div>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '18px' }}>{t.headerTitle}</div>
-              <div style={{ fontSize: '12px', opacity: 0.8 }}>{t.analysisSubtitle}</div>
-            </div>
-          </div>
-        </header>
-
-        <div style={baseStyles.container}>
-          <GlowCard style={{ maxWidth: '500px', margin: '80px auto', textAlign: 'center', padding: '60px' }}>
-            <div style={{ position: 'relative', width: '160px', height: '160px', margin: '0 auto 40px' }}>
-              <ProgressRing progress={progress} size={160} strokeWidth={12} />
-              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', fontSize: '42px', fontWeight: 800, background: 'linear-gradient(135deg, #0ea5e9, #f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{progress}%</div>
-            </div>
-            <h3 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '16px' }}>{t.analysisInProgress}</h3>
-            <p style={{ fontSize: '15px', color: '#64748b', minHeight: '50px' }}>{progressText}</p>
-            <p style={{ fontSize: '13px', color: '#94a3b8', marginTop: '24px' }}>☕ {t.analysisWait}</p>
-          </GlowCard>
-        </div>
-      </div>
-    );
-  }
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // ÉTAPE 4 - RÉSULTATS
-  // ═══════════════════════════════════════════════════════════════════════════
-
+  // STEP 4 - RESULTS
   if (step === 4 && results) {
+    const r = results;
     return (
-      <div style={baseStyles.app}>
-        <style>{`@media print { .no-print { display: none !important; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }`}</style>
-        
-        <header style={baseStyles.header} className="no-print">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            {results.logo && <img src={results.logo} alt="" style={{ width: '44px', height: '44px', borderRadius: '12px', objectFit: 'cover' }} />}
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '18px' }}>{t.headerTitle}</div>
-              <div style={{ fontSize: '12px', opacity: 0.8 }}>{results.business}</div>
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button style={{ ...baseStyles.btn, background: 'rgba(255,255,255,0.2)', color: '#fff', border: '2px solid rgba(255,255,255,0.3)' }} onClick={() => { setStep(2); setResults(null); }}>← {t.newAudit}</button>
-            <button style={{ ...baseStyles.btn, ...baseStyles.btnPrimary }} onClick={exportPDF}>📄 {t.exportPdf}</button>
-          </div>
+      <div style={page}>
+        <style>{`@media print{.noprint{display:none!important}}`}</style>
+        <header style={header} className="noprint">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>{r.logo && <img src={r.logo} alt="" style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover' }}/>}<div><div style={{ fontWeight: 700 }}>{r.biz}</div><div style={{ fontSize: '13px', color: '#64748b' }}>{r.met}</div></div></div>
+          <div style={{ display: 'flex', gap: '10px' }}><Btn onClick={() => { setStep(2); setResults(null); }}>{t.newA}</Btn><Btn primary onClick={() => window.print()}><Ic n="download" s={18}/> {t.pdf}</Btn></div>
         </header>
-
-        <div style={baseStyles.container}>
-          {/* EN-TÊTE */}
-          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '12px 28px', background: 'linear-gradient(135deg, rgba(14,165,233,0.1), rgba(249,115,22,0.1))', border: '2px solid rgba(14,165,233,0.3)', borderRadius: '100px', fontSize: '14px', fontWeight: 700, color: '#0369a1', marginBottom: '28px' }}>
-              📊 {t.auditBadge} — 2025
-            </div>
-            {results.logo && <div style={{ marginBottom: '24px' }}><img src={results.logo} alt="" style={{ width: '140px', height: '140px', borderRadius: '28px', objectFit: 'contain', background: '#fff', padding: '16px', boxShadow: '0 20px 50px rgba(0,0,0,0.15)' }} /></div>}
-            <h2 style={{ fontSize: '52px', fontWeight: 800, marginBottom: '16px', background: 'linear-gradient(135deg, #0369a1, #0ea5e9, #f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{results.business}</h2>
-            <p style={{ color: '#64748b', fontSize: '20px' }}>{results.metier} — {results.summary.totalLocs} {t.establishments}</p>
+        <div style={container}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}><Badge v="pri">{t.report}</Badge><h1 style={{ fontSize: '36px', fontWeight: 700, marginTop: '16px', marginBottom: '8px' }}>{r.biz}</h1><p style={{ color: '#64748b' }}>{r.sum.tot} {t.etabs}</p></div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '20px', marginBottom: '40px' }}>
+            {[{ ic: 'building', v: r.sum.tot, l: t.statEtab }, { ic: 'star', v: r.sum.avgR || 'N/A', l: t.statNote }, { ic: 'target', v: r.sum.tot * kws.length, l: t.statReq }, { ic: 'trending', v: r.sum.visPct + '%', l: t.statVis }].map((s, i) => <Card key={i} style={{ marginBottom: 0, padding: '24px' }}><div style={{ width: '48px', height: '48px', background: '#f8fafc', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0ea5e9', marginBottom: '16px' }}><Ic n={s.ic}/></div><div style={{ fontSize: '36px', fontWeight: 700, marginBottom: '4px' }}>{s.v}</div><div style={{ fontSize: '14px', color: '#64748b' }}>{s.l}</div></Card>)}
           </div>
-
-          {/* STATS PRINCIPALES */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '40px' }}>
-            {[
-              { value: results.summary.totalLocs, label: t.statsEstablishments, color: '#0ea5e9', icon: '🏢' },
-              { value: results.summary.avgRating || 'N/A', label: t.statsAvgRating, color: '#f97316', icon: '⭐' },
-              { value: results.summary.totalLocs * keywords.length, label: t.statsQueries, color: '#22c55e', icon: '🔍' },
-              { value: `${results.summary.visiblePercent}%`, label: t.statsVisible, color: '#8b5cf6', icon: '👁️' },
-            ].map((stat, i) => (
-              <GlowCard key={i} color={stat.color} style={{ textAlign: 'center', padding: '32px 24px' }}>
-                <div style={{ fontSize: '40px', marginBottom: '12px' }}>{stat.icon}</div>
-                <div style={{ fontSize: '42px', fontWeight: 800, marginBottom: '8px' }}><AnimatedNumber value={stat.value} color={stat.color} /></div>
-                <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>{stat.label}</div>
-              </GlowCard>
-            ))}
-          </div>
-
-          {/* DIAGNOSTIC VISIBILITÉ */}
-          <GlowCard style={{ marginBottom: '32px' }}>
-            <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '28px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ width: '8px', height: '32px', background: 'linear-gradient(180deg, #0ea5e9, #f97316)', borderRadius: '4px' }} />
-              {t.visibilityDiagnostic}
-            </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
-              <VisibilityGauge percent={results.summary.visiblePercent} label="Visibilité Globale" />
-              <div style={{ textAlign: 'center', padding: '20px', background: 'linear-gradient(135deg, rgba(34,197,94,0.1), rgba(22,163,74,0.05))', borderRadius: '16px', border: '2px solid rgba(34,197,94,0.2)' }}>
-                <div style={{ fontSize: '48px', fontWeight: 800, color: '#22c55e' }}>{results.summary.top3}</div>
-                <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>{t.top3Positions}</div>
-                <div style={{ fontSize: '12px', color: '#22c55e', marginTop: '6px', fontWeight: 700 }}>🟢 {t.excellent}</div>
-              </div>
-              <div style={{ textAlign: 'center', padding: '20px', background: 'linear-gradient(135deg, rgba(249,115,22,0.1), rgba(234,88,12,0.05))', borderRadius: '16px', border: '2px solid rgba(249,115,22,0.2)' }}>
-                <div style={{ fontSize: '48px', fontWeight: 800, color: '#f97316' }}>{results.summary.top7 - results.summary.top3}</div>
-                <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>{t.positions47}</div>
-                <div style={{ fontSize: '12px', color: '#f97316', marginTop: '6px', fontWeight: 700 }}>🟠 {t.toImprove}</div>
-              </div>
-              <div style={{ textAlign: 'center', padding: '20px', background: 'linear-gradient(135deg, rgba(239,68,68,0.1), rgba(220,38,38,0.05))', borderRadius: '16px', border: '2px solid rgba(239,68,68,0.2)' }}>
-                <div style={{ fontSize: '48px', fontWeight: 800, color: '#ef4444' }}>{results.summary.totalLocs * keywords.length - results.summary.top7}</div>
-                <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>{t.positions8plus}</div>
-                <div style={{ fontSize: '12px', color: '#ef4444', marginTop: '6px', fontWeight: 700 }}>🔴 {t.critical}</div>
-              </div>
-            </div>
-          </GlowCard>
-
-          {/* IMPACT FINANCIER */}
-          <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ width: '8px', height: '32px', background: 'linear-gradient(180deg, #0ea5e9, #f97316)', borderRadius: '4px' }} />
-            {t.financialImpact}
-          </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '32px' }}>
-            <GlowCard color="#ef4444" style={{ borderLeft: '6px solid #ef4444' }}>
-              <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>{t.annualLoss}</div>
-              <div style={{ fontSize: '56px', fontWeight: 800, color: '#ef4444', marginBottom: '12px' }}>-{results.financial.totalLoss}K€</div>
-              <div style={{ fontSize: '15px', color: '#64748b' }}>{t.lossDesc}</div>
-            </GlowCard>
-            <GlowCard color="#22c55e" style={{ borderLeft: '6px solid #22c55e' }}>
-              <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>{t.acquisitionPotential}</div>
-              <div style={{ fontSize: '56px', fontWeight: 800, color: '#22c55e', marginBottom: '12px' }}>+{results.financial.potentialGain}K€</div>
-              <div style={{ fontSize: '15px', color: '#64748b' }}>{t.acquisitionDesc}</div>
-            </GlowCard>
-          </div>
-
-          {/* RÉPARTITION */}
-          <GlowCard style={{ marginBottom: '32px' }}>
-            <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#ef4444', marginBottom: '20px', textTransform: 'uppercase', letterSpacing: '1px' }}>📊 {t.lossDistribution}</h4>
-            {results.locations.sort((a, b) => b.estimatedLoss - a.estimatedLoss).map((loc, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', background: '#f8fafc', borderRadius: '12px', marginBottom: '12px', border: '1px solid #e2e8f0' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                  <span style={{ fontWeight: 700, fontSize: '16px' }}>{loc.city}</span>
-                  <StatusBadge status={loc.status} lang={lang} />
-                </div>
-                <span style={{ fontSize: '20px', fontWeight: 800, color: '#ef4444' }}>-{loc.estimatedLoss}K€</span>
-              </div>
-            ))}
-          </GlowCard>
-
-          {/* ROI */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '40px' }}>
-            {[
-              { value: results.financial.investmentRange + '€', label: t.investment, color: '#0ea5e9' },
-              { value: results.financial.roi + '%', label: t.roiEstimated, color: '#22c55e' },
-              { value: results.financial.breakeven, label: t.breakeven, color: '#f97316' },
-              { value: '+' + results.financial.leadsPerYear, label: t.leadsYear, color: '#8b5cf6' },
-            ].map((m, i) => (
-              <GlowCard key={i} color={m.color} style={{ textAlign: 'center', padding: '28px' }}>
-                <div style={{ fontSize: '32px', fontWeight: 800, color: m.color, marginBottom: '8px' }}>{m.value}</div>
-                <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>{m.label}</div>
-              </GlowCard>
-            ))}
-          </div>
-
-          {/* CONCURRENTS */}
-          {results.topCompetitors?.length > 0 && (
-            <GlowCard style={{ marginBottom: '32px' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '24px' }}>🏆 {t.mainCompetitors}</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
-                {results.topCompetitors.map((comp, i) => (
-                  <div key={i} style={{ padding: '20px', background: '#f8fafc', borderRadius: '14px', textAlign: 'center', border: '2px solid #e2e8f0' }}>
-                    <div style={{ width: '48px', height: '48px', background: i === 0 ? 'linear-gradient(135deg, #fbbf24, #f59e0b)' : i === 1 ? 'linear-gradient(135deg, #9ca3af, #6b7280)' : i === 2 ? 'linear-gradient(135deg, #d97706, #b45309)' : '#e2e8f0', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '18px', color: i < 3 ? '#fff' : '#64748b', margin: '0 auto 12px', boxShadow: i < 3 ? '0 8px 20px rgba(0,0,0,0.2)' : 'none' }}>{i + 1}</div>
-                    <div style={{ fontSize: '14px', fontWeight: 700, marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{comp.name}</div>
-                    {comp.rating && <div style={{ fontSize: '13px', color: '#f97316' }}>⭐ {comp.rating}</div>}
-                  </div>
-                ))}
-              </div>
-            </GlowCard>
-          )}
-
-          {/* DÉTAIL PAR ÉTABLISSEMENT */}
-          <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ width: '8px', height: '32px', background: 'linear-gradient(180deg, #0ea5e9, #f97316)', borderRadius: '4px' }} />
-            {t.detailedAnalysis}
-          </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '24px', marginBottom: '40px' }}>
-            {results.locations.map((loc, i) => (
-              <GlowCard key={i}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
-                  <div>
-                    <div style={{ fontSize: '22px', fontWeight: 800, marginBottom: '4px' }}>{loc.city}</div>
-                  </div>
-                  <StatusBadge status={loc.status} lang={lang} />
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
-                  <div style={{ textAlign: 'center', padding: '20px', background: loc.rating >= 4.5 ? 'rgba(34,197,94,0.1)' : loc.rating >= 4.1 ? 'rgba(249,115,22,0.1)' : 'rgba(239,68,68,0.1)', borderRadius: '14px', border: `2px solid ${loc.rating >= 4.5 ? 'rgba(34,197,94,0.3)' : loc.rating >= 4.1 ? 'rgba(249,115,22,0.3)' : 'rgba(239,68,68,0.3)'}` }}>
-                    <div style={{ fontSize: '36px', fontWeight: 800, color: loc.rating >= 4.5 ? '#22c55e' : loc.rating >= 4.1 ? '#f97316' : '#ef4444' }}>{loc.rating || 'N/A'}</div>
-                    <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600, textTransform: 'uppercase' }}>{t.googleRating}</div>
-                  </div>
-                  <div style={{ textAlign: 'center', padding: '20px', background: '#f8fafc', borderRadius: '14px', border: '2px solid #e2e8f0' }}>
-                    <div style={{ fontSize: '36px', fontWeight: 800, color: '#0ea5e9' }}>{loc.reviews || 'N/A'}</div>
-                    <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600, textTransform: 'uppercase' }}>{t.reviews}</div>
-                  </div>
-                </div>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '14px' }}>{t.positionsPerQuery}</div>
-                {loc.rankings.map((r, j) => (
-                  <div key={j} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', background: '#f8fafc', borderRadius: '10px', marginBottom: '10px', border: '1px solid #e2e8f0' }}>
-                    <span style={{ fontSize: '13px', color: '#64748b', fontFamily: 'monospace' }}>{r.keyword}</span>
-                    <PositionBadge rank={r.rank} />
-                  </div>
-                ))}
-              </GlowCard>
-            ))}
-          </div>
-
-          {/* MATRICE */}
-          <GlowCard style={{ overflowX: 'auto' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '24px' }}>{t.matrixTitle}</h3>
-            <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 10px' }}>
-              <thead>
-                <tr>
-                  <th style={{ padding: '16px', background: 'linear-gradient(135deg, #0369a1, #0ea5e9)', color: '#fff', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'left', borderRadius: '12px 0 0 12px' }}>Requête</th>
-                  {results.locations.map((loc, i) => (
-                    <th key={i} style={{ padding: '16px', background: 'linear-gradient(135deg, #0369a1, #0ea5e9)', color: '#fff', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'center', borderRadius: i === results.locations.length - 1 ? '0 12px 12px 0' : 0 }}>{loc.city}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {keywords.map((kw, ki) => (
-                  <tr key={ki}>
-                    <td style={{ padding: '16px', background: '#f8fafc', fontSize: '14px', fontFamily: 'monospace', borderRadius: '12px 0 0 12px', border: '1px solid #e2e8f0', borderRight: 'none' }}>{kw}</td>
-                    {results.locations.map((loc, li) => (
-                      <td key={li} style={{ padding: '16px', background: '#f8fafc', textAlign: 'center', borderRadius: li === results.locations.length - 1 ? '0 12px 12px 0' : 0, border: '1px solid #e2e8f0', borderLeft: 'none', borderRight: li === results.locations.length - 1 ? '1px solid #e2e8f0' : 'none' }}>
-                        <PositionBadge rank={loc.rankings[ki]?.rank} />
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '32px', marginTop: '28px' }}>
-              {[
-                { color: '#22c55e', label: `#1-3 — ${t.legendExcellent}` },
-                { color: '#f97316', label: `#4-7 — ${t.legendToImprove}` },
-                { color: '#ef4444', label: `#8+ — ${t.legendCritical}` },
-              ].map((l, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: '#64748b', fontWeight: 600 }}>
-                  <div style={{ width: '20px', height: '20px', borderRadius: '6px', background: l.color, boxShadow: `0 4px 10px ${l.color}40` }} />
-                  {l.label}
-                </div>
-              ))}
-            </div>
-          </GlowCard>
-
-          <p style={baseStyles.footer}>{t.footer}</p>
+          <Card><h2 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '24px' }}>{t.diag}</h2><div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '20px' }}><div style={{ padding: '24px', background: '#dcfce7', borderRadius: '12px', textAlign: 'center' }}><div style={{ fontSize: '40px', fontWeight: 700, color: '#16a34a' }}>{r.sum.t3}</div><div style={{ fontSize: '14px', color: '#16a34a', fontWeight: 600 }}>{t.top3}</div><div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>{t.exc}</div></div><div style={{ padding: '24px', background: '#fef3c7', borderRadius: '12px', textAlign: 'center' }}><div style={{ fontSize: '40px', fontWeight: 700, color: '#d97706' }}>{r.sum.t7 - r.sum.t3}</div><div style={{ fontSize: '14px', color: '#d97706', fontWeight: 600 }}>{t.pos47}</div><div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>{t.imp}</div></div><div style={{ padding: '24px', background: '#fee2e2', borderRadius: '12px', textAlign: 'center' }}><div style={{ fontSize: '40px', fontWeight: 700, color: '#dc2626' }}>{r.sum.tot * kws.length - r.sum.t7}</div><div style={{ fontSize: '14px', color: '#dc2626', fontWeight: 600 }}>{t.pos8}</div><div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>{t.crit}</div></div></div></Card>
+          <h2 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '20px' }}>{t.fin}</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '32px' }}><Card style={{ borderLeft: '4px solid #dc2626', marginBottom: 0 }}><div style={{ fontSize: '13px', color: '#64748b', fontWeight: 600, marginBottom: '8px' }}>{t.loss}</div><div style={{ fontSize: '48px', fontWeight: 700, color: '#dc2626', marginBottom: '8px' }}>-{r.fin.tl}K€</div><div style={{ fontSize: '14px', color: '#64748b' }}>{t.lossD}</div></Card><Card style={{ borderLeft: '4px solid #16a34a', marginBottom: 0 }}><div style={{ fontSize: '13px', color: '#64748b', fontWeight: 600, marginBottom: '8px' }}>{t.pot}</div><div style={{ fontSize: '48px', fontWeight: 700, color: '#16a34a', marginBottom: '8px' }}>+{r.fin.pg}K€</div><div style={{ fontSize: '14px', color: '#64748b' }}>{t.potD}</div></Card></div>
+          <Card><h3 style={{ fontSize: '15px', fontWeight: 700, color: '#dc2626', marginBottom: '16px' }}>{t.dist}</h3>{r.locs.sort((a, b) => b.loss - a.loss).map((l, i) => <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', background: '#f8fafc', borderRadius: '10px', marginBottom: '10px' }}><div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}><span style={{ fontWeight: 600 }}>{l.city}</span><Badge v={l.stat === 'excellent' ? 'ok' : l.stat === 'bon' ? 'pri' : l.stat === 'moyen' ? 'warn' : 'err'}>{l.stat}</Badge></div><span style={{ fontSize: '18px', fontWeight: 700, color: '#dc2626' }}>-{l.loss}K€</span></div>)}</Card>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '20px', marginBottom: '40px' }}>{[{ v: r.fin.inv + '€', l: t.inv }, { v: r.fin.roi + '%', l: t.roi }, { v: r.fin.be, l: t.be }, { v: '+' + r.fin.lpy, l: t.leads }].map((s, i) => <Card key={i} style={{ marginBottom: 0, textAlign: 'center', padding: '24px' }}><div style={{ fontSize: '28px', fontWeight: 700, color: '#0ea5e9', marginBottom: '4px' }}>{s.v}</div><div style={{ fontSize: '13px', color: '#64748b' }}>{s.l}</div></Card>)}</div>
+          {r.topComp?.length > 0 && <Card><h2 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '20px' }}>{t.comp}</h2><div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '16px' }}>{r.topComp.map((c, i) => <div key={i} style={{ padding: '20px', background: '#f8fafc', borderRadius: '12px', textAlign: 'center' }}><div style={{ width: '40px', height: '40px', background: i === 0 ? '#fef3c7' : '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: i === 0 ? '#d97706' : '#64748b', margin: '0 auto 12px' }}>{i + 1}</div><div style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.name}</div>{c.rating && <div style={{ fontSize: '13px', color: '#f59e0b' }}>★ {c.rating}</div>}</div>)}</div></Card>}
+          <h2 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '20px' }}>{t.detail}</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(400px,1fr))', gap: '24px', marginBottom: '40px' }}>{r.locs.map((l, i) => <Card key={i}><div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}><div style={{ fontSize: '20px', fontWeight: 700 }}>{l.city}</div><Badge v={l.stat === 'excellent' ? 'ok' : l.stat === 'bon' ? 'pri' : l.stat === 'moyen' ? 'warn' : 'err'}>{l.stat}</Badge></div><div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}><div style={{ padding: '20px', background: '#f8fafc', borderRadius: '12px', textAlign: 'center' }}><div style={{ fontSize: '32px', fontWeight: 700, color: l.rat >= 4.5 ? '#16a34a' : l.rat >= 4 ? '#d97706' : '#dc2626' }}>{l.rat || 'N/A'}</div><div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>{t.note}</div></div><div style={{ padding: '20px', background: '#f8fafc', borderRadius: '12px', textAlign: 'center' }}><div style={{ fontSize: '32px', fontWeight: 700, color: '#0ea5e9' }}>{l.rev || 'N/A'}</div><div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>{t.avis}</div></div></div><div style={{ fontSize: '12px', fontWeight: 700, color: '#64748b', marginBottom: '12px' }}>{t.posReq}</div>{l.ranks.map((x, j) => <div key={j} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: '#f8fafc', borderRadius: '8px', marginBottom: '8px' }}><span style={{ fontSize: '13px', color: '#64748b' }}>{x.kw}</span><PosBadge r={x.rk}/></div>)}</Card>)}</div>
+          <Card style={{ overflowX: 'auto' }}><h2 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '20px' }}>{t.matrix}</h2><table style={{ width: '100%', borderCollapse: 'collapse' }}><thead><tr><th style={{ padding: '14px 16px', background: '#f8fafc', fontSize: '13px', fontWeight: 600, color: '#64748b', textAlign: 'left', borderRadius: '8px 0 0 8px' }}>Requête</th>{r.locs.map((l, i) => <th key={i} style={{ padding: '14px 16px', background: '#f8fafc', fontSize: '13px', fontWeight: 600, color: '#64748b', textAlign: 'center', borderRadius: i === r.locs.length - 1 ? '0 8px 8px 0' : 0 }}>{l.city}</th>)}</tr></thead><tbody>{kws.map((k, ki) => <tr key={ki}><td style={{ padding: '14px 16px', fontSize: '14px', borderBottom: '1px solid #f1f5f9' }}>{k}</td>{r.locs.map((l, li) => <td key={li} style={{ padding: '14px 16px', textAlign: 'center', borderBottom: '1px solid #f1f5f9' }}><PosBadge r={l.ranks[ki]?.rk}/></td>)}</tr>)}</tbody></table></Card>
+          <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: '13px', marginTop: '48px' }}>{t.footer}</p>
         </div>
       </div>
     );
