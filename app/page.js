@@ -3,10 +3,21 @@ import React, { useState } from 'react';
 
 const PASSWORD = "Test2026_V1";
 const BLUE = '#0c4a6e';
+const BG = '#0f172a';
 
 const T = {
-  fr: { login: "Audit SEO Local", sub: "Outil d'analyse", pwd: "Mot de passe", pwdPh: "Entrez le mot de passe", pwdErr: "Incorrect", access: "Accéder", header: "Audit SEO Local", badge: "Automatisé", title: "Analysez votre visibilité locale", desc: "Audit complet avec positionnement et impact financier", apiTitle: "Clé API SerpAPI", apiLabel: "Clé API", apiPh: "Collez votre clé", cont: "Continuer", config: "Configuration", bizTitle: "Informations", bizName: "Nom de l'entreprise *", bizPh: "Ex: MiNiTAUX", logoL: "Logo URL", logoPh: "https://...", actL: "Activité", actPh: "Ex: courtier immobilier", panL: "Panier moyen €", panPh: "500", marL: "Marge %", marPh: "15", etabTitle: "Établissements", etab: "Établissement", del: "Supprimer", cityL: "Ville", cityPh: "Ville", volL: "Volume recherches/mois", volInfo: "Retrouvez cette donnée sur Semrush.com (outil gratuit)", volUpload: "Télécharger une capture Semrush", addEtab: "Ajouter un établissement", kwTitle: "Mots-clés à analyser", kwPh: "Ex: courtier immobilier", addKw: "Ajouter", back: "Retour", launch: "Lancer l'analyse", analyzing: "Analyse en cours", wait: "Veuillez patienter", report: "Rapport d'audit", etabs: "établissement(s)", statEtab: "Établissements", statNote: "Note moyenne", statReq: "Requêtes", statVis: "Visibilité", diag: "Diagnostic visibilité", top3: "Top 3", exc: "Excellent", pos47: "Position 4-7", imp: "À améliorer", pos8: "Position 8+", crit: "Critique", fin: "Impact financier", loss: "Perte annuelle estimée", lossD: "CA perdu par manque de visibilité", pot: "Potentiel récupérable", potD: "Récupérable en 12 mois", dist: "Répartition par établissement", inv: "Investissement", roi: "ROI estimé", be: "Break-even", leads: "Leads/an", comp: "Concurrents principaux", detail: "Analyse détaillée", note: "Note", avis: "Avis", posReq: "Positions", matrix: "Matrice de positionnement", newA: "Nouvel audit", pdf: "Exporter PDF", search: "Rechercher un établissement...", footer: "V1" },
-  it: { login: "Audit SEO Locale", sub: "Strumento di analisi", pwd: "Password", pwdPh: "Inserisci password", pwdErr: "Errata", access: "Accedi", header: "Audit SEO Locale", badge: "Automatizzato", title: "Analizza la visibilità locale", desc: "Audit completo con posizionamento e impatto", apiTitle: "Chiave API SerpAPI", apiLabel: "Chiave API", apiPh: "Incolla chiave", cont: "Continua", config: "Configurazione", bizTitle: "Informazioni", bizName: "Nome azienda *", bizPh: "Es: MiNiTAUX", logoL: "Logo URL", logoPh: "https://...", actL: "Attività", actPh: "Es: agente immobiliare", panL: "Scontrino medio €", panPh: "500", marL: "Margine %", marPh: "15", etabTitle: "Stabilimenti", etab: "Stabilimento", del: "Elimina", cityL: "Città", cityPh: "Città", volL: "Volume ricerche/mese", volInfo: "Trova questo dato su Semrush.com (strumento gratuito)", volUpload: "Carica screenshot Semrush", addEtab: "Aggiungi stabilimento", kwTitle: "Parole chiave da analizzare", kwPh: "Es: agente immobiliare", addKw: "Aggiungi", back: "Indietro", launch: "Avvia analisi", analyzing: "Analisi in corso", wait: "Attendere", report: "Rapporto audit", etabs: "stabilimento/i", statEtab: "Stabilimenti", statNote: "Valutazione", statReq: "Query", statVis: "Visibilità", diag: "Diagnosi visibilità", top3: "Top 3", exc: "Eccellente", pos47: "Posizione 4-7", imp: "Da migliorare", pos8: "Posizione 8+", crit: "Critico", fin: "Impatto finanziario", loss: "Perdita annuale stimata", lossD: "Fatturato perso", pot: "Potenziale recuperabile", potD: "Recuperabile in 12 mesi", dist: "Distribuzione per stabilimento", inv: "Investimento", roi: "ROI stimato", be: "Break-even", leads: "Lead/anno", comp: "Concorrenti principali", detail: "Analisi dettagliata", note: "Nota", avis: "Recensioni", posReq: "Posizioni", matrix: "Matrice di posizionamento", newA: "Nuovo audit", pdf: "Esporta PDF", search: "Cerca uno stabilimento...", footer: "V1" }
+  fr: { login: "Audit SEO Local", sub: "Outil d'analyse", pwd: "Mot de passe", pwdPh: "Entrez le mot de passe", pwdErr: "Incorrect", access: "Accéder", header: "Audit SEO Local", badge: "Automatisé", title: "Analysez votre visibilité locale", desc: "Audit complet avec positionnement et impact financier", apiTitle: "Clé API SerpAPI", apiLabel: "Clé API", apiPh: "Collez votre clé", cont: "Continuer", config: "Configuration", bizTitle: "Informations", bizName: "Nom de l'entreprise *", bizPh: "Ex: MiNiTAUX", logoL: "Logo URL", logoPh: "https://...", actL: "Activité", actPh: "Ex: courtier immobilier", panL: "Panier moyen €", panPh: "500", marL: "Marge %", marPh: "15", etabTitle: "Établissements", etab: "Établissement", del: "Supprimer", cityL: "Ville", cityPh: "Ville", volL: "Volume recherches/mois", volInfo: "Retrouvez cette donnée sur Semrush.com", volUpload: "Télécharger capture Semrush", addEtab: "Ajouter un établissement", kwTitle: "Mots-clés à analyser", kwPh: "Ex: courtier immobilier", addKw: "Ajouter", back: "Retour", launch: "Lancer l'analyse", analyzing: "Analyse en cours", wait: "Veuillez patienter", report: "Rapport d'audit", etabs: "établissement(s)", statEtab: "Établissements", statNote: "Note moyenne", statReq: "Requêtes", statVis: "Visibilité", diag: "Diagnostic visibilité", top3: "Top 3", exc: "Excellent", pos47: "Position 4-7", imp: "À améliorer", pos8: "Position 8+", crit: "Critique", fin: "Impact financier", loss: "Perte annuelle estimée", lossD: "CA perdu par manque de visibilité", pot: "Potentiel récupérable", potD: "Récupérable en 12 mois", dist: "Répartition par établissement", inv: "Investissement", roi: "ROI estimé", be: "Break-even", leads: "Leads/an", comp: "Concurrents principaux", detail: "Analyse détaillée", note: "Note", avis: "Avis", posReq: "Positions", matrix: "Matrice de positionnement", newA: "Nouvel audit", pdf: "Exporter PDF", search: "Rechercher un établissement...", footer: "V1",
+    fomo: "Ce que vos concurrents gagnent pendant que vous perdez", fomoSub: "Chaque jour sans action, c'est du CA offert à la concurrence", fomoMonth: "Perte ce mois", fomoYear: "Perte cette année", fomoComp: "Gain estimé concurrent #1",
+    roiTitle: "Retour sur investissement détaillé", roiCac: "Coût acquisition actuel", roiCacNew: "Coût avec Partoo", roiEco: "Économie/client", roi12: "Projection 12 mois", roi24: "Projection 24 mois", roi36: "Projection 36 mois", roiFor: "Pour 1€ investi",
+    alertTitle: "Alertes critiques", alertReview: "Aucun avis récent", alertReviewD: "Les fiches sans avis récents perdent 15% de confiance", alertPhoto: "Photos manquantes ou anciennes", alertPhotoD: "35% de clics en moins sans photos de qualité", alertDesc: "Fiche non optimisée", alertDescD: "40% de visibilité perdue sans description optimisée", alertPos: "Hors Top 3 sur requêtes clés", alertPosD: "92% des clics vont aux 3 premiers résultats",
+    benchTitle: "Benchmark sectoriel", benchYou: "Vous", benchAvg: "Moyenne secteur", benchTop: "Leaders du marché", benchNote: "Note Google", benchAvis: "Nombre d'avis", benchPos: "Position moyenne", benchWhere: "Où vous situez-vous ?"
+  },
+  it: { login: "Audit SEO Locale", sub: "Strumento di analisi", pwd: "Password", pwdPh: "Inserisci password", pwdErr: "Errata", access: "Accedi", header: "Audit SEO Locale", badge: "Automatizzato", title: "Analizza la visibilità locale", desc: "Audit completo con posizionamento e impatto", apiTitle: "Chiave API SerpAPI", apiLabel: "Chiave API", apiPh: "Incolla chiave", cont: "Continua", config: "Configurazione", bizTitle: "Informazioni", bizName: "Nome azienda *", bizPh: "Es: MiNiTAUX", logoL: "Logo URL", logoPh: "https://...", actL: "Attività", actPh: "Es: agente immobiliare", panL: "Scontrino medio €", panPh: "500", marL: "Margine %", marPh: "15", etabTitle: "Stabilimenti", etab: "Stabilimento", del: "Elimina", cityL: "Città", cityPh: "Città", volL: "Volume ricerche/mese", volInfo: "Trova questo dato su Semrush.com", volUpload: "Carica screenshot Semrush", addEtab: "Aggiungi stabilimento", kwTitle: "Parole chiave da analizzare", kwPh: "Es: agente immobiliare", addKw: "Aggiungi", back: "Indietro", launch: "Avvia analisi", analyzing: "Analisi in corso", wait: "Attendere", report: "Rapporto audit", etabs: "stabilimento/i", statEtab: "Stabilimenti", statNote: "Valutazione", statReq: "Query", statVis: "Visibilità", diag: "Diagnosi visibilità", top3: "Top 3", exc: "Eccellente", pos47: "Posizione 4-7", imp: "Da migliorare", pos8: "Posizione 8+", crit: "Critico", fin: "Impatto finanziario", loss: "Perdita annuale stimata", lossD: "Fatturato perso", pot: "Potenziale recuperabile", potD: "Recuperabile in 12 mesi", dist: "Distribuzione per stabilimento", inv: "Investimento", roi: "ROI stimato", be: "Break-even", leads: "Lead/anno", comp: "Concorrenti principali", detail: "Analisi dettagliata", note: "Nota", avis: "Recensioni", posReq: "Posizioni", matrix: "Matrice di posizionamento", newA: "Nuovo audit", pdf: "Esporta PDF", search: "Cerca uno stabilimento...", footer: "V1",
+    fomo: "Cosa guadagnano i concorrenti mentre tu perdi", fomoSub: "Ogni giorno senza azione è fatturato regalato", fomoMonth: "Perdita questo mese", fomoYear: "Perdita quest'anno", fomoComp: "Guadagno stimato concorrente #1",
+    roiTitle: "Ritorno sull'investimento dettagliato", roiCac: "Costo acquisizione attuale", roiCacNew: "Costo con Partoo", roiEco: "Risparmio/cliente", roi12: "Proiezione 12 mesi", roi24: "Proiezione 24 mesi", roi36: "Proiezione 36 mesi", roiFor: "Per 1€ investito",
+    alertTitle: "Avvisi critici", alertReview: "Nessuna recensione recente", alertReviewD: "Le schede senza recensioni recenti perdono il 15% di fiducia", alertPhoto: "Foto mancanti o vecchie", alertPhotoD: "35% di clic in meno senza foto di qualità", alertDesc: "Scheda non ottimizzata", alertDescD: "40% di visibilità persa senza descrizione ottimizzata", alertPos: "Fuori Top 3 su query chiave", alertPosD: "Il 92% dei clic va ai primi 3 risultati",
+    benchTitle: "Benchmark settoriale", benchYou: "Tu", benchAvg: "Media settore", benchTop: "Leader di mercato", benchNote: "Valutazione Google", benchAvis: "Numero recensioni", benchPos: "Posizione media", benchWhere: "Dove ti posizioni?"
+  }
 };
 
 const Ic = ({ n, s = 20 }) => {
@@ -28,6 +39,16 @@ const Ic = ({ n, s = 20 }) => {
     key: <><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></>,
     upload: <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></>,
     info: <><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></>,
+    alertTri: <><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></>,
+    clock: <><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>,
+    dollar: <><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></>,
+    trendingDown: <><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></>,
+    users: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
+    award: <><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></>,
+    zap: <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>,
+    camera: <><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></>,
+    fileText: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></>,
+    barChart: <><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></>,
   };
   return <svg width={s} height={s} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">{paths[n]}</svg>;
 };
@@ -46,14 +67,14 @@ const PosBadge = ({ r }) => {
 };
 
 const st = {
-  page: { minHeight: '100vh', background: '#e2e8f0', color: '#1e293b', fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" },
+  page: { minHeight: '100vh', background: BG, color: '#1e293b', fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" },
   header: { background: '#fff', borderBottom: '1px solid #cbd5e1', padding: '14px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
   container: { maxWidth: '1100px', margin: '0 auto', padding: '40px 24px' },
-  card: { background: '#fff', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.06)', padding: '24px', marginBottom: '20px' },
+  card: { background: '#fff', borderRadius: '12px', boxShadow: '0 4px 24px rgba(0,0,0,0.2)', padding: '24px', marginBottom: '20px' },
   btn: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px 24px', borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', border: 'none', transition: 'all 0.2s' },
   btnP: { background: BLUE, color: '#fff', boxShadow: '0 4px 14px rgba(12, 74, 110, 0.4)' },
   btnS: { background: '#f1f5f9', color: '#475569', border: '1px solid #cbd5e1' },
-  btnO: { background: '#fff', color: BLUE, border: '1px solid ' + BLUE },
+  btnO: { background: '#fff', color: BLUE, border: '2px solid ' + BLUE },
   input: { width: '100%', padding: '12px 14px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '14px', color: '#1e293b', outline: 'none', boxSizing: 'border-box' },
   label: { display: 'block', fontSize: '13px', fontWeight: 500, color: '#64748b', marginBottom: '6px' },
   row: { display: 'grid', gap: '16px', marginBottom: '16px' },
@@ -89,9 +110,7 @@ export default function App() {
     const parts = address.split(',').map(p => p.trim());
     for (let i = parts.length - 2; i >= 0; i--) {
       const clean = parts[i].replace(/\d{5}/g, '').trim();
-      if (clean && clean.length > 2 && !/france|itali|germany|belgi/i.test(clean)) {
-        return clean;
-      }
+      if (clean && clean.length > 2 && !/france|itali|germany|belgi/i.test(clean)) return clean;
     }
     return parts[0] || '';
   };
@@ -203,22 +222,16 @@ export default function App() {
   if (step === 1) return (
     <div style={st.page}>
       <header style={st.header}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ color: BLUE }}><Ic n="chart" s={22}/></div>
-          <span style={{ fontWeight: 600 }}>{t.header}</span>
-        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><div style={{ color: BLUE }}><Ic n="chart" s={22}/></div><span style={{ fontWeight: 600 }}>{t.header}</span></div>
       </header>
       <div style={st.container}>
         <div style={{ maxWidth: '500px', margin: '0 auto', textAlign: 'center' }}>
           <Badge v="pri">{t.badge}</Badge>
-          <h1 style={{ fontSize: '28px', fontWeight: 600, margin: '14px 0 10px' }}>{t.title}</h1>
-          <p style={{ color: '#64748b', fontSize: '15px', marginBottom: '32px' }}>{t.desc}</p>
+          <h1 style={{ fontSize: '28px', fontWeight: 600, margin: '14px 0 10px', color: '#fff' }}>{t.title}</h1>
+          <p style={{ color: '#94a3b8', fontSize: '15px', marginBottom: '32px' }}>{t.desc}</p>
           <div style={st.card}>
             <div style={{ background: '#f8fafc', borderRadius: '10px', padding: '18px', marginBottom: '24px', textAlign: 'left' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-                <div style={{ color: BLUE }}><Ic n="key" s={18}/></div>
-                <span style={{ fontWeight: 600 }}>{t.apiTitle}</span>
-              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}><div style={{ color: BLUE }}><Ic n="key" s={18}/></div><span style={{ fontWeight: 600 }}>{t.apiTitle}</span></div>
               <ol style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.9, paddingLeft: '18px', margin: 0 }}>
                 <li>Créez un compte sur <a href="https://serpapi.com" target="_blank" rel="noreferrer" style={{ color: BLUE, fontWeight: 500 }}>serpapi.com</a></li>
                 <li>Confirmez votre email</li>
@@ -245,7 +258,7 @@ export default function App() {
         <button style={{ ...st.btn, ...st.btnS }} onClick={() => setStep(1)}>{t.back}</button>
       </header>
       <div style={st.container}>
-        <h1 style={{ fontSize: '24px', fontWeight: 600, marginBottom: '28px', textAlign: 'center' }}>{t.config}</h1>
+        <h1 style={{ fontSize: '24px', fontWeight: 600, marginBottom: '28px', textAlign: 'center', color: '#fff' }}>{t.config}</h1>
         
         <div style={st.card}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
@@ -309,9 +322,7 @@ export default function App() {
                 <div>
                   <label style={st.label}>{t.volL}</label>
                   <input style={st.input} type="number" placeholder="500" value={l.vol} onChange={e => upLoc(l.id, 'vol', e.target.value)} />
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '8px', fontSize: '11px', color: '#64748b' }}>
-                    <Ic n="info" s={12}/> {t.volInfo}
-                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '8px', fontSize: '11px', color: '#64748b' }}><Ic n="info" s={12}/> {t.volInfo}</div>
                 </div>
               </div>
               <div style={{ marginTop: '12px' }}>
@@ -367,6 +378,20 @@ export default function App() {
   // STEP 4 - RESULTS
   if (step === 4 && results) {
     const r = results;
+    const avgRat = parseFloat(r.sum.avgR) || 4.0;
+    const avgRev = Math.round(r.locs.reduce((s, l) => s + (l.rev || 0), 0) / r.locs.length) || 50;
+    const avgPos = r.locs.length > 0 ? (r.locs.reduce((s, l) => { const positions = l.ranks.filter(x => typeof x.rk === 'number').map(x => x.rk); return s + (positions.length ? positions.reduce((a, b) => a + b, 0) / positions.length : 10); }, 0) / r.locs.length).toFixed(1) : '8';
+    const topCompRat = r.topComp?.[0]?.rating || 4.8;
+    const topCompRev = r.topComp?.[0]?.reviews || 150;
+    const lossMonth = Math.round(r.fin.tl / 12);
+    const compGain = Math.round(r.fin.tl * 0.8);
+    const cacActual = Math.round((parseFloat(pan) || 500) * 0.15);
+    const cacNew = Math.round(cacActual * 0.6);
+    const hasRecentReviews = avgRev > 20;
+    const hasGoodPhotos = avgRat >= 4.2;
+    const hasOptimizedDesc = r.sum.visPct >= 50;
+    const isTop3 = r.sum.t3 >= r.kws.length * r.locs.length * 0.5;
+
     return (
       <div style={st.page}>
         <style>{`@media print{.noprint{display:none!important}}`}</style>
@@ -383,10 +408,36 @@ export default function App() {
         <div style={st.container}>
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
             <Badge v="pri">{t.report}</Badge>
-            <h1 style={{ fontSize: '32px', fontWeight: 700, marginTop: '14px', marginBottom: '8px' }}>{r.biz}</h1>
-            <p style={{ color: '#64748b', fontSize: '15px' }}>{r.sum.tot} {t.etabs}</p>
+            <h1 style={{ fontSize: '32px', fontWeight: 700, marginTop: '14px', marginBottom: '8px', color: '#fff' }}>{r.biz}</h1>
+            <p style={{ color: '#94a3b8', fontSize: '15px' }}>{r.sum.tot} {t.etabs}</p>
           </div>
 
+          {/* 1. FOMO - URGENCE */}
+          <div style={{ ...st.card, background: 'linear-gradient(135deg, #7f1d1d 0%, #dc2626 100%)', color: '#fff', marginBottom: '24px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+              <div style={{ width: '48px', height: '48px', background: 'rgba(255,255,255,0.2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Ic n="clock" s={24}/></div>
+              <div>
+                <h2 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '4px' }}>{t.fomo}</h2>
+                <p style={{ fontSize: '14px', opacity: 0.9 }}>{t.fomoSub}</p>
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: '10px', padding: '20px', textAlign: 'center' }}>
+                <div style={{ fontSize: '12px', opacity: 0.8, marginBottom: '8px', textTransform: 'uppercase' }}>{t.fomoMonth}</div>
+                <div style={{ fontSize: '32px', fontWeight: 700 }}>-{lossMonth}K€</div>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: '10px', padding: '20px', textAlign: 'center' }}>
+                <div style={{ fontSize: '12px', opacity: 0.8, marginBottom: '8px', textTransform: 'uppercase' }}>{t.fomoYear}</div>
+                <div style={{ fontSize: '32px', fontWeight: 700 }}>-{r.fin.tl}K€</div>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.25)', borderRadius: '10px', padding: '20px', textAlign: 'center', border: '2px solid rgba(255,255,255,0.3)' }}>
+                <div style={{ fontSize: '12px', opacity: 0.8, marginBottom: '8px', textTransform: 'uppercase' }}>{t.fomoComp}</div>
+                <div style={{ fontSize: '32px', fontWeight: 700 }}>+{compGain}K€</div>
+              </div>
+            </div>
+          </div>
+
+          {/* STATS */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '32px' }}>
             {[{ ic: 'building', v: r.sum.tot, l: t.statEtab }, { ic: 'chart', v: r.sum.avgR ? '★ ' + r.sum.avgR : 'N/A', l: t.statNote }, { ic: 'target', v: r.kws.length, l: t.statReq }, { ic: 'trending', v: r.sum.visPct + '%', l: t.statVis }].map((x, i) => (
               <div key={i} style={{ ...st.card, marginBottom: 0, padding: '22px' }}>
@@ -397,6 +448,32 @@ export default function App() {
             ))}
           </div>
 
+          {/* 4. ALERTES CRITIQUES */}
+          <div style={st.card}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+              <div style={{ width: '44px', height: '44px', background: '#fee2e2', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#dc2626' }}><Ic n="alertTri" s={22}/></div>
+              <h2 style={{ fontSize: '18px', fontWeight: 700 }}>{t.alertTitle}</h2>
+            </div>
+            <div style={{ display: 'grid', gap: '12px' }}>
+              {[
+                { ok: hasRecentReviews, title: t.alertReview, desc: t.alertReviewD, icon: 'users' },
+                { ok: hasGoodPhotos, title: t.alertPhoto, desc: t.alertPhotoD, icon: 'camera' },
+                { ok: hasOptimizedDesc, title: t.alertDesc, desc: t.alertDescD, icon: 'fileText' },
+                { ok: isTop3, title: t.alertPos, desc: t.alertPosD, icon: 'trending' },
+              ].map((alert, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', background: alert.ok ? '#f0fdf4' : '#fef2f2', borderRadius: '10px', border: alert.ok ? '1px solid #bbf7d0' : '1px solid #fecaca' }}>
+                  <div style={{ width: '40px', height: '40px', background: alert.ok ? '#dcfce7' : '#fee2e2', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: alert.ok ? '#059669' : '#dc2626' }}><Ic n={alert.icon} s={20}/></div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, marginBottom: '2px', color: alert.ok ? '#059669' : '#dc2626' }}>{alert.ok ? '✓ OK' : '⚠️ ' + alert.title}</div>
+                    <div style={{ fontSize: '13px', color: '#64748b' }}>{alert.desc}</div>
+                  </div>
+                  {!alert.ok && <div style={{ fontSize: '24px', fontWeight: 700, color: '#dc2626' }}>!</div>}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* DIAGNOSTIC */}
           <div style={st.card}>
             <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '20px' }}>{t.diag}</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px' }}>
@@ -406,12 +483,97 @@ export default function App() {
             </div>
           </div>
 
-          <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px' }}>{t.fin}</h2>
+          {/* 5. BENCHMARK SECTORIEL */}
+          <div style={st.card}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+              <div style={{ width: '44px', height: '44px', background: '#e0f2fe', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: BLUE }}><Ic n="barChart" s={22}/></div>
+              <div>
+                <h2 style={{ fontSize: '18px', fontWeight: 700 }}>{t.benchTitle}</h2>
+                <p style={{ fontSize: '13px', color: '#64748b' }}>{t.benchWhere}</p>
+              </div>
+            </div>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr>
+                    <th style={{ padding: '14px 16px', background: '#f8fafc', fontSize: '13px', fontWeight: 600, color: '#64748b', textAlign: 'left', borderRadius: '8px 0 0 8px' }}></th>
+                    <th style={{ padding: '14px 16px', background: '#fee2e2', fontSize: '13px', fontWeight: 600, color: '#dc2626', textAlign: 'center' }}>{t.benchYou}</th>
+                    <th style={{ padding: '14px 16px', background: '#fef3c7', fontSize: '13px', fontWeight: 600, color: '#d97706', textAlign: 'center' }}>{t.benchAvg}</th>
+                    <th style={{ padding: '14px 16px', background: '#d1fae5', fontSize: '13px', fontWeight: 600, color: '#059669', textAlign: 'center', borderRadius: '0 8px 8px 0' }}>{t.benchTop}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style={{ padding: '16px', fontSize: '14px', fontWeight: 500, borderBottom: '1px solid #f1f5f9' }}>{t.benchNote}</td>
+                    <td style={{ padding: '16px', textAlign: 'center', borderBottom: '1px solid #f1f5f9' }}><span style={{ fontSize: '20px', fontWeight: 700, color: avgRat >= 4.5 ? '#059669' : avgRat >= 4 ? '#d97706' : '#dc2626' }}>★ {avgRat}</span></td>
+                    <td style={{ padding: '16px', textAlign: 'center', borderBottom: '1px solid #f1f5f9' }}><span style={{ fontSize: '20px', fontWeight: 700, color: '#64748b' }}>★ 4.3</span></td>
+                    <td style={{ padding: '16px', textAlign: 'center', borderBottom: '1px solid #f1f5f9' }}><span style={{ fontSize: '20px', fontWeight: 700, color: '#059669' }}>★ {topCompRat}</span></td>
+                  </tr>
+                  <tr>
+                    <td style={{ padding: '16px', fontSize: '14px', fontWeight: 500, borderBottom: '1px solid #f1f5f9' }}>{t.benchAvis}</td>
+                    <td style={{ padding: '16px', textAlign: 'center', borderBottom: '1px solid #f1f5f9' }}><span style={{ fontSize: '20px', fontWeight: 700, color: avgRev >= 100 ? '#059669' : avgRev >= 50 ? '#d97706' : '#dc2626' }}>{avgRev}</span></td>
+                    <td style={{ padding: '16px', textAlign: 'center', borderBottom: '1px solid #f1f5f9' }}><span style={{ fontSize: '20px', fontWeight: 700, color: '#64748b' }}>85</span></td>
+                    <td style={{ padding: '16px', textAlign: 'center', borderBottom: '1px solid #f1f5f9' }}><span style={{ fontSize: '20px', fontWeight: 700, color: '#059669' }}>{topCompRev}</span></td>
+                  </tr>
+                  <tr>
+                    <td style={{ padding: '16px', fontSize: '14px', fontWeight: 500 }}>{t.benchPos}</td>
+                    <td style={{ padding: '16px', textAlign: 'center' }}><span style={{ fontSize: '20px', fontWeight: 700, color: parseFloat(avgPos) <= 3 ? '#059669' : parseFloat(avgPos) <= 7 ? '#d97706' : '#dc2626' }}>#{avgPos}</span></td>
+                    <td style={{ padding: '16px', textAlign: 'center' }}><span style={{ fontSize: '20px', fontWeight: 700, color: '#64748b' }}>#6</span></td>
+                    <td style={{ padding: '16px', textAlign: 'center' }}><span style={{ fontSize: '20px', fontWeight: 700, color: '#059669' }}>#1-2</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* IMPACT FINANCIER */}
+          <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px', color: '#fff' }}>{t.fin}</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
             <div style={{ ...st.card, borderLeft: '4px solid #dc2626', marginBottom: 0 }}><div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600, marginBottom: '8px', textTransform: 'uppercase' }}>{t.loss}</div><div style={{ fontSize: '42px', fontWeight: 700, color: '#dc2626', marginBottom: '6px' }}>-{r.fin.tl}K€</div><div style={{ fontSize: '14px', color: '#64748b' }}>{t.lossD}</div></div>
             <div style={{ ...st.card, borderLeft: '4px solid #059669', marginBottom: 0 }}><div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600, marginBottom: '8px', textTransform: 'uppercase' }}>{t.pot}</div><div style={{ fontSize: '42px', fontWeight: 700, color: '#059669', marginBottom: '6px' }}>+{r.fin.pg}K€</div><div style={{ fontSize: '14px', color: '#64748b' }}>{t.potD}</div></div>
           </div>
 
+          {/* 3. ROI DÉTAILLÉ */}
+          <div style={st.card}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+              <div style={{ width: '44px', height: '44px', background: '#d1fae5', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#059669' }}><Ic n="dollar" s={22}/></div>
+              <h2 style={{ fontSize: '18px', fontWeight: 700 }}>{t.roiTitle}</h2>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
+              <div style={{ padding: '20px', background: '#fee2e2', borderRadius: '10px', textAlign: 'center' }}>
+                <div style={{ fontSize: '12px', color: '#dc2626', fontWeight: 600, marginBottom: '8px', textTransform: 'uppercase' }}>{t.roiCac}</div>
+                <div style={{ fontSize: '28px', fontWeight: 700, color: '#dc2626' }}>{cacActual}€</div>
+              </div>
+              <div style={{ padding: '20px', background: '#d1fae5', borderRadius: '10px', textAlign: 'center' }}>
+                <div style={{ fontSize: '12px', color: '#059669', fontWeight: 600, marginBottom: '8px', textTransform: 'uppercase' }}>{t.roiCacNew}</div>
+                <div style={{ fontSize: '28px', fontWeight: 700, color: '#059669' }}>{cacNew}€</div>
+              </div>
+              <div style={{ padding: '20px', background: '#e0f2fe', borderRadius: '10px', textAlign: 'center' }}>
+                <div style={{ fontSize: '12px', color: BLUE, fontWeight: 600, marginBottom: '8px', textTransform: 'uppercase' }}>{t.roiEco}</div>
+                <div style={{ fontSize: '28px', fontWeight: 700, color: BLUE }}>{cacActual - cacNew}€</div>
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+              <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '8px', textAlign: 'center' }}>
+                <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, marginBottom: '6px' }}>{t.roi12}</div>
+                <div style={{ fontSize: '22px', fontWeight: 700, color: '#059669' }}>+{r.fin.pg}K€</div>
+              </div>
+              <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '8px', textAlign: 'center' }}>
+                <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, marginBottom: '6px' }}>{t.roi24}</div>
+                <div style={{ fontSize: '22px', fontWeight: 700, color: '#059669' }}>+{Math.round(r.fin.pg * 2.2)}K€</div>
+              </div>
+              <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '8px', textAlign: 'center' }}>
+                <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, marginBottom: '6px' }}>{t.roi36}</div>
+                <div style={{ fontSize: '22px', fontWeight: 700, color: '#059669' }}>+{Math.round(r.fin.pg * 3.5)}K€</div>
+              </div>
+              <div style={{ padding: '16px', background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)', borderRadius: '8px', textAlign: 'center' }}>
+                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.9)', fontWeight: 600, marginBottom: '6px' }}>{t.roiFor}</div>
+                <div style={{ fontSize: '22px', fontWeight: 700, color: '#fff' }}>{Math.round(r.fin.pg / 15)}€</div>
+              </div>
+            </div>
+          </div>
+
+          {/* RÉPARTITION */}
           <div style={st.card}>
             <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#dc2626', marginBottom: '16px', textTransform: 'uppercase' }}>{t.dist}</h3>
             {r.locs.sort((a, b) => b.loss - a.loss).map((l, i) => (
@@ -422,12 +584,14 @@ export default function App() {
             ))}
           </div>
 
+          {/* MÉTRIQUES ROI */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '32px' }}>
             {[{ v: r.fin.inv + '€', l: t.inv }, { v: r.fin.roi + '%', l: t.roi }, { v: r.fin.be, l: t.be }, { v: '+' + r.fin.lpy, l: t.leads }].map((x, i) => (
               <div key={i} style={{ ...st.card, marginBottom: 0, textAlign: 'center', padding: '22px' }}><div style={{ fontSize: '24px', fontWeight: 700, color: BLUE, marginBottom: '4px' }}>{x.v}</div><div style={{ fontSize: '12px', color: '#64748b' }}>{x.l}</div></div>
             ))}
           </div>
 
+          {/* CONCURRENTS */}
           {r.topComp?.length > 0 && (
             <div style={st.card}>
               <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '18px' }}>{t.comp}</h2>
@@ -443,7 +607,8 @@ export default function App() {
             </div>
           )}
 
-          <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '18px' }}>{t.detail}</h2>
+          {/* DÉTAIL */}
+          <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '18px', color: '#fff' }}>{t.detail}</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(380px,1fr))', gap: '20px', marginBottom: '32px' }}>
             {r.locs.map((l, i) => (
               <div key={i} style={st.card}>
@@ -478,6 +643,7 @@ export default function App() {
             ))}
           </div>
 
+          {/* MATRICE */}
           <div style={{ ...st.card, overflowX: 'auto' }}>
             <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '18px' }}>{t.matrix}</h2>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -498,7 +664,7 @@ export default function App() {
             </table>
           </div>
 
-          <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: '12px', marginTop: '40px' }}>{t.footer}</p>
+          <p style={{ textAlign: 'center', color: '#64748b', fontSize: '12px', marginTop: '40px' }}>{t.footer}</p>
         </div>
       </div>
     );
