@@ -5,18 +5,37 @@ const PASSWORD = "Test2026_V1";
 const DEFAULT_KW = { fr: ['[métier] [ville]', 'meilleur [métier] [ville]', '[métier] près de [ville]', 'avis [métier] [ville]'], it: ['[métier] [ville]', 'miglior [métier] [ville]', '[métier] vicino a [ville]', 'recensioni [métier] [ville]'] };
 
 const T = {
-  fr: { login: "Audit SEO Local", sub: "Outil d'analyse", pwd: "Mot de passe", pwdPh: "Entrez le mot de passe", pwdErr: "Incorrect", access: "Accéder", header: "Audit SEO Local", badge: "Automatisé", title: "Analysez votre visibilité locale", desc: "Audit complet avec positionnement et impact financier", apiTitle: "Clé API SerpAPI", apiLabel: "Clé API", apiPh: "Collez votre clé", cont: "Continuer", config: "Configuration", bizTitle: "Informations", bizName: "Entreprise", bizPh: "Ex: Alsace Carreaux", logoL: "Logo URL", logoPh: "https://...", actL: "Activité", actPh: "Ex: carrelage", panL: "Panier €", panPh: "500", marL: "Marge %", marPh: "15", etabTitle: "Établissements", etab: "Établissement", del: "Supprimer", cityL: "Ville", cityPh: "Ville", volL: "Volume/mois", addEtab: "Ajouter", kwTitle: "Mots-clés", kwDesc: "Variable:", kwPh: "Ex: [métier] [ville]", addKw: "Ajouter", back: "Retour", launch: "Lancer", analyzing: "Analyse...", wait: "Veuillez patienter", report: "Rapport", etabs: "établissement(s)", statEtab: "Établissements", statNote: "Note moyenne", statReq: "Requêtes", statVis: "Visibilité", diag: "Diagnostic", top3: "Top 3", exc: "Excellent", pos47: "Pos 4-7", imp: "À améliorer", pos8: "Pos 8+", crit: "Critique", fin: "Impact financier", loss: "Perte annuelle", lossD: "CA perdu", pot: "Potentiel", potD: "Récupérable 12 mois", dist: "Répartition", inv: "Investissement", roi: "ROI", be: "Break-even", leads: "Leads/an", comp: "Concurrents", detail: "Analyse détaillée", note: "Note", avis: "Avis", posReq: "Positions", matrix: "Matrice", newA: "Nouvel audit", pdf: "Exporter", search: "Rechercher...", footer: "V1" },
-  it: { login: "Audit SEO Locale", sub: "Strumento di analisi", pwd: "Password", pwdPh: "Inserisci password", pwdErr: "Errata", access: "Accedi", header: "Audit SEO Locale", badge: "Automatizzato", title: "Analizza la visibilità locale", desc: "Audit completo con posizionamento e impatto", apiTitle: "Chiave API SerpAPI", apiLabel: "Chiave API", apiPh: "Incolla chiave", cont: "Continua", config: "Configurazione", bizTitle: "Informazioni", bizName: "Azienda", bizPh: "Es: Milano Piastrelle", logoL: "Logo URL", logoPh: "https://...", actL: "Attività", actPh: "Es: piastrelle", panL: "Scontrino €", panPh: "500", marL: "Margine %", marPh: "15", etabTitle: "Stabilimenti", etab: "Stabilimento", del: "Elimina", cityL: "Città", cityPh: "Città", volL: "Volume/mese", addEtab: "Aggiungi", kwTitle: "Parole chiave", kwDesc: "Variabile:", kwPh: "Es: [métier] [ville]", addKw: "Aggiungi", back: "Indietro", launch: "Avvia", analyzing: "Analisi...", wait: "Attendere", report: "Rapporto", etabs: "stabilimento/i", statEtab: "Stabilimenti", statNote: "Valutazione", statReq: "Query", statVis: "Visibilità", diag: "Diagnosi", top3: "Top 3", exc: "Eccellente", pos47: "Pos 4-7", imp: "Da migliorare", pos8: "Pos 8+", crit: "Critico", fin: "Impatto finanziario", loss: "Perdita annuale", lossD: "Fatturato perso", pot: "Potenziale", potD: "Recuperabile 12 mesi", dist: "Distribuzione", inv: "Investimento", roi: "ROI", be: "Break-even", leads: "Lead/anno", comp: "Concorrenti", detail: "Analisi dettagliata", note: "Valutazione", avis: "Recensioni", posReq: "Posizioni", matrix: "Matrice", newA: "Nuovo audit", pdf: "Esporta", search: "Cerca...", footer: "V1" }
+  fr: { login: "Audit SEO Local", sub: "Outil d'analyse", pwd: "Mot de passe", pwdPh: "Entrez le mot de passe", pwdErr: "Incorrect", access: "Accéder", header: "Audit SEO Local", badge: "Automatisé", title: "Analysez votre visibilité locale", desc: "Audit complet avec positionnement et impact financier", apiTitle: "Clé API SerpAPI", apiLabel: "Clé API", apiPh: "Collez votre clé", cont: "Continuer", config: "Configuration", bizTitle: "Informations", bizName: "Entreprise", bizPh: "Ex: Alsace Carreaux", logoL: "Logo URL", logoPh: "https://...", actL: "Activité", actPh: "Ex: carrelage", panL: "Panier moyen €", panPh: "500", marL: "Marge %", marPh: "15", etabTitle: "Établissements", etab: "Établissement", del: "Supprimer", cityL: "Ville", cityPh: "Ville", volL: "Volume/mois", addEtab: "Ajouter un établissement", kwTitle: "Mots-clés", kwDesc: "Variable disponible:", kwPh: "Ex: [métier] [ville]", addKw: "Ajouter un mot-clé", back: "Retour", launch: "Lancer l'analyse", analyzing: "Analyse en cours", wait: "Veuillez patienter", report: "Rapport d'audit", etabs: "établissement(s)", statEtab: "Établissements", statNote: "Note moyenne", statReq: "Requêtes", statVis: "Visibilité", diag: "Diagnostic visibilité", top3: "Top 3", exc: "Excellent", pos47: "Position 4-7", imp: "À améliorer", pos8: "Position 8+", crit: "Critique", fin: "Impact financier", loss: "Perte annuelle estimée", lossD: "CA perdu par manque de visibilité", pot: "Potentiel récupérable", potD: "Récupérable en 12 mois", dist: "Répartition par établissement", inv: "Investissement", roi: "ROI estimé", be: "Break-even", leads: "Leads/an", comp: "Concurrents principaux", detail: "Analyse détaillée", note: "Note Google", avis: "Avis", posReq: "Positions par requête", matrix: "Matrice de positionnement", newA: "Nouvel audit", pdf: "Exporter PDF", search: "Rechercher un établissement...", footer: "V1" },
+  it: { login: "Audit SEO Locale", sub: "Strumento di analisi", pwd: "Password", pwdPh: "Inserisci password", pwdErr: "Errata", access: "Accedi", header: "Audit SEO Locale", badge: "Automatizzato", title: "Analizza la visibilità locale", desc: "Audit completo con posizionamento e impatto", apiTitle: "Chiave API SerpAPI", apiLabel: "Chiave API", apiPh: "Incolla chiave", cont: "Continua", config: "Configurazione", bizTitle: "Informazioni", bizName: "Azienda", bizPh: "Es: Milano Piastrelle", logoL: "Logo URL", logoPh: "https://...", actL: "Attività", actPh: "Es: piastrelle", panL: "Scontrino medio €", panPh: "500", marL: "Margine %", marPh: "15", etabTitle: "Stabilimenti", etab: "Stabilimento", del: "Elimina", cityL: "Città", cityPh: "Città", volL: "Volume/mese", addEtab: "Aggiungi stabilimento", kwTitle: "Parole chiave", kwDesc: "Variabile disponibile:", kwPh: "Es: [métier] [ville]", addKw: "Aggiungi parola chiave", back: "Indietro", launch: "Avvia analisi", analyzing: "Analisi in corso", wait: "Attendere", report: "Rapporto audit", etabs: "stabilimento/i", statEtab: "Stabilimenti", statNote: "Valutazione", statReq: "Query", statVis: "Visibilità", diag: "Diagnosi visibilità", top3: "Top 3", exc: "Eccellente", pos47: "Posizione 4-7", imp: "Da migliorare", pos8: "Posizione 8+", crit: "Critico", fin: "Impatto finanziario", loss: "Perdita annuale stimata", lossD: "Fatturato perso", pot: "Potenziale recuperabile", potD: "Recuperabile in 12 mesi", dist: "Distribuzione per stabilimento", inv: "Investimento", roi: "ROI stimato", be: "Break-even", leads: "Lead/anno", comp: "Concorrenti principali", detail: "Analisi dettagliata", note: "Valutazione Google", avis: "Recensioni", posReq: "Posizioni per query", matrix: "Matrice di posizionamento", newA: "Nuovo audit", pdf: "Esporta PDF", search: "Cerca uno stabilimento...", footer: "V1" }
 };
 
 const Ic = ({ n, s = 20 }) => {
-  const d = { lock: "M7 11V7a5 5 0 0110 0v4M5 11h14a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2v-7a2 2 0 012-2z", chart: "M18 20V10M12 20V4M6 20v-6", search: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z", pin: "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z", building: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4", target: "M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a6 6 0 100 12 6 6 0 000-12zm0 4a2 2 0 100 4 2 2 0 000-4z", trending: "M23 6l-9.5 9.5-5-5L1 18M17 6h6v6", users: "M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zm14 14v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75", check: "M20 6L9 17l-5-5", x: "M18 6L6 18M6 6l12 12", arrow: "M5 12h14m-7-7l7 7-7 7", download: "M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5 5 5-5m-5 5V3", plus: "M12 5v14m-7-7h14", trash: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16", globe: "M12 2a10 10 0 100 20 10 10 0 000-20zm0 0c2.5 0 4.5 4.5 4.5 10s-2 10-4.5 10-4.5-4.5-4.5-10 2-10 4.5-10zM2 12h20", key: "M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" };
-  return <svg width={s} height={s} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d={d[n]}/></svg>;
+  const paths = {
+    lock: <><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></>,
+    chart: <><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></>,
+    search: <><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></>,
+    pin: <><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></>,
+    building: <><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01"/></>,
+    target: <><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></>,
+    trending: <><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></>,
+    users: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
+    check: <polyline points="20 6 9 17 4 12"/>,
+    x: <><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>,
+    arrow: <><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>,
+    download: <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>,
+    plus: <><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></>,
+    trash: <><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></>,
+    globe: <><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>,
+    key: <><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></>,
+    star: <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/>,
+  };
+  return <svg width={s} height={s} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">{paths[n]}</svg>;
 };
 
 const Badge = ({ children, v = 'def' }) => {
-  const c = { def: ['#f1f5f9', '#475569'], ok: ['#dcfce7', '#16a34a'], warn: ['#fef3c7', '#d97706'], err: ['#fee2e2', '#dc2626'], pri: ['#dbeafe', '#2563eb'] }[v];
-  return <span style={{ display: 'inline-flex', padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: 600, background: c[0], color: c[1] }}>{children}</span>;
+  const colors = { def: { bg: '#f1f5f9', c: '#475569' }, ok: { bg: '#dcfce7', c: '#16a34a' }, warn: { bg: '#fef3c7', c: '#d97706' }, err: { bg: '#fee2e2', c: '#dc2626' }, pri: { bg: '#e0e7ff', c: '#4f46e5' } };
+  const col = colors[v] || colors.def;
+  return <span style={{ display: 'inline-flex', alignItems: 'center', padding: '5px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: 600, background: col.bg, color: col.c }}>{children}</span>;
 };
 
 const PosBadge = ({ r }) => {
@@ -26,10 +45,17 @@ const PosBadge = ({ r }) => {
   return <Badge v={v}>{r === 'N/A' || r === null ? 'N/A' : typeof r === 'number' ? '#' + r : r}</Badge>;
 };
 
-const Card = ({ children, style }) => <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e2e8f0', padding: '28px', marginBottom: '24px', ...style }}>{children}</div>;
-const Btn = ({ children, primary, style, ...p }) => <button style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px 24px', borderRadius: '10px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', border: 'none', transition: 'all 0.2s', background: primary ? '#0f172a' : '#f1f5f9', color: primary ? '#fff' : '#475569', ...style }} {...p}>{children}</button>;
-const Input = ({ style, ...p }) => <input style={{ width: '100%', padding: '14px 16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', color: '#0f172a', fontSize: '15px', outline: 'none', ...style }} {...p} />;
-const Label = ({ children }) => <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: '#475569', marginBottom: '8px' }}>{children}</label>;
+const s = {
+  page: { minHeight: '100vh', background: '#f8fafc', color: '#1e293b', fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" },
+  header: { background: '#fff', borderBottom: '1px solid #e2e8f0', padding: '14px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
+  container: { maxWidth: '1100px', margin: '0 auto', padding: '40px 24px' },
+  card: { background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', padding: '24px', marginBottom: '20px' },
+  btn: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '10px 20px', borderRadius: '8px', fontSize: '14px', fontWeight: 500, cursor: 'pointer', border: 'none', transition: 'all 0.15s' },
+  btnP: { background: '#1e293b', color: '#fff' },
+  btnS: { background: '#f1f5f9', color: '#475569' },
+  input: { width: '100%', padding: '12px 14px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '14px', color: '#1e293b', outline: 'none' },
+  label: { display: 'block', fontSize: '13px', fontWeight: 500, color: '#64748b', marginBottom: '6px' },
+};
 
 export default function App() {
   const [lang, setLang] = useState(null);
@@ -50,9 +76,6 @@ export default function App() {
   const [progT, setProgT] = useState('');
 
   const t = lang ? T[lang] : T.fr;
-  const page = { minHeight: '100vh', background: '#f8fafc', color: '#0f172a', fontFamily: "'Inter',-apple-system,sans-serif" };
-  const header = { background: '#fff', borderBottom: '1px solid #e2e8f0', padding: '16px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' };
-  const container = { maxWidth: '1200px', margin: '0 auto', padding: '48px 24px' };
 
   const login = () => pwd === PASSWORD ? setAuth(true) : setPwdErr(true);
   const addLoc = () => setLocs([...locs, { id: Date.now(), pid: '', name: '', city: '', lat: '', lon: '', ld: false, err: '', rat: null, rev: null, vol: 500, q: '', res: [], sh: false }]);
@@ -114,104 +137,191 @@ export default function App() {
 
   // LANG SELECT
   if (!lang) return (
-    <div style={page}><div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Card style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
-        <div style={{ width: '64px', height: '64px', background: '#f1f5f9', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', color: '#0ea5e9' }}><Ic n="globe" s={28}/></div>
-        <h1 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '8px' }}>Audit SEO Local</h1>
-        <p style={{ color: '#64748b', marginBottom: '32px' }}>Sélectionnez votre langue</p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-          <Btn onClick={() => { setLang('fr'); setKws(DEFAULT_KW.fr); }} style={{ padding: '20px', flexDirection: 'column', gap: '8px', border: '1px solid #e2e8f0', background: '#fff' }}><span style={{ fontSize: '24px', fontWeight: 700 }}>FR</span><span style={{ fontSize: '13px', color: '#64748b' }}>Français</span></Btn>
-          <Btn onClick={() => { setLang('it'); setKws(DEFAULT_KW.it); }} style={{ padding: '20px', flexDirection: 'column', gap: '8px', border: '1px solid #e2e8f0', background: '#fff' }}><span style={{ fontSize: '24px', fontWeight: 700 }}>IT</span><span style={{ fontSize: '13px', color: '#64748b' }}>Italiano</span></Btn>
+    <div style={s.page}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={s.card}>
+          <div style={{ width: '56px', height: '56px', background: '#f1f5f9', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#64748b' }}><Ic n="globe" s={26}/></div>
+          <h1 style={{ fontSize: '22px', fontWeight: 600, marginBottom: '6px', textAlign: 'center' }}>Audit SEO Local</h1>
+          <p style={{ color: '#64748b', marginBottom: '24px', textAlign: 'center', fontSize: '14px' }}>Sélectionnez votre langue</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <button onClick={() => { setLang('fr'); setKws(DEFAULT_KW.fr); }} style={{ ...s.btn, ...s.btnS, padding: '16px', flexDirection: 'column', gap: '4px' }}><span style={{ fontSize: '20px', fontWeight: 600 }}>FR</span><span style={{ fontSize: '12px', color: '#94a3b8' }}>Français</span></button>
+            <button onClick={() => { setLang('it'); setKws(DEFAULT_KW.it); }} style={{ ...s.btn, ...s.btnS, padding: '16px', flexDirection: 'column', gap: '4px' }}><span style={{ fontSize: '20px', fontWeight: 600 }}>IT</span><span style={{ fontSize: '12px', color: '#94a3b8' }}>Italiano</span></button>
+          </div>
         </div>
-      </Card>
-    </div></div>
+      </div>
+    </div>
   );
 
   // LOGIN
   if (!auth) return (
-    <div style={page}><div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Card style={{ maxWidth: '400px', width: '100%' }}>
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <div style={{ width: '56px', height: '56px', background: '#f1f5f9', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#64748b' }}><Ic n="lock" s={24}/></div>
-          <h1 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '6px' }}>{t.login}</h1>
-          <p style={{ color: '#64748b', fontSize: '14px' }}>{t.sub}</p>
+    <div style={s.page}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ ...s.card, width: '360px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+            <div style={{ width: '48px', height: '48px', background: '#f1f5f9', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', color: '#64748b' }}><Ic n="lock" s={22}/></div>
+            <h1 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '4px' }}>{t.login}</h1>
+            <p style={{ color: '#64748b', fontSize: '14px' }}>{t.sub}</p>
+          </div>
+          <div style={{ marginBottom: '16px' }}>
+            <label style={s.label}>{t.pwd}</label>
+            <input type="password" style={{ ...s.input, borderColor: pwdErr ? '#ef4444' : '#e2e8f0' }} placeholder={t.pwdPh} value={pwd} onChange={e => { setPwd(e.target.value); setPwdErr(false); }} onKeyPress={e => e.key === 'Enter' && login()} />
+            {pwdErr && <p style={{ color: '#ef4444', fontSize: '12px', marginTop: '6px' }}>{t.pwdErr}</p>}
+          </div>
+          <button style={{ ...s.btn, ...s.btnP, width: '100%' }} onClick={login}>{t.access}<Ic n="arrow" s={16}/></button>
         </div>
-        <div style={{ marginBottom: '20px' }}><Label>{t.pwd}</Label><Input type="password" placeholder={t.pwdPh} value={pwd} onChange={e => { setPwd(e.target.value); setPwdErr(false); }} onKeyPress={e => e.key === 'Enter' && login()} style={{ borderColor: pwdErr ? '#ef4444' : '#e2e8f0' }} />{pwdErr && <p style={{ color: '#ef4444', fontSize: '13px', marginTop: '8px' }}>{t.pwdErr}</p>}</div>
-        <Btn primary onClick={login} style={{ width: '100%' }}>{t.access} <Ic n="arrow" s={16}/></Btn>
-      </Card>
-    </div></div>
+      </div>
+    </div>
   );
 
   // STEP 1 - API KEY
   if (step === 1) return (
-    <div style={page}>
-      <header style={header}><div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#0ea5e9' }}><Ic n="chart"/><span style={{ fontWeight: 700, color: '#0f172a' }}>{t.header}</span></div></header>
-      <div style={container}><div style={{ maxWidth: '560px', margin: '0 auto', textAlign: 'center' }}>
-        <Badge v="pri">{t.badge}</Badge>
-        <h1 style={{ fontSize: '32px', fontWeight: 700, margin: '16px 0 12px', letterSpacing: '-0.5px' }}>{t.title}</h1>
-        <p style={{ color: '#64748b', fontSize: '16px', marginBottom: '40px' }}>{t.desc}</p>
-        <Card>
-          <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '20px', marginBottom: '24px', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-            <div style={{ color: '#0ea5e9' }}><Ic n="key"/></div>
-            <div style={{ textAlign: 'left' }}><div style={{ fontWeight: 600, marginBottom: '8px' }}>{t.apiTitle}</div>
-              <ol style={{ fontSize: '14px', color: '#64748b', lineHeight: 2, paddingLeft: '18px', margin: 0 }}><li>Créez un compte sur <a href="https://serpapi.com" target="_blank" rel="noreferrer" style={{ color: '#0ea5e9' }}>serpapi.com</a></li><li>Confirmez votre email</li><li>Dashboard → API Key</li><li>100 recherches/mois gratuites</li></ol>
+    <div style={s.page}>
+      <header style={s.header}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Ic n="chart" s={22}/>
+          <span style={{ fontWeight: 600 }}>{t.header}</span>
+        </div>
+      </header>
+      <div style={s.container}>
+        <div style={{ maxWidth: '500px', margin: '0 auto', textAlign: 'center' }}>
+          <Badge v="pri">{t.badge}</Badge>
+          <h1 style={{ fontSize: '28px', fontWeight: 600, margin: '12px 0 8px' }}>{t.title}</h1>
+          <p style={{ color: '#64748b', fontSize: '15px', marginBottom: '32px' }}>{t.desc}</p>
+          <div style={s.card}>
+            <div style={{ background: '#f8fafc', borderRadius: '8px', padding: '16px', marginBottom: '20px', textAlign: 'left' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px', color: '#64748b' }}>
+                <Ic n="key" s={18}/>
+                <span style={{ fontWeight: 500, color: '#1e293b' }}>{t.apiTitle}</span>
+              </div>
+              <ol style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.8, paddingLeft: '18px', margin: 0 }}>
+                <li>Créez un compte sur <a href="https://serpapi.com" target="_blank" rel="noreferrer" style={{ color: '#4f46e5' }}>serpapi.com</a></li>
+                <li>Confirmez votre email</li>
+                <li>Dashboard → API Key</li>
+                <li>100 recherches/mois gratuites</li>
+              </ol>
             </div>
+            <div style={{ marginBottom: '16px', textAlign: 'left' }}>
+              <label style={s.label}>{t.apiLabel}</label>
+              <input type="password" style={s.input} placeholder={t.apiPh} value={apiKey} onChange={e => setApiKey(e.target.value)} />
+            </div>
+            <button style={{ ...s.btn, ...s.btnP, width: '100%' }} onClick={() => apiKey && setStep(2)}>{t.cont}<Ic n="arrow" s={16}/></button>
           </div>
-          <div style={{ marginBottom: '20px' }}><Label>{t.apiLabel}</Label><Input type="password" placeholder={t.apiPh} value={apiKey} onChange={e => setApiKey(e.target.value)} /></div>
-          <Btn primary onClick={() => apiKey && setStep(2)} style={{ width: '100%' }}>{t.cont} <Ic n="arrow" s={16}/></Btn>
-        </Card>
-      </div></div>
+        </div>
+      </div>
     </div>
   );
 
   // STEP 2 - CONFIG
   if (step === 2) return (
-    <div style={page}>
-      <header style={header}><div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#0ea5e9' }}><Ic n="chart"/><span style={{ fontWeight: 700, color: '#0f172a' }}>{t.header}</span></div><Btn onClick={() => setStep(1)}>{t.back}</Btn></header>
-      <div style={container}>
-        <h1 style={{ fontSize: '28px', fontWeight: 700, marginBottom: '32px', textAlign: 'center' }}>{t.config}</h1>
-        <Card>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}><div style={{ width: '40px', height: '40px', background: '#dbeafe', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}><Ic n="building"/></div><h2 style={{ fontSize: '16px', fontWeight: 600 }}>{t.bizTitle}</h2></div>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px', marginBottom: '16px' }}><div><Label>{t.bizName}</Label><Input placeholder={t.bizPh} value={biz} onChange={e => setBiz(e.target.value)} /></div><div><Label>{t.logoL}</Label><Input placeholder={t.logoPh} value={logo} onChange={e => setLogo(e.target.value)} /></div></div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}><div><Label>{t.actL}</Label><Input placeholder={t.actPh} value={met} onChange={e => setMet(e.target.value)} /></div><div><Label>{t.panL}</Label><Input type="number" placeholder={t.panPh} value={pan} onChange={e => setPan(e.target.value)} /></div><div><Label>{t.marL}</Label><Input type="number" placeholder={t.marPh} value={mar} onChange={e => setMar(e.target.value)} /></div></div>
-        </Card>
-        <Card>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}><div style={{ width: '40px', height: '40px', background: '#fef3c7', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d97706' }}><Ic n="pin"/></div><h2 style={{ fontSize: '16px', fontWeight: 600 }}>{t.etabTitle}</h2></div>
+    <div style={s.page}>
+      <header style={s.header}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><Ic n="chart" s={22}/><span style={{ fontWeight: 600 }}>{t.header}</span></div>
+        <button style={{ ...s.btn, ...s.btnS }} onClick={() => setStep(1)}>{t.back}</button>
+      </header>
+      <div style={s.container}>
+        <h1 style={{ fontSize: '24px', fontWeight: 600, marginBottom: '24px', textAlign: 'center' }}>{t.config}</h1>
+        
+        <div style={s.card}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+            <div style={{ width: '36px', height: '36px', background: '#e0e7ff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4f46e5' }}><Ic n="building" s={18}/></div>
+            <h2 style={{ fontSize: '15px', fontWeight: 600 }}>{t.bizTitle}</h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '14px', marginBottom: '14px' }}>
+            <div><label style={s.label}>{t.bizName}</label><input style={s.input} placeholder={t.bizPh} value={biz} onChange={e => setBiz(e.target.value)} /></div>
+            <div><label style={s.label}>{t.logoL}</label><input style={s.input} placeholder={t.logoPh} value={logo} onChange={e => setLogo(e.target.value)} /></div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '14px' }}>
+            <div><label style={s.label}>{t.actL}</label><input style={s.input} placeholder={t.actPh} value={met} onChange={e => setMet(e.target.value)} /></div>
+            <div><label style={s.label}>{t.panL}</label><input style={s.input} type="number" placeholder={t.panPh} value={pan} onChange={e => setPan(e.target.value)} /></div>
+            <div><label style={s.label}>{t.marL}</label><input style={s.input} type="number" placeholder={t.marPh} value={mar} onChange={e => setMar(e.target.value)} /></div>
+          </div>
+        </div>
+
+        <div style={s.card}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+            <div style={{ width: '36px', height: '36px', background: '#fef3c7', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d97706' }}><Ic n="pin" s={18}/></div>
+            <h2 style={{ fontSize: '15px', fontWeight: 600 }}>{t.etabTitle}</h2>
+          </div>
           {locs.map((l, i) => (
-            <div key={l.id} style={{ background: '#f8fafc', borderRadius: '12px', padding: '20px', marginBottom: '16px', border: '1px solid #e2e8f0' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}><span style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '10px' }}><span style={{ width: '28px', height: '28px', background: '#0f172a', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 700, color: '#fff' }}>{i + 1}</span>{t.etab}</span>{locs.length > 1 && <Btn onClick={() => rmLoc(l.id)} style={{ background: '#fee2e2', color: '#dc2626', padding: '6px 12px' }}><Ic n="trash" s={16}/></Btn>}</div>
-              <div style={{ position: 'relative', marginBottom: '16px' }}><div style={{ display: 'flex', gap: '10px' }}><Input placeholder={t.search} value={l.q} onChange={e => upLoc(l.id, 'q', e.target.value)} onKeyPress={e => e.key === 'Enter' && searchP(l.id, l.q)} style={{ flex: 1, background: '#fff' }} /><Btn primary onClick={() => searchP(l.id, l.q)} disabled={l.ld} style={{ padding: '14px 18px', opacity: l.ld ? 0.6 : 1 }}>{l.ld ? '...' : <Ic n="search" s={18}/>}</Btn></div>
-                {l.sh && l.res.length > 0 && <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', marginTop: '8px', maxHeight: '280px', overflowY: 'auto', zIndex: 100, boxShadow: '0 10px 40px rgba(0,0,0,0.1)' }}>{l.res.map((p, j) => <div key={j} onClick={() => selP(l.id, p)} style={{ padding: '14px 18px', borderBottom: '1px solid #f1f5f9', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.background = '#f8fafc'} onMouseOut={e => e.currentTarget.style.background = '#fff'}><div style={{ fontWeight: 600, marginBottom: '2px' }}>{p.name}</div><div style={{ fontSize: '13px', color: '#64748b' }}>{p.address}</div>{p.rating && <div style={{ marginTop: '4px', fontSize: '13px', color: '#f59e0b' }}>★ {p.rating}</div>}</div>)}</div>}
+            <div key={l.id} style={{ background: '#f8fafc', borderRadius: '10px', padding: '16px', marginBottom: '14px', border: '1px solid #e2e8f0' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                <span style={{ fontWeight: 500, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ width: '24px', height: '24px', background: '#1e293b', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 600, color: '#fff' }}>{i + 1}</span>
+                  {t.etab}
+                </span>
+                {locs.length > 1 && <button onClick={() => rmLoc(l.id)} style={{ ...s.btn, background: '#fee2e2', color: '#dc2626', padding: '6px 10px' }}><Ic n="trash" s={14}/></button>}
               </div>
-              {l.err && <div style={{ color: '#dc2626', fontSize: '13px', marginBottom: '12px', padding: '10px 14px', background: '#fee2e2', borderRadius: '8px' }}>{l.err}</div>}
-              {l.name && <div style={{ background: '#dcfce7', borderRadius: '10px', padding: '16px', marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><div><div style={{ fontWeight: 600, color: '#16a34a', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}><Ic n="check" s={16}/> {l.name}</div><div style={{ fontSize: '13px', color: '#64748b' }}>{l.city}</div></div>{l.rat && <span style={{ color: '#f59e0b', fontWeight: 600 }}>★ {l.rat}</span>}</div>}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}><div><Label style={{ fontSize: '12px' }}>{t.cityL}</Label><Input placeholder={t.cityPh} value={l.city} onChange={e => upLoc(l.id, 'city', e.target.value)} style={{ background: '#fff' }} /></div><div><Label style={{ fontSize: '12px' }}>{t.volL}</Label><Input type="number" placeholder="500" value={l.vol} onChange={e => upLoc(l.id, 'vol', parseInt(e.target.value) || 500)} style={{ background: '#fff' }} /></div></div>
+              <div style={{ position: 'relative', marginBottom: '14px' }}>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <input style={{ ...s.input, flex: 1 }} placeholder={t.search} value={l.q} onChange={e => upLoc(l.id, 'q', e.target.value)} onKeyPress={e => e.key === 'Enter' && searchP(l.id, l.q)} />
+                  <button style={{ ...s.btn, ...s.btnP, padding: '12px 14px' }} onClick={() => searchP(l.id, l.q)} disabled={l.ld}>{l.ld ? '...' : <Ic n="search" s={16}/>}</button>
+                </div>
+                {l.sh && l.res.length > 0 && (
+                  <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', marginTop: '6px', maxHeight: '240px', overflowY: 'auto', zIndex: 100, boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
+                    {l.res.map((p, j) => (
+                      <div key={j} onClick={() => selP(l.id, p)} style={{ padding: '12px 14px', borderBottom: '1px solid #f1f5f9', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.background = '#f8fafc'} onMouseOut={e => e.currentTarget.style.background = '#fff'}>
+                        <div style={{ fontWeight: 500, marginBottom: '2px', fontSize: '14px' }}>{p.name}</div>
+                        <div style={{ fontSize: '12px', color: '#64748b' }}>{p.address}</div>
+                        {p.rating && <div style={{ marginTop: '4px', fontSize: '12px', color: '#f59e0b', display: 'flex', alignItems: 'center', gap: '4px' }}><Ic n="star" s={12}/> {p.rating}</div>}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {l.err && <div style={{ color: '#dc2626', fontSize: '12px', marginBottom: '10px', padding: '8px 12px', background: '#fee2e2', borderRadius: '6px' }}>{l.err}</div>}
+              {l.name && (
+                <div style={{ background: '#dcfce7', borderRadius: '8px', padding: '12px 14px', marginBottom: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ fontWeight: 500, color: '#16a34a', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px' }}><Ic n="check" s={14}/> {l.name}</div>
+                    <div style={{ fontSize: '12px', color: '#64748b' }}>{l.city}</div>
+                  </div>
+                  {l.rat && <span style={{ color: '#f59e0b', fontWeight: 500, fontSize: '13px', display: 'flex', alignItems: 'center', gap: '4px' }}><Ic n="star" s={14}/> {l.rat}</span>}
+                </div>
+              )}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                <div><label style={{ ...s.label, fontSize: '12px' }}>{t.cityL}</label><input style={s.input} placeholder={t.cityPh} value={l.city} onChange={e => upLoc(l.id, 'city', e.target.value)} /></div>
+                <div><label style={{ ...s.label, fontSize: '12px' }}>{t.volL}</label><input style={s.input} type="number" placeholder="500" value={l.vol} onChange={e => upLoc(l.id, 'vol', parseInt(e.target.value) || 500)} /></div>
+              </div>
             </div>
           ))}
-          <button onClick={addLoc} style={{ width: '100%', padding: '16px', background: '#fff', border: '2px dashed #e2e8f0', borderRadius: '12px', color: '#64748b', cursor: 'pointer', fontSize: '14px', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}><Ic n="plus" s={18}/> {t.addEtab}</button>
-        </Card>
-        <Card>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}><div style={{ width: '40px', height: '40px', background: '#dcfce7', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a' }}><Ic n="target"/></div><h2 style={{ fontSize: '16px', fontWeight: 600 }}>{t.kwTitle}</h2></div>
-          <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '16px' }}>{t.kwDesc} <code style={{ background: '#f1f5f9', padding: '3px 8px', borderRadius: '6px' }}>[métier]</code></p>
-          {kws.map((k, i) => <div key={i} style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}><Input value={k} onChange={e => { const n = [...kws]; n[i] = e.target.value; setKws(n); }} placeholder={t.kwPh} />{kws.length > 1 && <Btn onClick={() => setKws(kws.filter((_, j) => j !== i))} style={{ background: '#fee2e2', color: '#dc2626', padding: '0 14px' }}><Ic n="x" s={16}/></Btn>}</div>)}
-          <button onClick={() => setKws([...kws, ''])} style={{ marginTop: '8px', padding: '12px 20px', background: '#fff', border: '2px dashed #e2e8f0', borderRadius: '10px', color: '#64748b', cursor: 'pointer', fontWeight: 600, fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}><Ic n="plus" s={18}/> {t.addKw}</button>
-        </Card>
-        <div style={{ textAlign: 'center' }}><Btn primary onClick={run} disabled={!biz || !met || locs.every(l => !l.pid)} style={{ padding: '16px 48px', fontSize: '16px', opacity: (!biz || !met || locs.every(l => !l.pid)) ? 0.5 : 1 }}>{t.launch} <Ic n="arrow" s={16}/></Btn></div>
+          <button onClick={addLoc} style={{ width: '100%', padding: '12px', background: '#fff', border: '1px dashed #cbd5e1', borderRadius: '8px', color: '#64748b', cursor: 'pointer', fontSize: '13px', fontWeight: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Ic n="plus" s={16}/> {t.addEtab}</button>
+        </div>
+
+        <div style={s.card}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+            <div style={{ width: '36px', height: '36px', background: '#dcfce7', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a' }}><Ic n="target" s={18}/></div>
+            <h2 style={{ fontSize: '15px', fontWeight: 600 }}>{t.kwTitle}</h2>
+          </div>
+          <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '14px' }}>{t.kwDesc} <code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px', fontSize: '12px' }}>[métier]</code></p>
+          {kws.map((k, i) => (
+            <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+              <input style={{ ...s.input, flex: 1 }} value={k} onChange={e => { const n = [...kws]; n[i] = e.target.value; setKws(n); }} placeholder={t.kwPh} />
+              {kws.length > 1 && <button onClick={() => setKws(kws.filter((_, j) => j !== i))} style={{ ...s.btn, background: '#fee2e2', color: '#dc2626', padding: '0 12px' }}><Ic n="x" s={14}/></button>}
+            </div>
+          ))}
+          <button onClick={() => setKws([...kws, ''])} style={{ marginTop: '6px', padding: '10px 16px', background: '#fff', border: '1px dashed #cbd5e1', borderRadius: '8px', color: '#64748b', cursor: 'pointer', fontWeight: 500, fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}><Ic n="plus" s={16}/> {t.addKw}</button>
+        </div>
+
+        <div style={{ textAlign: 'center' }}>
+          <button style={{ ...s.btn, ...s.btnP, padding: '12px 32px', fontSize: '15px', opacity: (!biz || !met || locs.every(l => !l.pid)) ? 0.5 : 1 }} onClick={run} disabled={!biz || !met || locs.every(l => !l.pid)}>{t.launch}<Ic n="arrow" s={16}/></button>
+        </div>
       </div>
     </div>
   );
 
   // STEP 3 - LOADING
   if (step === 3) return (
-    <div style={page}>
-      <header style={header}><div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#0ea5e9' }}><Ic n="chart"/><span style={{ fontWeight: 700, color: '#0f172a' }}>{t.header}</span></div></header>
-      <div style={container}><Card style={{ maxWidth: '480px', margin: '60px auto', textAlign: 'center', padding: '48px' }}>
-        <div style={{ fontSize: '64px', fontWeight: 700, color: '#0f172a', marginBottom: '16px' }}>{prog}%</div>
-        <div style={{ height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden', marginBottom: '24px' }}><div style={{ width: prog + '%', height: '100%', background: '#0ea5e9', borderRadius: '4px', transition: 'width 0.3s' }}/></div>
-        <h2 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '12px' }}>{t.analyzing}</h2>
-        <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '8px' }}>{progT}</p>
-        <p style={{ fontSize: '13px', color: '#94a3b8' }}>{t.wait}</p>
-      </Card></div>
+    <div style={s.page}>
+      <header style={s.header}><div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><Ic n="chart" s={22}/><span style={{ fontWeight: 600 }}>{t.header}</span></div></header>
+      <div style={s.container}>
+        <div style={{ ...s.card, maxWidth: '420px', margin: '40px auto', textAlign: 'center', padding: '40px' }}>
+          <div style={{ fontSize: '48px', fontWeight: 600, color: '#1e293b', marginBottom: '12px' }}>{prog}%</div>
+          <div style={{ height: '6px', background: '#e2e8f0', borderRadius: '3px', overflow: 'hidden', marginBottom: '20px' }}><div style={{ width: prog + '%', height: '100%', background: '#4f46e5', borderRadius: '3px', transition: 'width 0.3s' }}/></div>
+          <h2 style={{ fontSize: '18px', fontWeight: 500, marginBottom: '8px' }}>{t.analyzing}</h2>
+          <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '4px' }}>{progT}</p>
+          <p style={{ fontSize: '12px', color: '#94a3b8' }}>{t.wait}</p>
+        </div>
+      </div>
     </div>
   );
 
@@ -219,27 +329,125 @@ export default function App() {
   if (step === 4 && results) {
     const r = results;
     return (
-      <div style={page}>
+      <div style={s.page}>
         <style>{`@media print{.noprint{display:none!important}}`}</style>
-        <header style={header} className="noprint">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>{r.logo && <img src={r.logo} alt="" style={{ width: '40px', height: '40px', borderRadius: '10px', objectFit: 'cover' }}/>}<div><div style={{ fontWeight: 700 }}>{r.biz}</div><div style={{ fontSize: '13px', color: '#64748b' }}>{r.met}</div></div></div>
-          <div style={{ display: 'flex', gap: '10px' }}><Btn onClick={() => { setStep(2); setResults(null); }}>{t.newA}</Btn><Btn primary onClick={() => window.print()}><Ic n="download" s={18}/> {t.pdf}</Btn></div>
-        </header>
-        <div style={container}>
-          <div style={{ textAlign: 'center', marginBottom: '48px' }}><Badge v="pri">{t.report}</Badge><h1 style={{ fontSize: '36px', fontWeight: 700, marginTop: '16px', marginBottom: '8px' }}>{r.biz}</h1><p style={{ color: '#64748b' }}>{r.sum.tot} {t.etabs}</p></div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '20px', marginBottom: '40px' }}>
-            {[{ ic: 'building', v: r.sum.tot, l: t.statEtab }, { ic: 'star', v: r.sum.avgR || 'N/A', l: t.statNote }, { ic: 'target', v: r.sum.tot * kws.length, l: t.statReq }, { ic: 'trending', v: r.sum.visPct + '%', l: t.statVis }].map((s, i) => <Card key={i} style={{ marginBottom: 0, padding: '24px' }}><div style={{ width: '48px', height: '48px', background: '#f8fafc', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0ea5e9', marginBottom: '16px' }}><Ic n={s.ic}/></div><div style={{ fontSize: '36px', fontWeight: 700, marginBottom: '4px' }}>{s.v}</div><div style={{ fontSize: '14px', color: '#64748b' }}>{s.l}</div></Card>)}
+        <header style={s.header} className="noprint">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {r.logo && <img src={r.logo} alt="" style={{ width: '36px', height: '36px', borderRadius: '8px', objectFit: 'cover' }}/>}
+            <div><div style={{ fontWeight: 600, fontSize: '15px' }}>{r.biz}</div><div style={{ fontSize: '12px', color: '#64748b' }}>{r.met}</div></div>
           </div>
-          <Card><h2 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '24px' }}>{t.diag}</h2><div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '20px' }}><div style={{ padding: '24px', background: '#dcfce7', borderRadius: '12px', textAlign: 'center' }}><div style={{ fontSize: '40px', fontWeight: 700, color: '#16a34a' }}>{r.sum.t3}</div><div style={{ fontSize: '14px', color: '#16a34a', fontWeight: 600 }}>{t.top3}</div><div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>{t.exc}</div></div><div style={{ padding: '24px', background: '#fef3c7', borderRadius: '12px', textAlign: 'center' }}><div style={{ fontSize: '40px', fontWeight: 700, color: '#d97706' }}>{r.sum.t7 - r.sum.t3}</div><div style={{ fontSize: '14px', color: '#d97706', fontWeight: 600 }}>{t.pos47}</div><div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>{t.imp}</div></div><div style={{ padding: '24px', background: '#fee2e2', borderRadius: '12px', textAlign: 'center' }}><div style={{ fontSize: '40px', fontWeight: 700, color: '#dc2626' }}>{r.sum.tot * kws.length - r.sum.t7}</div><div style={{ fontSize: '14px', color: '#dc2626', fontWeight: 600 }}>{t.pos8}</div><div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>{t.crit}</div></div></div></Card>
-          <h2 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '20px' }}>{t.fin}</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '32px' }}><Card style={{ borderLeft: '4px solid #dc2626', marginBottom: 0 }}><div style={{ fontSize: '13px', color: '#64748b', fontWeight: 600, marginBottom: '8px' }}>{t.loss}</div><div style={{ fontSize: '48px', fontWeight: 700, color: '#dc2626', marginBottom: '8px' }}>-{r.fin.tl}K€</div><div style={{ fontSize: '14px', color: '#64748b' }}>{t.lossD}</div></Card><Card style={{ borderLeft: '4px solid #16a34a', marginBottom: 0 }}><div style={{ fontSize: '13px', color: '#64748b', fontWeight: 600, marginBottom: '8px' }}>{t.pot}</div><div style={{ fontSize: '48px', fontWeight: 700, color: '#16a34a', marginBottom: '8px' }}>+{r.fin.pg}K€</div><div style={{ fontSize: '14px', color: '#64748b' }}>{t.potD}</div></Card></div>
-          <Card><h3 style={{ fontSize: '15px', fontWeight: 700, color: '#dc2626', marginBottom: '16px' }}>{t.dist}</h3>{r.locs.sort((a, b) => b.loss - a.loss).map((l, i) => <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', background: '#f8fafc', borderRadius: '10px', marginBottom: '10px' }}><div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}><span style={{ fontWeight: 600 }}>{l.city}</span><Badge v={l.stat === 'excellent' ? 'ok' : l.stat === 'bon' ? 'pri' : l.stat === 'moyen' ? 'warn' : 'err'}>{l.stat}</Badge></div><span style={{ fontSize: '18px', fontWeight: 700, color: '#dc2626' }}>-{l.loss}K€</span></div>)}</Card>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '20px', marginBottom: '40px' }}>{[{ v: r.fin.inv + '€', l: t.inv }, { v: r.fin.roi + '%', l: t.roi }, { v: r.fin.be, l: t.be }, { v: '+' + r.fin.lpy, l: t.leads }].map((s, i) => <Card key={i} style={{ marginBottom: 0, textAlign: 'center', padding: '24px' }}><div style={{ fontSize: '28px', fontWeight: 700, color: '#0ea5e9', marginBottom: '4px' }}>{s.v}</div><div style={{ fontSize: '13px', color: '#64748b' }}>{s.l}</div></Card>)}</div>
-          {r.topComp?.length > 0 && <Card><h2 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '20px' }}>{t.comp}</h2><div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '16px' }}>{r.topComp.map((c, i) => <div key={i} style={{ padding: '20px', background: '#f8fafc', borderRadius: '12px', textAlign: 'center' }}><div style={{ width: '40px', height: '40px', background: i === 0 ? '#fef3c7' : '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: i === 0 ? '#d97706' : '#64748b', margin: '0 auto 12px' }}>{i + 1}</div><div style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.name}</div>{c.rating && <div style={{ fontSize: '13px', color: '#f59e0b' }}>★ {c.rating}</div>}</div>)}</div></Card>}
-          <h2 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '20px' }}>{t.detail}</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(400px,1fr))', gap: '24px', marginBottom: '40px' }}>{r.locs.map((l, i) => <Card key={i}><div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}><div style={{ fontSize: '20px', fontWeight: 700 }}>{l.city}</div><Badge v={l.stat === 'excellent' ? 'ok' : l.stat === 'bon' ? 'pri' : l.stat === 'moyen' ? 'warn' : 'err'}>{l.stat}</Badge></div><div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}><div style={{ padding: '20px', background: '#f8fafc', borderRadius: '12px', textAlign: 'center' }}><div style={{ fontSize: '32px', fontWeight: 700, color: l.rat >= 4.5 ? '#16a34a' : l.rat >= 4 ? '#d97706' : '#dc2626' }}>{l.rat || 'N/A'}</div><div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>{t.note}</div></div><div style={{ padding: '20px', background: '#f8fafc', borderRadius: '12px', textAlign: 'center' }}><div style={{ fontSize: '32px', fontWeight: 700, color: '#0ea5e9' }}>{l.rev || 'N/A'}</div><div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>{t.avis}</div></div></div><div style={{ fontSize: '12px', fontWeight: 700, color: '#64748b', marginBottom: '12px' }}>{t.posReq}</div>{l.ranks.map((x, j) => <div key={j} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 14px', background: '#f8fafc', borderRadius: '8px', marginBottom: '8px' }}><span style={{ fontSize: '13px', color: '#64748b' }}>{x.kw}</span><PosBadge r={x.rk}/></div>)}</Card>)}</div>
-          <Card style={{ overflowX: 'auto' }}><h2 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '20px' }}>{t.matrix}</h2><table style={{ width: '100%', borderCollapse: 'collapse' }}><thead><tr><th style={{ padding: '14px 16px', background: '#f8fafc', fontSize: '13px', fontWeight: 600, color: '#64748b', textAlign: 'left', borderRadius: '8px 0 0 8px' }}>Requête</th>{r.locs.map((l, i) => <th key={i} style={{ padding: '14px 16px', background: '#f8fafc', fontSize: '13px', fontWeight: 600, color: '#64748b', textAlign: 'center', borderRadius: i === r.locs.length - 1 ? '0 8px 8px 0' : 0 }}>{l.city}</th>)}</tr></thead><tbody>{kws.map((k, ki) => <tr key={ki}><td style={{ padding: '14px 16px', fontSize: '14px', borderBottom: '1px solid #f1f5f9' }}>{k}</td>{r.locs.map((l, li) => <td key={li} style={{ padding: '14px 16px', textAlign: 'center', borderBottom: '1px solid #f1f5f9' }}><PosBadge r={l.ranks[ki]?.rk}/></td>)}</tr>)}</tbody></table></Card>
-          <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: '13px', marginTop: '48px' }}>{t.footer}</p>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button style={{ ...s.btn, ...s.btnS }} onClick={() => { setStep(2); setResults(null); }}>{t.newA}</button>
+            <button style={{ ...s.btn, ...s.btnP }} onClick={() => window.print()}><Ic n="download" s={16}/> {t.pdf}</button>
+          </div>
+        </header>
+        <div style={s.container}>
+          <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+            <Badge v="pri">{t.report}</Badge>
+            <h1 style={{ fontSize: '30px', fontWeight: 600, marginTop: '12px', marginBottom: '6px' }}>{r.biz}</h1>
+            <p style={{ color: '#64748b', fontSize: '14px' }}>{r.sum.tot} {t.etabs}</p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '32px' }}>
+            {[{ ic: 'building', v: r.sum.tot, l: t.statEtab }, { ic: 'star', v: r.sum.avgR || 'N/A', l: t.statNote }, { ic: 'target', v: r.sum.tot * kws.length, l: t.statReq }, { ic: 'trending', v: r.sum.visPct + '%', l: t.statVis }].map((x, i) => (
+              <div key={i} style={{ ...s.card, marginBottom: 0, padding: '20px' }}>
+                <div style={{ width: '40px', height: '40px', background: '#f1f5f9', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b', marginBottom: '12px' }}><Ic n={x.ic} s={18}/></div>
+                <div style={{ fontSize: '28px', fontWeight: 600, marginBottom: '2px' }}>{x.v}</div>
+                <div style={{ fontSize: '13px', color: '#64748b' }}>{x.l}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={s.card}>
+            <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '20px' }}>{t.diag}</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px' }}>
+              <div style={{ padding: '20px', background: '#dcfce7', borderRadius: '10px', textAlign: 'center' }}><div style={{ fontSize: '32px', fontWeight: 600, color: '#16a34a' }}>{r.sum.t3}</div><div style={{ fontSize: '13px', color: '#16a34a', fontWeight: 500 }}>{t.top3}</div><div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>{t.exc}</div></div>
+              <div style={{ padding: '20px', background: '#fef3c7', borderRadius: '10px', textAlign: 'center' }}><div style={{ fontSize: '32px', fontWeight: 600, color: '#d97706' }}>{r.sum.t7 - r.sum.t3}</div><div style={{ fontSize: '13px', color: '#d97706', fontWeight: 500 }}>{t.pos47}</div><div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>{t.imp}</div></div>
+              <div style={{ padding: '20px', background: '#fee2e2', borderRadius: '10px', textAlign: 'center' }}><div style={{ fontSize: '32px', fontWeight: 600, color: '#dc2626' }}>{r.sum.tot * kws.length - r.sum.t7}</div><div style={{ fontSize: '13px', color: '#dc2626', fontWeight: 500 }}>{t.pos8}</div><div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>{t.crit}</div></div>
+            </div>
+          </div>
+
+          <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px' }}>{t.fin}</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+            <div style={{ ...s.card, borderLeft: '3px solid #dc2626', marginBottom: 0 }}><div style={{ fontSize: '12px', color: '#64748b', fontWeight: 500, marginBottom: '6px' }}>{t.loss}</div><div style={{ fontSize: '36px', fontWeight: 600, color: '#dc2626', marginBottom: '4px' }}>-{r.fin.tl}K€</div><div style={{ fontSize: '13px', color: '#64748b' }}>{t.lossD}</div></div>
+            <div style={{ ...s.card, borderLeft: '3px solid #16a34a', marginBottom: 0 }}><div style={{ fontSize: '12px', color: '#64748b', fontWeight: 500, marginBottom: '6px' }}>{t.pot}</div><div style={{ fontSize: '36px', fontWeight: 600, color: '#16a34a', marginBottom: '4px' }}>+{r.fin.pg}K€</div><div style={{ fontSize: '13px', color: '#64748b' }}>{t.potD}</div></div>
+          </div>
+
+          <div style={s.card}>
+            <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#dc2626', marginBottom: '14px' }}>{t.dist}</h3>
+            {r.locs.sort((a, b) => b.loss - a.loss).map((l, i) => (
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 14px', background: '#f8fafc', borderRadius: '8px', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><span style={{ fontWeight: 500, fontSize: '14px' }}>{l.city}</span><Badge v={l.stat === 'excellent' ? 'ok' : l.stat === 'bon' ? 'pri' : l.stat === 'moyen' ? 'warn' : 'err'}>{l.stat}</Badge></div>
+                <span style={{ fontSize: '16px', fontWeight: 600, color: '#dc2626' }}>-{l.loss}K€</span>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '32px' }}>
+            {[{ v: r.fin.inv + '€', l: t.inv }, { v: r.fin.roi + '%', l: t.roi }, { v: r.fin.be, l: t.be }, { v: '+' + r.fin.lpy, l: t.leads }].map((x, i) => (
+              <div key={i} style={{ ...s.card, marginBottom: 0, textAlign: 'center', padding: '20px' }}><div style={{ fontSize: '22px', fontWeight: 600, color: '#4f46e5', marginBottom: '2px' }}>{x.v}</div><div style={{ fontSize: '12px', color: '#64748b' }}>{x.l}</div></div>
+            ))}
+          </div>
+
+          {r.topComp?.length > 0 && (
+            <div style={s.card}>
+              <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px' }}>{t.comp}</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '12px' }}>
+                {r.topComp.map((c, i) => (
+                  <div key={i} style={{ padding: '16px', background: '#f8fafc', borderRadius: '10px', textAlign: 'center' }}>
+                    <div style={{ width: '32px', height: '32px', background: i === 0 ? '#fef3c7' : '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600, fontSize: '14px', color: i === 0 ? '#d97706' : '#64748b', margin: '0 auto 10px' }}>{i + 1}</div>
+                    <div style={{ fontSize: '13px', fontWeight: 500, marginBottom: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.name}</div>
+                    {c.rating && <div style={{ fontSize: '12px', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3px' }}><Ic n="star" s={10}/> {c.rating}</div>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px' }}>{t.detail}</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(360px,1fr))', gap: '20px', marginBottom: '32px' }}>
+            {r.locs.map((l, i) => (
+              <div key={i} style={s.card}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                  <div style={{ fontSize: '18px', fontWeight: 600 }}>{l.city}</div>
+                  <Badge v={l.stat === 'excellent' ? 'ok' : l.stat === 'bon' ? 'pri' : l.stat === 'moyen' ? 'warn' : 'err'}>{l.stat}</Badge>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px' }}>
+                  <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '10px', textAlign: 'center' }}><div style={{ fontSize: '26px', fontWeight: 600, color: l.rat >= 4.5 ? '#16a34a' : l.rat >= 4 ? '#d97706' : '#dc2626' }}>{l.rat || 'N/A'}</div><div style={{ fontSize: '11px', color: '#64748b', fontWeight: 500 }}>{t.note}</div></div>
+                  <div style={{ padding: '16px', background: '#f8fafc', borderRadius: '10px', textAlign: 'center' }}><div style={{ fontSize: '26px', fontWeight: 600, color: '#4f46e5' }}>{l.rev || 'N/A'}</div><div style={{ fontSize: '11px', color: '#64748b', fontWeight: 500 }}>{t.avis}</div></div>
+                </div>
+                <div style={{ fontSize: '11px', fontWeight: 600, color: '#64748b', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{t.posReq}</div>
+                {l.ranks.map((x, j) => (
+                  <div key={j} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: '#f8fafc', borderRadius: '6px', marginBottom: '6px' }}>
+                    <span style={{ fontSize: '12px', color: '#64748b' }}>{x.kw}</span>
+                    <PosBadge r={x.rk}/>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+
+          <div style={{ ...s.card, overflowX: 'auto' }}>
+            <h2 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px' }}>{t.matrix}</h2>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr>
+                  <th style={{ padding: '12px 14px', background: '#f8fafc', fontSize: '12px', fontWeight: 600, color: '#64748b', textAlign: 'left', borderRadius: '6px 0 0 6px' }}>Requête</th>
+                  {r.locs.map((l, i) => <th key={i} style={{ padding: '12px 14px', background: '#f8fafc', fontSize: '12px', fontWeight: 600, color: '#64748b', textAlign: 'center', borderRadius: i === r.locs.length - 1 ? '0 6px 6px 0' : 0 }}>{l.city}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {kws.map((k, ki) => (
+                  <tr key={ki}>
+                    <td style={{ padding: '12px 14px', fontSize: '13px', borderBottom: '1px solid #f1f5f9' }}>{k}</td>
+                    {r.locs.map((l, li) => <td key={li} style={{ padding: '12px 14px', textAlign: 'center', borderBottom: '1px solid #f1f5f9' }}><PosBadge r={l.ranks[ki]?.rk}/></td>)}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: '12px', marginTop: '40px' }}>{t.footer}</p>
         </div>
       </div>
     );
