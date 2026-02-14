@@ -454,41 +454,78 @@ export default function App() {
                         <h2 style={{fontSize:'22px',fontWeight:700,color:'#0f172a'}}>{t.pillarTitle}</h2>
                       </div>
                     </div>
-                    <div style={{width:'60px',height:'4px',background:'#8b5cf6',borderRadius:'2px',marginBottom:'32px'}}/>
+                    <div style={{width:'60px',height:'4px',background:'#0ea5e9',borderRadius:'2px',marginBottom:'32px'}}/>
                     
-                    {/* Plateformes principales */}
-                    <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:'20px',marginBottom:'24px'}}>
-                      {['GBP','G-Maps','Facebook','Factual','Apple plans','Siri','TikTok*'].map((p,i)=>(
+                    {/* Plateformes principales - Ligne 1 */}
+                    <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:'16px',marginBottom:'20px'}}>
+                      {[
+                        {name:'GBP',icon:'G',bg:'#dbeafe',color:'#1d4ed8'},
+                        {name:'G-Maps',icon:'📍',bg:'#dcfce7',color:'#16a34a'},
+                        {name:'Facebook',icon:'f',bg:'#dbeafe',color:'#1d4ed8'},
+                        {name:'Factual',icon:'F',bg:'#fef9c3',color:'#ca8a04'},
+                        {name:'Apple plans',icon:'',bg:'#f3f4f6',color:'#6b7280'},
+                        {name:'Siri',icon:'🎵',bg:'#fce7f3',color:'#db2777'},
+                        {name:'TikTok*',icon:'♪',bg:'#fce7f3',color:'#000'}
+                      ].map((p,i)=>(
                         <div key={i} style={{textAlign:'center'}}>
-                          <div style={{width:'56px',height:'56px',background:['#e0f2fe','#d1fae5','#dbeafe','#fef3c7','#f3f4f6','#fef3c7','#fce7f3'][i],borderRadius:'50%',margin:'0 auto 8px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'24px'}}>
-                            {['G','📍','f','F','','🔊','♪'][i]}
+                          <div style={{width:'56px',height:'56px',background:p.bg,borderRadius:'50%',margin:'0 auto 8px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:p.icon.length>1?'20px':'24px',fontWeight:700,color:p.color}}>
+                            {p.icon}
                           </div>
-                          <span style={{fontSize:'12px',color:'#64748b'}}>{p}</span>
+                          <span style={{fontSize:'12px',color:'#64748b'}}>{p.name}</span>
                         </div>
                       ))}
                     </div>
-                    <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:'20px',marginBottom:'24px'}}>
-                      {['Snapchat','Waze','Here','Tomtom','Mappy*','Hoodspot','Justacoté','118 000'].map((p,i)=>(
+                    
+                    {/* Plateformes - Ligne 2 */}
+                    <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:'16px',marginBottom:'20px'}}>
+                      {[
+                        {name:'Snapchat',icon:'👻',bg:'#fef9c3',color:'#000'},
+                        {name:'Waze',icon:'W',bg:'#f3f4f6',color:'#6b7280'},
+                        {name:'Here',icon:'H',bg:'#dcfce7',color:'#16a34a'},
+                        {name:'Tomtom',icon:'T',bg:'#f3f4f6',color:'#6b7280'},
+                        {name:'Mappy*',icon:'M',bg:'#e0e7ff',color:'#4f46e5'},
+                        {name:'Hoodspot',icon:'H',bg:'#fee2e2',color:'#dc2626'},
+                        {name:'Justacoté',icon:'J',bg:'#dbeafe',color:'#1d4ed8'}
+                      ].map((p,i)=>(
                         <div key={i} style={{textAlign:'center'}}>
-                          <div style={{width:'56px',height:'56px',background:'#f1f5f9',borderRadius:'50%',margin:'0 auto 8px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px'}}>
-                            {['👻','W','H','T','M','H','J','118'][i]}
+                          <div style={{width:'56px',height:'56px',background:p.bg,borderRadius:'50%',margin:'0 auto 8px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:p.icon.length>1?'20px':'24px',fontWeight:700,color:p.color}}>
+                            {p.icon}
                           </div>
-                          <span style={{fontSize:'12px',color:'#64748b'}}>{p}</span>
+                          <span style={{fontSize:'12px',color:'#64748b'}}>{p.name}</span>
                         </div>
                       ))}
+                    </div>
+                    
+                    {/* Ligne 3 - 118 000 */}
+                    <div style={{display:'flex',justifyContent:'flex-start',marginBottom:'24px'}}>
+                      <div style={{textAlign:'center'}}>
+                        <div style={{width:'56px',height:'56px',background:'#f3f4f6',borderRadius:'50%',margin:'0 auto 8px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'14px',fontWeight:700,color:'#6b7280'}}>
+                          118
+                        </div>
+                        <span style={{fontSize:'12px',color:'#64748b'}}>118 000</span>
+                      </div>
                     </div>
                     
                     <p style={{fontSize:'12px',color:'#94a3b8',fontStyle:'italic',marginBottom:'24px'}}>{t.pertNote}</p>
-                    <div style={{background:'#f8fafc',borderRadius:'8px',padding:'16px',textAlign:'center'}}>
-                      <p style={{fontSize:'14px',fontWeight:600,color:'#64748b'}}>{t.pertMore}</p>
+                    
+                    <div style={{background:'#f8fafc',borderRadius:'8px',padding:'20px',textAlign:'center',marginBottom:'24px'}}>
+                      <p style={{fontSize:'14px',fontWeight:600,color:'#64748b',letterSpacing:'0.5px'}}>{t.pertMore}</p>
                     </div>
                     
-                    {/* Logos GPS */}
-                    <div style={{marginTop:'24px',display:'flex',gap:'24px',justifyContent:'center',alignItems:'center',flexWrap:'wrap'}}>
-                      {['Instagram (via Facebook)','Garmin (via Here)','Via Michelin (via TomTom)','Renault (via Waze)','GPS embarqués (via Here)'].map((p,i)=>(
-                        <div key={i} style={{textAlign:'center',padding:'12px'}}>
-                          <div style={{width:'40px',height:'40px',background:'#f1f5f9',borderRadius:'8px',margin:'0 auto 6px'}}/>
-                          <span style={{fontSize:'10px',color:'#94a3b8'}}>{p}</span>
+                    {/* Logos GPS en bas */}
+                    <div style={{display:'flex',gap:'32px',justifyContent:'center',alignItems:'center',flexWrap:'wrap'}}>
+                      {[
+                        {name:'Instagram (via Facebook)',icon:'📷'},
+                        {name:'Garmin (via Here)',icon:'⌚'},
+                        {name:'Via Michelin (via TomTom)',icon:'🗺️'},
+                        {name:'Renault (via Waze)',icon:'🚗'},
+                        {name:'GPS embarqués (via Here)',icon:'🛰️'}
+                      ].map((p,i)=>(
+                        <div key={i} style={{textAlign:'center'}}>
+                          <div style={{width:'48px',height:'48px',background:'#f1f5f9',borderRadius:'12px',margin:'0 auto 8px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'20px'}}>
+                            {p.icon}
+                          </div>
+                          <span style={{fontSize:'10px',color:'#94a3b8'}}>{p.name}</span>
                         </div>
                       ))}
                     </div>
