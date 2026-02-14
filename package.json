@@ -13,18 +13,3 @@
     "react-dom": "^18.2.0"
   }
 }
-{
-  "dependencies": {
-    "pptxgenjs": "^4.0.1",
-    ... tes autres dépendances
-  }
-}
-```
-
----
-
-## Option 2 : Supprimer la route PPTX (plus simple)
-
-Si tu n'as pas besoin de la génération PPTX pour l'instant, **supprime le fichier** :
-```
-app/api/pptx/route.js
