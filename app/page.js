@@ -41,7 +41,13 @@ const T = {
     rep1:"Le nombre d'avis",rep2:"Le dépôt régulier d'avis (5-10 min/mois)",rep3:"La note",rep4:"Réponse aux avis en 24/48h",rep5:"Contenu des avis divergents",
     // Pertinence
     pertNote:"*Mappy & TikTok sont en cours de discussions",pertMore:"ET DES DIZAINES D'AUTRES SITES CONNECTÉS…",
-    backToReport:"Retour au rapport"
+    backToReport:"Retour au rapport",
+    // GEO/LLM Audit
+    geoTitle:"Audit GEO / Visibilité IA",geoDesc:"Testez votre visibilité sur les assistants IA (ChatGPT, Claude, Perplexity...)",
+    geoApiLabel:"Clé API Claude (Anthropic)",geoApiPh:"sk-ant-...",geoLaunch:"Lancer l'audit GEO",
+    geoAnalyzing:"Analyse IA en cours",geoPrompt:"Prompt testé",
+    geoMentioned:"Mentionné",geoNotMentioned:"Non mentionné",geoPosition:"Position",
+    geoPlatforms:"Plateformes IA testées",geoScore:"Score GEO",geoRecommendations:"Recommandations GEO"
   },
   it: {
     login:"Audit SEO Locale",sub:"Strumento di analisi",pwd:"Password",pwdPh:"Inserisci password",pwdErr:"Errata",access:"Accedi",
@@ -72,7 +78,13 @@ const T = {
     opt13:"Rispondere a tutte le recensioni",opt14:"Aggiungere contatto WhatsApp",opt15:"Completare gli attributi",
     rep1:"Il numero di recensioni",rep2:"Deposito regolare (5-10 min/mese)",rep3:"La valutazione",rep4:"Risposta in 24/48h",rep5:"Contenuto recensioni divergenti",
     pertNote:"*Mappy & TikTok in corso di discussione",pertMore:"E DECINE DI ALTRI SITI CONNESSI…",
-    backToReport:"Torna al rapporto"
+    backToReport:"Torna al rapporto",
+    // GEO/LLM Audit
+    geoTitle:"Audit GEO / Visibilità IA",geoDesc:"Testa la visibilità sugli assistenti IA (ChatGPT, Claude, Perplexity...)",
+    geoApiLabel:"Chiave API Claude (Anthropic)",geoApiPh:"sk-ant-...",geoLaunch:"Avvia audit GEO",
+    geoAnalyzing:"Analisi IA in corso",geoPrompt:"Prompt testato",
+    geoMentioned:"Menzionato",geoNotMentioned:"Non menzionato",geoPosition:"Posizione",
+    geoPlatforms:"Piattaforme IA testate",geoScore:"Score GEO",geoRecommendations:"Raccomandazioni GEO"
   }
 };
 
@@ -145,6 +157,11 @@ export default function App() {
   const [showFinancial, setShowFinancial] = useState(false);
   const [showSolutions, setShowSolutions] = useState(false);
   const [solutionTab, setSolutionTab] = useState(1); // 1=Optimisation, 2=Réputation, 3=Pertinence
+  // GEO/LLM Audit
+  const [claudeKey, setClaudeKey] = useState('');
+  const [geoLoading, setGeoLoading] = useState(false);
+  const [geoResults, setGeoResults] = useState(null);
+  const [geoProgress, setGeoProgress] = useState(0);
 
   const t = lang ? T[lang] : T.fr;
   const login = () => pwd === PASSWORD ? setAuth(true) : setPwdErr(true);
@@ -215,23 +232,180 @@ export default function App() {
     if(!results||!pan)return null;
     const pn=parseFloat(pan)||0;
     const convRate=0.04;
+    const volDefault=500;
+    
+    // Calcul perte par établissement
     results.locs.forEach(l=>{
-      const ir=l.inv/results.kws.length;
-      const pr=(results.kws.length-l.t7)/results.kws.length;
-      const v=parseInt(l.vol)||500;
-      l.loss=Math.round(v*0.35*(ir+pr*0.5)*12*convRate*pn/1000);
+      const invisibleRatio = l.inv / Math.max(results.kws.length, 1);
+      const poorRatio = (results.kws.length - l.t7) / Math.max(results.kws.length, 1);
+      const vol = parseInt(l.vol) || volDefault;
+      // Perte = volume * taux invisible * conversion * panier moyen * 12 mois
+      l.loss = Math.round(vol * (invisibleRatio * 0.7 + poorRatio * 0.3) * convRate * pn * 12 / 1000);
     });
-    const tl=results.locs.reduce((s,l)=>s+(l.loss||0),0);
-    const partooCost=getPartooPricing(results.sum.tot);
-    const gainYear1=Math.round(tl*0.65*1000);
-    const netBenefit=gainYear1-partooCost;
+    
+    const tl = results.locs.reduce((s,l) => s + (l.loss || 0), 0);
+    const partooCost = getPartooPricing(results.sum.tot);
+    const pg = Math.round(tl * 0.65);
+    const gainYear1 = pg * 1000;
+    const netBenefit = gainYear1 - partooCost;
+    
     return {
-      tl,pg:Math.round(tl*0.65),partooCost,gainYear1,netBenefit,
-      roi:partooCost>0?Math.round((gainYear1/partooCost)*100):0,
-      roiMultiple:partooCost>0?(gainYear1/partooCost).toFixed(1):'0',
-      be:gainYear1>partooCost?Math.round((partooCost/gainYear1)*12)+' mois':'N/A',
-      lpy:Math.round(tl*0.65/pn*1000)
+      tl, // en K€
+      pg, // en K€
+      partooCost,
+      gainYear1,
+      netBenefit,
+      roi: partooCost > 0 ? Math.round((gainYear1 / partooCost) * 100) : 0,
+      roiMultiple: partooCost > 0 ? (gainYear1 / partooCost).toFixed(1) : '0',
+      be: gainYear1 > partooCost ? Math.round((partooCost / gainYear1) * 12) + ' mois' : 'N/A',
+      lpy: pn > 0 ? Math.round(gainYear1 / pn) : 0
     };
+  };
+
+  // Audit GEO / LLM
+  const runGeoAudit = async () => {
+    if (!claudeKey || !results) return;
+    setGeoLoading(true);
+    setGeoProgress(0);
+    setGeoResults(null);
+
+    // Générer les prompts basés sur l'activité et les villes
+    const cities = [...new Set(results.locs.map(l => l.city).filter(Boolean))];
+    const activity = results.biz;
+    const locNames = results.locs.map(l => l.name);
+    
+    // Types de prompts à tester
+    const promptTemplates = [
+      { type: 'recommendation', template: (city) => `Quels sont les meilleurs ${activity} à ${city} ? Donne-moi tes recommandations.` },
+      { type: 'search', template: (city) => `Je cherche un ${activity} à ${city}, que me conseilles-tu ?` },
+      { type: 'comparison', template: (city) => `Compare les ${activity} les plus réputés à ${city}.` },
+      { type: 'specific', template: (city) => `Connais-tu ${locNames[0]} à ${city} ? Qu'en penses-tu ?` }
+    ];
+
+    const geoData = {
+      prompts: [],
+      score: 0,
+      totalTests: 0,
+      mentioned: 0,
+      platforms: [
+        { name: 'Claude (Anthropic)', icon: '🧠', tested: true },
+        { name: 'ChatGPT', icon: '🤖', tested: false, note: 'Requiert clé OpenAI' },
+        { name: 'Perplexity', icon: '🔍', tested: false, note: 'Requiert clé Perplexity' },
+        { name: 'Google Gemini', icon: '✨', tested: false, note: 'Requiert clé Google' }
+      ],
+      recommendations: []
+    };
+
+    const testCity = cities[0] || 'Paris';
+    const promptsToTest = promptTemplates.slice(0, 3).map(p => ({
+      ...p,
+      prompt: p.template(testCity),
+      city: testCity
+    }));
+
+    let completed = 0;
+    
+    for (const p of promptsToTest) {
+      try {
+        setGeoProgress(Math.round((completed / promptsToTest.length) * 100));
+        
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': claudeKey,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 1024,
+            messages: [{ role: 'user', content: p.prompt }]
+          })
+        });
+
+        const data = await response.json();
+        
+        if (data.error) {
+          p.result = { error: data.error.message };
+        } else {
+          const text = data.content?.[0]?.text || '';
+          
+          // Analyser si l'entreprise est mentionnée
+          const mentioned = locNames.some(name => 
+            text.toLowerCase().includes(name.toLowerCase())
+          );
+          
+          // Chercher la position si mentionné
+          let position = null;
+          if (mentioned) {
+            const lines = text.split('\n');
+            for (let i = 0; i < lines.length; i++) {
+              if (locNames.some(name => lines[i].toLowerCase().includes(name.toLowerCase()))) {
+                // Chercher un numéro au début de la ligne
+                const match = lines[i].match(/^(\d+)/);
+                position = match ? parseInt(match[1]) : i + 1;
+                break;
+              }
+            }
+            geoData.mentioned++;
+          }
+          
+          p.result = {
+            mentioned,
+            position,
+            excerpt: text.substring(0, 500) + (text.length > 500 ? '...' : ''),
+            fullResponse: text
+          };
+        }
+        
+        geoData.prompts.push(p);
+        geoData.totalTests++;
+        completed++;
+        
+        // Pause entre les requêtes
+        await new Promise(r => setTimeout(r, 1000));
+        
+      } catch (err) {
+        p.result = { error: err.message };
+        geoData.prompts.push(p);
+        geoData.totalTests++;
+        completed++;
+      }
+    }
+
+    // Calculer le score GEO
+    geoData.score = geoData.totalTests > 0 
+      ? Math.round((geoData.mentioned / geoData.totalTests) * 100) 
+      : 0;
+
+    // Générer les recommandations
+    if (geoData.score < 30) {
+      geoData.recommendations = [
+        "🚨 Visibilité IA critique - Votre entreprise n'est pas connue des assistants IA",
+        "📝 Créez du contenu riche et structuré sur votre site web",
+        "🔗 Obtenez des mentions sur des sites d'autorité (annuaires, presse, blogs)",
+        "⭐ Augmentez votre présence sur Google Business Profile (source de données pour les IA)",
+        "📰 Publiez des communiqués de presse et articles de blog réguliers"
+      ];
+    } else if (geoData.score < 70) {
+      geoData.recommendations = [
+        "⚠️ Visibilité IA partielle - Vous apparaissez parfois mais pas systématiquement",
+        "📈 Renforcez votre notoriété locale avec plus d'avis clients",
+        "🎯 Optimisez vos mots-clés sur votre site pour correspondre aux requêtes IA",
+        "🔄 Maintenez vos informations à jour sur toutes les plateformes"
+      ];
+    } else {
+      geoData.recommendations = [
+        "✅ Bonne visibilité IA - Vous êtes bien référencé par les assistants IA",
+        "🚀 Continuez à publier du contenu de qualité",
+        "👀 Surveillez régulièrement votre positionnement IA"
+      ];
+    }
+
+    setGeoResults(geoData);
+    setGeoProgress(100);
+    setGeoLoading(false);
   };
 
   // LANG SELECTION
@@ -681,6 +855,133 @@ export default function App() {
             <button style={{...st.btn,...st.btnG,padding:'16px 48px',fontSize:'16px'}} onClick={()=>setShowSolutions(true)}>
               <Ic n="trending" s={20}/>{t.solutionsBtn}
             </button>
+          </div>
+
+          {/* ÉTAPE 4 - AUDIT GEO / LLM (Optionnel) */}
+          <div style={{...st.card,marginTop:'32px',background:'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)',color:'#fff',border:'2px solid #8b5cf6'}}>
+            <div style={{display:'flex',alignItems:'center',gap:'12px',marginBottom:'16px'}}>
+              <div style={{width:'48px',height:'48px',background:'#8b5cf6',borderRadius:'12px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'24px'}}>🤖</div>
+              <div>
+                <h3 style={{fontSize:'18px',fontWeight:600,color:'#fff',marginBottom:'4px'}}>{t.geoTitle}</h3>
+                <p style={{fontSize:'13px',color:'#a5b4fc'}}>{t.geoDesc}</p>
+              </div>
+            </div>
+            
+            {/* Instructions pour obtenir la clé API */}
+            <div style={{background:'#312e81',borderRadius:'10px',padding:'16px',marginBottom:'20px'}}>
+              <p style={{fontSize:'13px',fontWeight:600,color:'#c4b5fd',marginBottom:'10px'}}>📋 Comment obtenir votre clé API Claude :</p>
+              <ol style={{margin:0,paddingLeft:'20px',fontSize:'12px',color:'#a5b4fc',lineHeight:'1.8'}}>
+                <li>Allez sur <a href="https://console.anthropic.com" target="_blank" rel="noreferrer" style={{color:'#f9a8d4',textDecoration:'underline'}}>console.anthropic.com</a></li>
+                <li>Créez un compte ou connectez-vous</li>
+                <li>Allez dans "API Keys" → "Create Key"</li>
+                <li>Copiez la clé (commence par <code style={{background:'#1e1b4b',padding:'2px 6px',borderRadius:'4px'}}>sk-ant-...</code>)</li>
+                <li>Ajoutez des crédits (environ 5$ suffisent pour ~100 tests)</li>
+              </ol>
+            </div>
+
+            <div style={{display:'flex',gap:'16px',alignItems:'flex-end',marginBottom:'24px'}}>
+              <div style={{flex:1}}>
+                <label style={{...st.label,color:'#a5b4fc'}}>{t.geoApiLabel}</label>
+                <input 
+                  type="password" 
+                  style={{...st.input,background:'#1e1b4b',border:'1px solid #6366f1',color:'#fff'}} 
+                  placeholder={t.geoApiPh} 
+                  value={claudeKey} 
+                  onChange={e=>setClaudeKey(e.target.value)}
+                />
+              </div>
+              <button 
+                style={{...st.btn,background:'#8b5cf6',color:'#fff',padding:'12px 32px',opacity:claudeKey?1:0.5}} 
+                onClick={runGeoAudit} 
+                disabled={!claudeKey || geoLoading}
+              >
+                {geoLoading ? `${geoProgress}%` : t.geoLaunch}
+              </button>
+            </div>
+
+            {/* Loading */}
+            {geoLoading && (
+              <div style={{textAlign:'center',padding:'20px'}}>
+                <div style={{fontSize:'32px',fontWeight:700,color:'#8b5cf6',marginBottom:'12px'}}>{geoProgress}%</div>
+                <div style={{height:'6px',background:'#1e1b4b',borderRadius:'3px',overflow:'hidden',marginBottom:'12px'}}>
+                  <div style={{width:geoProgress+'%',height:'100%',background:'#8b5cf6',borderRadius:'3px',transition:'width 0.3s'}}/>
+                </div>
+                <p style={{color:'#a5b4fc',fontSize:'13px'}}>{t.geoAnalyzing}...</p>
+              </div>
+            )}
+
+            {/* Résultats GEO */}
+            {geoResults && !geoLoading && (
+              <div style={{borderTop:'1px solid #6366f1',paddingTop:'24px'}}>
+                {/* Score global */}
+                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'16px',marginBottom:'24px'}}>
+                  <div style={{background:'#1e1b4b',borderRadius:'10px',padding:'20px',textAlign:'center'}}>
+                    <div style={{fontSize:'36px',fontWeight:700,color:geoResults.score>=70?'#22c55e':geoResults.score>=30?'#f59e0b':'#ef4444'}}>{geoResults.score}%</div>
+                    <div style={{fontSize:'12px',color:'#a5b4fc'}}>{t.geoScore}</div>
+                  </div>
+                  <div style={{background:'#1e1b4b',borderRadius:'10px',padding:'20px',textAlign:'center'}}>
+                    <div style={{fontSize:'36px',fontWeight:700,color:'#22c55e'}}>{geoResults.mentioned}</div>
+                    <div style={{fontSize:'12px',color:'#a5b4fc'}}>{t.geoMentioned}</div>
+                  </div>
+                  <div style={{background:'#1e1b4b',borderRadius:'10px',padding:'20px',textAlign:'center'}}>
+                    <div style={{fontSize:'36px',fontWeight:700,color:'#ef4444'}}>{geoResults.totalTests - geoResults.mentioned}</div>
+                    <div style={{fontSize:'12px',color:'#a5b4fc'}}>{t.geoNotMentioned}</div>
+                  </div>
+                </div>
+
+                {/* Plateformes testées */}
+                <div style={{marginBottom:'24px'}}>
+                  <h4 style={{fontSize:'14px',fontWeight:600,color:'#fff',marginBottom:'12px'}}>{t.geoPlatforms}</h4>
+                  <div style={{display:'flex',gap:'12px',flexWrap:'wrap'}}>
+                    {geoResults.platforms.map((p,i)=>(
+                      <div key={i} style={{background:p.tested?'#059669':'#1e1b4b',borderRadius:'8px',padding:'10px 16px',display:'flex',alignItems:'center',gap:'8px'}}>
+                        <span style={{fontSize:'18px'}}>{p.icon}</span>
+                        <span style={{fontSize:'13px',color:'#fff'}}>{p.name}</span>
+                        {p.tested && <span style={{fontSize:'10px',background:'#22c55e',color:'#fff',padding:'2px 6px',borderRadius:'4px'}}>✓ Testé</span>}
+                        {!p.tested && p.note && <span style={{fontSize:'10px',color:'#94a3b8'}}>({p.note})</span>}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Détail des prompts testés */}
+                <div style={{marginBottom:'24px'}}>
+                  <h4 style={{fontSize:'14px',fontWeight:600,color:'#fff',marginBottom:'12px'}}>🔍 Prompts testés</h4>
+                  {geoResults.prompts.map((p,i)=>(
+                    <div key={i} style={{background:'#1e1b4b',borderRadius:'8px',padding:'16px',marginBottom:'12px'}}>
+                      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'8px'}}>
+                        <span style={{fontSize:'12px',color:'#a5b4fc',fontStyle:'italic'}}>"{p.prompt}"</span>
+                        {p.result?.mentioned ? (
+                          <span style={{background:'#059669',color:'#fff',fontSize:'11px',padding:'4px 10px',borderRadius:'4px',fontWeight:600}}>✓ {t.geoMentioned}{p.result.position ? ` #${p.result.position}` : ''}</span>
+                        ) : p.result?.error ? (
+                          <span style={{background:'#dc2626',color:'#fff',fontSize:'11px',padding:'4px 10px',borderRadius:'4px'}}>Erreur</span>
+                        ) : (
+                          <span style={{background:'#dc2626',color:'#fff',fontSize:'11px',padding:'4px 10px',borderRadius:'4px'}}>✗ {t.geoNotMentioned}</span>
+                        )}
+                      </div>
+                      {p.result?.excerpt && (
+                        <div style={{fontSize:'11px',color:'#94a3b8',background:'#312e81',padding:'10px',borderRadius:'6px',maxHeight:'100px',overflow:'auto'}}>
+                          {p.result.excerpt}
+                        </div>
+                      )}
+                      {p.result?.error && (
+                        <div style={{fontSize:'11px',color:'#f87171'}}>{p.result.error}</div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Recommandations */}
+                <div>
+                  <h4 style={{fontSize:'14px',fontWeight:600,color:'#fff',marginBottom:'12px'}}>💡 {t.geoRecommendations}</h4>
+                  <div style={{background:'#1e1b4b',borderRadius:'8px',padding:'16px'}}>
+                    {geoResults.recommendations.map((rec,i)=>(
+                      <p key={i} style={{fontSize:'13px',color:'#c4b5fd',marginBottom:'8px',paddingLeft:'8px'}}>{rec}</p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
