@@ -17,6 +17,7 @@ const T = {
     etabTitle:"Établissements",etab:"Établissement",cityL:"Ville",cityPh:"Ville",
     volL:"Volume recherches/mois",volInfo:"Retrouvez cette donnée sur Semrush.com",
     addEtab:"Ajouter un établissement",kwTitle:"Mots-clés à analyser",kwPh:"Ex: constructeur maison",addKw:"Ajouter",
+    placeIdL:"OU entrez le Google Place ID",placeIdPh:"ChIJ...",placeIdInfo:"Trouvez-le sur Google Maps → Partager → Intégrer",placeIdBtn:"Valider",placeIdOr:"ou",
     back:"Retour",launch:"Lancer l'analyse",analyzing:"Analyse en cours",wait:"Veuillez patienter",
     report:"Rapport d'audit",etabs:"établissement(s)",statEtab:"Établissements",statNote:"Note moyenne",statReq:"Requêtes",statVis:"Visibilité",
     diag:"Diagnostic visibilité",top3:"Top 3",exc:"Excellent",pos47:"Position 4-7",imp:"À améliorer",pos8:"Position 8+",crit:"Critique",
@@ -57,6 +58,7 @@ const T = {
     etabTitle:"Stabilimenti",etab:"Stabilimento",cityL:"Città",cityPh:"Città",
     volL:"Volume ricerche/mese",volInfo:"Trova su Semrush.com",
     addEtab:"Aggiungi stabilimento",kwTitle:"Parole chiave",kwPh:"Es: costruttore casa",addKw:"Aggiungi",
+    placeIdL:"OPPURE inserisci il Google Place ID",placeIdPh:"ChIJ...",placeIdInfo:"Trovalo su Google Maps → Condividi → Incorpora",placeIdBtn:"Valida",placeIdOr:"oppure",
     back:"Indietro",launch:"Avvia analisi",analyzing:"Analisi in corso",wait:"Attendere",
     report:"Rapporto audit",etabs:"stabilimento/i",statEtab:"Stabilimenti",statNote:"Valutazione",statReq:"Query",statVis:"Visibilità",
     diag:"Diagnosi visibilità",top3:"Top 3",exc:"Eccellente",pos47:"Posizione 4-7",imp:"Da migliorare",pos8:"Posizione 8+",crit:"Critico",
@@ -148,7 +150,7 @@ export default function App() {
   const [step, setStep] = useState(1);
   const [apiKey, setApiKey] = useState('');
   const [biz, setBiz] = useState('');
-  const [locs, setLocs] = useState([{id:1,pid:'',name:'',city:'',lat:'',lon:'',ld:false,err:'',rat:null,rev:null,vol:'',q:'',res:[],sh:false}]);
+  const [locs, setLocs] = useState([{id:1,pid:'',name:'',city:'',lat:'',lon:'',ld:false,err:'',rat:null,rev:null,vol:'',q:'',res:[],sh:false,manualPid:'',pidLd:false}]);
   const [kws, setKws] = useState(['']);
   const [results, setResults] = useState(null);
   const [prog, setProg] = useState(0);
@@ -165,7 +167,7 @@ export default function App() {
 
   const t = lang ? T[lang] : T.fr;
   const login = () => pwd === PASSWORD ? setAuth(true) : setPwdErr(true);
-  const addLoc = () => setLocs([...locs,{id:Date.now(),pid:'',name:'',city:'',lat:'',lon:'',ld:false,err:'',rat:null,rev:null,vol:'',q:'',res:[],sh:false}]);
+  const addLoc = () => setLocs([...locs,{id:Date.now(),pid:'',name:'',city:'',lat:'',lon:'',ld:false,err:'',rat:null,rev:null,vol:'',q:'',res:[],sh:false,manualPid:'',pidLd:false}]);
   const upLoc = (id,k,v) => setLocs(locs.map(l=>l.id===id?{...l,[k]:v}:l));
   const rmLoc = id => locs.length > 1 && setLocs(locs.filter(l=>l.id!==id));
   const extractCity = (addr) => { if(!addr)return'';const parts=addr.split(',').map(p=>p.trim());for(let i=parts.length-2;i>=0;i--){const c=parts[i].replace(/\d{5}/g,'').trim();if(c&&c.length>2&&!/france|itali|germany|belgi/i.test(c))return c;}return parts[0]||''; };
@@ -178,6 +180,24 @@ export default function App() {
       const d=await r.json();
       setLocs(ls=>ls.map(l=>l.id===id?{...l,ld:false,res:d.places||[],sh:d.places?.length>0,err:d.places?.length?'':'Aucun résultat'}:l));
     }catch{setLocs(ls=>ls.map(l=>l.id===id?{...l,ld:false,err:'Erreur'}:l));}
+  };
+
+  // Fetch place details by Google Place ID
+  const fetchPlaceById = async (id, placeId) => {
+    if(!apiKey||!placeId||placeId.length<10)return;
+    setLocs(ls=>ls.map(l=>l.id===id?{...l,pidLd:true,err:''}:l));
+    try{
+      const r=await fetch('/api/serpapi',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({apiKey,action:'getPlaceDetails',placeId})});
+      const d=await r.json();
+      if(d.error){
+        setLocs(ls=>ls.map(l=>l.id===id?{...l,pidLd:false,err:d.error}:l));
+      } else if(d.place){
+        const city=extractCity(d.place.address);
+        setLocs(ls=>ls.map(l=>l.id===id?{...l,pidLd:false,pid:placeId,name:d.place.name,city,lat:d.place.lat,lon:d.place.lon,rat:d.place.rating,rev:d.place.reviews,q:d.place.name,manualPid:'',err:''}:l));
+      } else {
+        setLocs(ls=>ls.map(l=>l.id===id?{...l,pidLd:false,err:'Place ID non trouvé'}:l));
+      }
+    }catch{setLocs(ls=>ls.map(l=>l.id===id?{...l,pidLd:false,err:'Erreur'}:l));}
   };
 
   const selP = (id,p) => {
@@ -497,6 +517,41 @@ export default function App() {
                 <div style={{display:'flex',gap:'10px'}}><input style={{...st.input,flex:1}} placeholder={t.search} value={l.q} onChange={e=>upLoc(l.id,'q',e.target.value)} onKeyPress={e=>e.key==='Enter'&&searchP(l.id,l.q)}/><button style={{...st.btn,...st.btnP,padding:'12px 16px'}} onClick={()=>searchP(l.id,l.q)} disabled={l.ld}>{l.ld?'...':<Ic n="search" s={18}/>}</button></div>
                 {l.sh&&l.res.length>0&&(<div style={{position:'absolute',top:'100%',left:0,right:0,background:'#fff',border:'1px solid #cbd5e1',borderRadius:'10px',marginTop:'8px',maxHeight:'400px',overflowY:'auto',zIndex:100,boxShadow:'0 10px 40px rgba(0,0,0,0.15)'}}>{l.res.slice(0,30).map((p,j)=>(<div key={j} onClick={()=>selP(l.id,p)} style={{padding:'14px 16px',borderBottom:'1px solid #f1f5f9',cursor:'pointer'}}><div style={{fontWeight:600,marginBottom:'3px',fontSize:'14px'}}>{p.name}</div><div style={{fontSize:'12px',color:'#64748b'}}>{p.address}</div>{p.rating&&<div style={{marginTop:'5px',fontSize:'13px',color:'#d97706',fontWeight:500}}>★ {p.rating} ({p.reviews} {t.avis})</div>}</div>))}</div>)}
               </div>
+              
+              {/* Séparateur OU */}
+              {!l.name && (
+                <div style={{display:'flex',alignItems:'center',gap:'16px',marginBottom:'16px'}}>
+                  <div style={{flex:1,height:'1px',background:'#cbd5e1'}}/>
+                  <span style={{fontSize:'12px',color:'#94a3b8',fontWeight:500}}>{t.placeIdOr}</span>
+                  <div style={{flex:1,height:'1px',background:'#cbd5e1'}}/>
+                </div>
+              )}
+              
+              {/* Champ Google Place ID */}
+              {!l.name && (
+                <div style={{marginBottom:'16px'}}>
+                  <label style={{...st.label,display:'flex',alignItems:'center',gap:'6px'}}>
+                    {t.placeIdL}
+                    <a href="https://developers.google.com/maps/documentation/places/web-service/place-id" target="_blank" rel="noreferrer" style={{color:BLUE,fontSize:'11px'}}>(?)</a>
+                  </label>
+                  <div style={{display:'flex',gap:'10px'}}>
+                    <input 
+                      style={{...st.input,flex:1,fontFamily:'monospace',fontSize:'13px'}} 
+                      placeholder={t.placeIdPh} 
+                      value={l.manualPid||''} 
+                      onChange={e=>upLoc(l.id,'manualPid',e.target.value)}
+                    />
+                    <button 
+                      style={{...st.btn,...st.btnP,padding:'12px 20px'}} 
+                      onClick={()=>fetchPlaceById(l.id,l.manualPid)} 
+                      disabled={l.pidLd||!l.manualPid}
+                    >
+                      {l.pidLd?'...':(t.placeIdBtn||'Valider')}
+                    </button>
+                  </div>
+                  <div style={{display:'flex',alignItems:'center',gap:'6px',marginTop:'8px',fontSize:'11px',color:'#64748b'}}><Ic n="info" s={12}/>{t.placeIdInfo}</div>
+                </div>
+              )}
               {l.err&&<div style={{color:'#dc2626',fontSize:'13px',marginBottom:'12px',padding:'10px 14px',background:'#fee2e2',borderRadius:'8px'}}>{l.err}</div>}
               {l.name&&(<div style={{background:'#d1fae5',borderRadius:'8px',padding:'14px 16px',marginBottom:'16px',display:'flex',justifyContent:'space-between',alignItems:'center'}}><div><div style={{fontWeight:600,color:'#059669',marginBottom:'2px',display:'flex',alignItems:'center',gap:'8px',fontSize:'14px'}}><Ic n="check" s={16}/>{l.name}</div><div style={{fontSize:'13px',color:'#64748b'}}>{l.city}</div></div>{l.rat&&<span style={{color:'#d97706',fontWeight:600,fontSize:'14px'}}>★ {l.rat}</span>}</div>)}
               <div style={{...st.row,gridTemplateColumns:'1fr 1fr'}}><div><label style={st.label}>{t.cityL}</label><input style={st.input} placeholder={t.cityPh} value={l.city} onChange={e=>upLoc(l.id,'city',e.target.value)}/></div><div><label style={st.label}>{t.volL}</label><input style={st.input} type="number" placeholder="500" value={l.vol} onChange={e=>upLoc(l.id,'vol',e.target.value)}/><div style={{display:'flex',alignItems:'center',gap:'6px',marginTop:'8px',fontSize:'11px',color:'#64748b'}}><Ic n="info" s={12}/>{t.volInfo}</div></div></div>
