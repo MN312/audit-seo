@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request) {
   try {
-    const { apiKey, action, query, keyword, lat, lon, limit = 30 } = await request.json();
+    const { apiKey, action, query, keyword, lat, lon, limit = 30, placeId } = await request.json();
 
     if (!apiKey) {
       return NextResponse.json({ error: 'API key required' }, { status: 400 });
@@ -33,7 +33,42 @@ export async function POST(request) {
       return NextResponse.json({ places });
     }
 
+    // Action: Get Place Details by Place ID
+    if (action === 'getPlaceDetails') {
+      if (!placeId) {
+        return NextResponse.json({ error: 'Place ID required' }, { status: 400 });
+      }
+      
+      const url = `https://serpapi.com/search.json?engine=google_maps&place_id=${encodeURIComponent(placeId)}&api_key=${apiKey}`;
+      
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.error) {
+        return NextResponse.json({ error: data.error }, { status: 400 });
+      }
+
+      if (data.place_results) {
+        const p = data.place_results;
+        return NextResponse.json({
+          place: {
+            placeId: placeId,
+            name: p.title,
+            address: p.address,
+            rating: p.rating,
+            reviews: p.reviews,
+            lat: p.gps_coordinates?.latitude,
+            lon: p.gps_coordinates?.longitude,
+            type: p.type
+          }
+        });
+      }
+
+      return NextResponse.json({ error: 'Place not found' }, { status: 404 });
+    }
+
     // Action: Search Ranking (pour vérifier le positionnement)
+    if (action === 'searchRanking') {
     if (action === 'searchRanking') {
       const url = `https://serpapi.com/search.json?engine=google_maps&q=${encodeURIComponent(keyword)}&ll=@${lat},${lon},14z&type=search&api_key=${apiKey}`;
       
