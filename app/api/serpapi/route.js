@@ -69,7 +69,6 @@ export async function POST(request) {
 
     // Action: Search Ranking (pour vérifier le positionnement)
     if (action === 'searchRanking') {
-    if (action === 'searchRanking') {
       const url = `https://serpapi.com/search.json?engine=google_maps&q=${encodeURIComponent(keyword)}&ll=@${lat},${lon},14z&type=search&api_key=${apiKey}`;
       
       const response = await fetch(url);
